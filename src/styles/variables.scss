@@ -1,0 +1,283 @@
+/******************************************************************* 
+// 위치 : src/assets/styles/variables.scss 
+// 설명 : 프로젝트 전체에 적용되는 변수에 대해 정의함 
+// 주의 : 컴포넌트 갯수 만큼 실행되기 때문에 변수에 대해서만 정의해야합니다. 
+(실제 CSS에 대한 적용은 _index.scss에 작성) // 이 파일은 vue.config.js에 설정되면 됨 ********************************************************************/
+
+// vuetify를 사용할 경우 vuetify의 일부 변수를 사용할 수 있음 
+@import "~vuetify/src/styles/styles.sass";
+
+// Vuetify Globals 
+$border-radius-root: 4px;
+$font-size-root: 14px;
+
+$headings: (
+  'h1': ('size': 24px,
+    'line-height': 1.15em),
+  'h2': ('size': 22px,
+    'line-height': 1.5em),
+  'h3': ('size': 20px,
+    'line-height': 1.4em),
+  'h4': ('size': 18px,
+    'weight':500,
+    'line-height': 1.4em),
+  'h5': ('size': 16px,
+    'weight':500,
+    'line-height': 24px),
+  'h6': ('size': 14px),
+  'subtitle-1': ('size': 16px),
+  'subtitle-2': ('size': 14px),
+  'body-1': ('size': 13px),
+  'body-2': ('size': 12px),
+  'Caption': ('size': 12px),
+  'overline': ('size': 12px,
+    'letter-spacing': 0)
+);
+
+$alert-border-width: 3px !default;
+$alert-font-size: 13px !default;
+//$alert-icon-size: 24px !default;
+
+$btn-font-weight: 400;
+$btn-icon-font-size: 16px;
+$btn-icon-padding: 12px;
+$btn-letter-spacing: 0;
+$btn-text-transform: none;
+$btn-sizes: (
+  'x-small': 20,
+  'small': 28,
+  'default': 36,
+  'large': 44,
+  'x-large': 52
+);
+$btn-font-sizes: (
+  'x-small': 12px,
+  'small': 13px,
+  'default': 14px,
+  'large': 16px,
+  'x-large': 18px
+);
+$fab-sizes: (
+  'x-small': 32,
+  'small': 40,
+  'default': 56,
+  'large': 64,
+  'x-large': 72
+);
+$fab-icon-sizes: (
+  'x-small': 18,
+  'small': 24,
+  'default': 24,
+  'large': 28,
+  'x-large': 32
+);
+
+$breadcrumbs-flex: 0 1 auto !default;
+$breadcrumbs-padding: 18px 12px !default;
+$breadcrumbs-even-child-padding: 0 6px !default;
+$breadcrumbs-item-font-size: 12px !default;
+$breadcrumbs-item-large-font-size: 16px !default;
+$breadcrumbs-margin: 0 !default;
+
+$card-actions-padding: 8px;
+$card-adjacent-sibling-text-padding-top: 0;
+$card-btn-margin-x: 8px;
+$card-btn-padding: 0 8px;
+$card-btn-small-margin-x: 4px;
+$card-elevation: 0;
+$card-hover-elevation: 0;
+$card-link-focus-opacity: 0.08;
+$card-outlined-border-width: thin;
+$card-overflow-wrap: break-word;
+$card-raised-elevation: 8;
+$card-subtitle-padding: 16px;
+$card-title-adjacent-sibling-subtitle-margin-top: -16px;
+$card-title-adjacent-sibling-subtitle-text-padding-top: 0;
+$card-title-font-size: 16px;
+$card-title-font-weight: 600;
+$card-title-letter-spacing: 0;
+$card-title-line-height: 1;
+$card-title-word-break: break-all;
+$card-white-space: normal;
+
+$chip-avatar-size: 24px !default;
+$chip-close-size: 18px !default;
+$chip-icon-margin-after: 6px !default;
+$chip-icon-margin-before: -6px !default;
+$chip-icon-right-margin-after: -4px !default;
+$chip-icon-right-margin-before: 8px !default;
+$chip-icon-size: 24px !default;
+$chip-label-border-radius: $border-radius-root  !default;
+$chip-link-focus-opacity: 0.32 !default;
+$chip-pill-avatar-margin-after: 8px !default;
+$chip-pill-avatar-margin-before: -12px !default;
+$chip-pill-avatar-size: 32px !default;
+$chip-pill-filter-margin: 0 16px 0 0 !default;
+$chip-transition-duration: 0.28s !default;
+//$chip-transition-fn: map-get($transition, 'fast-out-slow-in') !default;
+$icon-outlined-border-width: thin !default;
+$chip-line-height: 20px !default;
+$chip-padding: 0 5px !default;
+$chip-white-space: nowrap !default;
+$chip-disabled-opacity: 0.4 !default;
+$chip-filter-max-width: 24px !default;
+$chip-outlined-active-opacity: 0.08 !default;
+$chip-selected-opacity: 0.28 !default;
+$icon-sizes: (
+  ) !default;
+$icon-sizes: map-deep-merge(('x-small': ('font-size': 10,
+        'height': 16),
+      'small': ('font-size': 11,
+        'height': 18),
+      'default': ('font-size': 12,
+        'height': 24),
+      'large': ('font-size': 16,
+        'height': 54),
+      'x-large': ('font-size': 18,
+        'height': 66)),
+    $icon-sizes
+);
+
+$label-font-size: 14px;
+$label-line-height: 18px;
+$label-min-height: 8px;
+
+$input-font-size: 14px;
+$input-max-height: 32px;
+$input-label-height: 20px;
+$input-prepend-append-outer-margin: 9px;
+$input-icon-height: 24px;
+$input-icon-min-width: 24px;
+$input-icon-width: 24px;
+$input-slot-margin-bottom: 4px;
+$input-dense-slot-margin-bottom: 4px;
+
+$checkbox-dense-margin-top: 4px;
+
+$avatar-margin-x: 16px !default;
+$list-border-radius: 0 !default;
+$list-elevation: 0 !default;
+$list-dense-subheader-font-size: 12px !default;
+$list-dense-subheader-height: 40px !default;
+// TODO: Resolve naming conflicts for
+// shaped style propagation to items
+$list-shaped-border-radius: 0 !default;
+
+$list-item-avatar-margin-y: 8px !default;
+$list-item-avatar-horizontal-margin-x: -16px !default;
+
+$list-item-icon-margin-y: 16px !default;
+
+$list-item-min-height: 48px !default;
+$list-item-two-line-min-height: 64px !default;
+$list-item-three-line-min-height: 88px !default;
+
+$list-item-title-font-size: 14px !default;
+$list-item-subtitle-font-size: 13px !default;
+
+$list-item-dense-title-font-size: 13px !default;
+$list-item-dense-title-font-weight: 500 !default;
+$list-padding: 8px 0 !default;
+$list-dense-subheading-padding: 0 8px !default;
+$list-nav-border-radius: $border-radius-root  !default;
+$list-nav-rounded-item-margin-bottom: 8px !default;
+$list-nav-rounded-item-dense-margin-bottom: 4px !default;
+$list-nav-padding-left: 8px !default;
+$list-nav-padding-right: 8px !default;
+$list-nav-item-padding: 0 8px !default;
+$list-shaped-padding: 8px !default;
+$list-subheader-padding-top: 0 !default;
+$list-group-header-icon-min-width: 48px !default;
+$list-group-sub-group-child-margin: 16px !default;
+$list-group-sub-group-header-margin: 32px !default;
+$list-group-items-item-padding: 40px !default;
+$list-group-no-action-item-padding: 50px !default;
+$list-dense-subheader-padding: 0 8px !default;
+$list-nav-rounded-dense-item-margin-bottom: 4px !default;
+$list-group-no-action-sub-group-item-padding: 88px !default;
+$list-group-dense-sub-group-header-padding: 24px !default;
+$list-group-nav-no-action-item-padding: 64px !default;
+$list-group-sub-group-item-padding: 80px !default;
+$list-item-padding: 0 16px !default;
+$list-item-action-margin: 12px 0 !default;
+$list-item-action-text-font-size: 13px !default;
+$list-item-avatar-horizontal-margin: 8px !default;
+$list-item-content-padding: 12px 0 !default;
+$list-item-content-children-margin-bottom: 2px !default;
+$list-item-icon-margin: 16px 0 !default;
+$list-item-child-last-type-margin: 16px !default;
+$list-item-child-min-width: 24px !default;
+$list-item-title-subtitle-line-height: 1.2 !default;
+$list-item-avatar-first-child-margin: 16px !default;
+$list-item-action-icon-margin: 10px !default;
+$list-dense-icon-height: 24px !default;
+$list-dense-icon-margin: 8px !default;
+$list-dense-min-height: 40px !default;
+$list-item-dense-title-line-height: 1rem !default;
+$list-item-dense-two-line-min-height: 60px !default;
+$list-item-dense-three-line-min-height: 76px !default;
+$list-dense-content-padding: 8px 0 !default;
+$list-item-two-line-icon-margin-bottom: 32px !default;
+$list-item-three-line-avatar-action-margin: 16px !default;
+
+$tab-font-size: 14px;
+$tab-font-weight: 500;
+$tabs-bar-height: 40px !default;
+
+$text-field-line-height: 20px;
+$text-field-line-height: 20px;
+$text-field-padding: 4px 0 4px;
+$text-field-dense-padding: 4px 0 2px;
+$text-field-append-prepend-margin: 4px;
+$text-field-dense-append-prepend-margin: 0px;
+$text-field-dense-icon-append-prepend-margin-top: 8px;
+$text-field-filled-full-width-outlined-slot-min-height: 56px;
+$text-field-filled-full-width-outlined-dense-slot-min-height: 52px;
+$text-field-filled-full-width-outlined-single-line-slot-min-height: 40px;
+$text-field-counter-margin: 8px;
+$text-field-label-top: 6px;
+$text-field-details-min-height: 14px;
+$text-field-filled-full-width-label-top: 18px;
+$text-field-dense-label-top: 17px;
+$text-field-single-line-label-top: 11px;
+$text-field-filled-margin-top: 22px;
+$text-field-enclosed-prepend-append-margin-top: 17px;
+$text-field-dense-prepend-append-margin-top: 14px;
+$text-field-single-line-prepend-append-margin-top: 9px;
+$text-field-outlined-prepend-append-margin-top: 8px;
+$text-field-enclosed-details-padding: 0 12px;
+$text-field-details-padding-top: 0px;
+$text-field-details-margin-bottom: 8px;
+$text-field-outlined-margin-bottom: 16px;
+$text-field-outlined-label-position-x: 18px;
+$text-field-outlined-label-position-y: -24px;
+$text-field-outlined-dense-label-position-x: 10px;
+$text-field-outlined-dense-label-position-y: -16px;
+$text-field-prefix-max-height: 32px;
+$text-field-outlined-append-prepend-outer-margin-top: 18px;
+$text-field-outlined-fieldset-top: -5px;
+$text-field-outlined-fieldset-border-width: 1px;
+$text-field-outlined-fieldset-padding: 8px;
+$text-field-outlined-legend-line-height: 11px;
+$text-field-rounded-legend-margin: 12px;
+$text-field-rounded-border-radius: 28px;
+$text-field-shaped-border-radius: 16px 16px 0 0;
+$text-field-outlined-fieldset-border: 2px solid currentColor;
+$text-field-outlined-rounded-slot-padding: 0 24px;
+$text-field-solo-label-top: calc(50% - 9px);
+$text-field-solo-control-min-height: 48px;
+$text-field-solo-dense-control-min-height: 38px;
+$text-field-solo-outer-margin-top: 12px;
+$text-field-solo-dense-outer-margin-top: 7px;
+
+$timeline-divider-center: 50% !default;
+$timeline-divider-width: 50px !default;
+$timeline-item-padding: 24px !default;
+$timeline-line-width: 2px !default;
+$timeline-wedge-size: 10px !default;
+$timeline-dot-small-size: 24px !default;
+$timeline-dot-regular-size: 38px !default;
+$timeline-dot-large-size: 52px !default;
+$timeline-inner-dot-small-size: 18px !default;
+$timeline-inner-dot-regular-size: 30px !default;
+$timeline-inner-dot-large-size: 42px !default;
