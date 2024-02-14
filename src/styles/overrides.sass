@@ -1,0 +1,603 @@
+//common
+a:hover:not(.v-btn):not(.v-list-item)
+  text-decoration: underline
+
+//layout
+html
+  overflow: hidden !important
+body
+  overflow: auto
+  height: 100vh
+
+.v-application
+  font-family: "SCoreDream", "Roboto", sans-serif !important
+
+.page-container
+  max-width: 1520px
+  margin-left: auto
+  margin-right: auto
+  padding-right: 12px
+  padding-left: 12px
+
+//v-heading
+.v-heading-title
+  font-size: 20px
+
+//cursor
+.cursor-pointer
+  cursor: pointer
+
+//font
+.text-required:before,
+.icon-required:before
+  content: "* "
+  color: #13A95B
+.text-break
+  word-break: break-all
+
+//width
+.w-100
+  width: 100%
+.h-100
+  height: 100%
+
+//v-btn
+.v-btn:not(.v-btn--round).v-size--default.h-100
+  min-height: 36px
+  height: 100% !important
+
+//v-icon
+.mdi.mdi-custom:before
+  content: "" !important
+.mdi.mdi-custom
+  background-position: center center
+  background-repeat: no-repeat
+  background-size: 100%
+.mdi-custom.mdi-clipboard-check-outline
+  width: 32px
+  height: 32px
+  background-size: 75%
+  background-image: url("@/assets/icon_confirm_application_w.svg")
+.mdi-custom.mdi-file-excel-outline
+  width: 18px
+  height: 18px
+  background-size: 18px
+  background-image: url("@/assets/icon_excel.png")
+.mdi-custom.mdi-phone-in-talk
+  width: 36px
+  height: 36px
+  background-size: 80%
+  background-image: url("@/assets/icon_phone.svg")
+.mdi-custom.mdi-email-outline
+  width: 36px
+  height: 36px
+  background-size: 80%
+  background-image: url("@/assets/icon_email.svg")
+
+//v-divider
+.v-divider.divider-dashed
+  border-style: dashed
+
+//complete-group
+.complete-group
+  .complete-title
+    font-size: 20px
+    font-weight: 600
+  .complete-stext
+    font-size: 14px
+    font-weight: 500
+
+//terms-group
+.terms-group
+  border: 1px solid rgba(0, 0, 0, 0.2)
+  border-radius: 8px
+  padding: 20px
+  overflow: auto
+
+//form
+.form-group
+  display: flex
+  flex-direction: column
+  width: 100%
+  .v-label
+    display: block
+    margin-bottom: 8px
+    font-size: 14px
+    font-weight: 500
+    color: rgba(0, 0, 0, 1)
+  .label-padding .v-label
+    margin-bottom: 0 !important
+.form-group.form-horizontal
+  flex-direction: row
+  .v-label
+    width: 50px
+    padding-top: 12px
+
+.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
+/* .v-text-field.v-text-field--enclosed .v-text-field__details
+    padding: 0 !important */
+
+.filter-group, .button-group
+  display: flex
+  align-items: center
+  margin: 4px 0
+.button-group
+  margin-left: auto
+
+.v-input--selection-controls .v-input__slot > .v-label, .v-input--selection-controls .v-radio > .v-label
+  font-size: 14px
+  font-weight: 500
+
+//v-menu
+.v-menu__content
+  .v-list
+    padding: 0
+  .v-list-item--dense .v-list-item__title, .v-list-item--dense .v-list-item__subtitle, .v-list--dense .v-list-item .v-list-item__title, .v-list--dense .v-list-item .v-list-item__subtitle
+      font-size: 13px
+
+//v-stepper
+.v-stepper__header
+  justify-content: center !important
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
+  .v-divider
+    max-width: 40px
+    border-style: dashed
+    border-width: 1px
+.v-stepper__content
+  padding: 8px 0 16px 0 !important
+.theme--light.v-stepper .v-stepper__label
+  font-weight: 500
+
+//v-expansion-panels
+.v-expansion-panel-header
+  font-size: 15px !important
+  font-weight: 600
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2)
+.v-expansion-panel-content
+  background-color: rgba(0, 0, 0, 0.025)
+  padding-top: 20px
+  padding-bottom: 20px
+.panel-content-title
+  font-size: 14px
+  font-weight: 600
+  margin-bottom: 12px
+.panel-content-text
+  line-height: 1.8
+
+//v-card
+.v-card.card-contact
+  .contact-stext
+    font-size: 16px
+    font-weight: 600
+    text-align: center
+  .contact-group
+    display: flex
+    justify-content: center
+    background-color: rgba(0, 0, 0, 0.025)
+  .contact-item
+    display: flex
+    flex-direction: column
+    border-radius: 8px
+    padding: 20px
+    .contact-title
+      font-size: 16px
+      font-weight: 600
+      margin-bottom: 10px
+      small
+        font-size: 14px
+        font-weight: 500
+        color: rgba(0, 0, 0, 0.5)
+        margin-left: 8px
+    .contact-text
+      font-size: 20px
+      font-weight: 700
+
+.v-card.card-alert
+  .v-card__text
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 30px 24px 20px !important
+    min-height: 120px
+    font-size: 16px
+    font-weight: 500
+    text-align: center
+    color: rgba(0, 0, 0, 0.8) !important
+
+.v-card.card-view
+  .v-card__text
+    font-size: 14px
+    font-weight: 500
+
+.v-card.card-tab
+  .v-card__title
+    position: relative
+    font-size: 16px
+    font-weight: 700
+  .title-line
+    padding-left: 24px
+  .title-line:before
+    content: ""
+    position: absolute
+    top: 22px
+    left: 12px
+    display: block
+    width: 3px
+    height: 16px
+    background-color: #000000
+  .v-tab
+    font-size: 14px
+    font-weight: 700
+  .v-tab.v-tab--active
+    border-width: 1px 1px 0
+    border-color: #000
+    border-style: solid
+    background: #ffffff !important
+    .v-ripple__container
+      display: none
+  .v-tab--active:focus::before, .v-tab--active:hover::before, .v-tab--active::before
+    opacity: 0 !important
+  .v-slide-group__content
+    position: relative
+  .v-slide-group__content:before
+    content: ""
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 100%
+    height: 1px
+    background-color: #000000
+  .v-tabs-slider-wrapper
+    transition: 0s cubic-bezier(0.25, 0.8, 0.5, 1)
+
+.v-card.card-tab-detail
+  .v-card__title
+    font-size: 15px
+    font-weight: 600
+    padding-bottom: 5px
+  .v-card__text, .ul-list, .ol-list
+    font-size: 14px
+    font-weight: 500
+    line-height: 1.6
+
+.ul-list.list-dash
+  list-style: none
+  padding-left: 12px
+.ul-list.list-dash li
+  position: relative
+.ul-list.list-dash li:before
+  content: "-"
+  position: absolute
+  top: 0
+  left: -12px
+
+.ul-list.list-dot
+  list-style: none
+  padding-left: 12px
+.ul-list.list-dot li
+  position: relative
+.ul-list.list-dot li:before
+  content: ""
+  position: absolute
+  top: 9px
+  left: -12px
+  display: block
+  width: 3px
+  height: 3px
+  background-color: rgba(0, 0, 0, 0.5)
+
+.card-table
+  .v-card__title
+    margin-bottom: 16px
+  .table-title
+    font-size: 16px
+    font-weight: 700
+  .table-description
+    font-size: 13px
+    font-weight: 400
+
+.card-form
+  .theme--light.v-text-field--solo > .v-input__control > .v-input__slot
+    background-color: rgba(0, 0, 0, 0.06)
+  .v-card__actions
+    padding: 20px 0
+
+//v-pagination
+.v-pagination
+  margin-top: 10px !important
+.v-pagination__navigation, .v-pagination__item--active, .v-pagination__item
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
+
+//table
+.card-table:not(.table-view) .v-data-table > .v-data-table__wrapper > table 
+  border-collapse: collapse
+  thead.v-data-table-header-mobile > tr > th
+    background-color: #f5f7f7
+  thead:not(.v-data-table-header-mobile) > tr > th
+    border: thin solid rgba(0, 0, 0, 0.12)
+    background-color: #888888
+    color: #ffffff !important
+    font-weight: 400
+    .v-data-table-header__icon
+      color: rgba(255, 255, 255, 0.87) !important
+  tbody > tr:not(.v-data-table__mobile-table-row) > td
+    border: thin solid rgba(0, 0, 0, 0.12)
+  tbody > tr.v-data-table__mobile-table-row > td:last-child
+    border-bottom: thin solid rgba(0, 0, 0, 0.12)
+  tfoot > tr > td
+    border: thin solid rgba(0, 0, 0, 0.12)
+    background-color: #f5f7f7
+    font-weight: 600
+.v-data-table th, .v-data-table td
+  font-size: 14px !important
+.v-data-table__checkbox .v-input--selection-controls__input
+    margin-right: 0 !important
+
+.table-energy.no-title
+  .v-card__title
+    display: none
+
+.table-energy.no-title-padding
+  .v-card__title
+    padding-top: 0
+    padding-bottom: 0
+    margin-bottom: 0
+
+.table-energy
+  .v-data-table > .v-data-table__wrapper > table 
+    thead:not(.v-data-table-header-mobile) > tr > th
+      background-color: #3C5A80 !important
+  table th.text-start
+    text-align: center !important
+
+.table-energy.table-view > .v-card__title, .table-energy.table-view .v-data-table__wrapper
+  border-top: thin solid rgba(0, 0, 0, 0.12)
+  border-bottom: thin solid rgba(0, 0, 0, 0.12)
+
+.table-admin
+  .v-card__title
+    border-bottom: 1px solid #707070
+  table th.text-start
+    text-align: center !important
+
+.table-toolbar
+  align-items: center
+  padding: 4px 0 10px
+
+//v-list
+.v-list.list-status
+  .v-list-item + .v-list-item
+    margin-top: 20px
+  .v-list-item__title
+    font-size: 18px
+    font-weight: 600
+    margin-bottom: 10px
+  .v-list-item__subtitle
+    font-size: 14px
+    font-weight: 500
+    color: rgba(0, 0, 0, 0.4) !important
+    span
+      font-size: 36px
+      font-weight: 500
+      margin-right: 10px
+      color: rgba(0, 0, 0, 0.8)
+
+//main
+//main-banner
+.main-banner
+  position: relative
+  .v-image__image
+    background-position: center -300px !important
+  .carousel-sheet
+    position: absolute
+    z-index: 2
+    top: 0
+    left: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 50%
+    height: 100%
+    background-color: rgba(18, 128, 214, 0.8)
+    .carousel-text-group
+      display: flex
+      flex-direction: column
+      width: 70%
+      padding-left: 20px
+      .title
+        font-size: 32px !important
+        font-weight: 700
+        line-height: 1.2
+        color: rgba(255, 255, 255, 1)
+        margin-bottom: 20px
+        letter-spacing: -1px
+      .stext
+        font-size: 16px !important
+        font-weight: 500
+        color: rgba(255, 255, 255, 0.8)
+        margin-bottom: 20px
+@media (min-width: 1264px) and (max-width: 1904px)
+  .main-banner
+    .v-image__image
+      background-position: center -200px !important
+@media (min-width: 960px) and (max-width: 1264px)
+  .main-banner
+    .v-image__image
+      background-position: center -100px !important
+@media (min-width: 600px) and (max-width: 960px)
+  .main-banner
+    .v-image__image
+      background-position: center 0 !important
+    .v-carousel, .v-carousel__item
+      height: 400px !important
+@media screen and (max-width: 600px)
+  .main-banner
+    .v-image__image
+      background-position: center -50px !important
+    .v-carousel, .v-carousel__item
+      height: 400px !important
+    .v-window__prev, .v-window__next
+      top: calc(100% - 110px)
+    .carousel-sheet
+      top: auto
+      bottom: 0
+      left: 0
+      width: 100%
+      height: 44%
+      background-color: rgba(18, 128, 214, 1)
+      .carousel-text-group
+        width: 64%
+        padding-left: 0
+        .title
+          font-size: 22px !important
+          font-weight: 700
+          line-height: 1.2
+          color: rgba(255, 255, 255, 1)
+          margin-bottom: 4px
+        .stext
+          font-size: 14px !important
+          font-weight: 500
+          color: rgba(255, 255, 255, 0.8)
+          margin-bottom: 8px          
+          display: -webkit-box
+          -webkit-line-clamp: 3
+          -webkit-box-orient: vertical
+          overflow: hidden
+          text-overflow: ellipsis
+        .action
+          margin-left: auto
+
+//banner-icon-group
+.banner-icon-group
+  position: relative
+  display: flex
+  justify-content: center
+  margin-top: -70px
+  z-index: 3
+  .banner-icon
+    display: flex
+    align-items: center
+    background-color: #ffffff
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+    .v-btn.icon-item 
+      width: 130px
+      height: 130px !important
+      .v-btn__content
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-items: center
+      .icon-name
+        font-weight: 600
+        margin-top: 8px
+    .v-divider
+      min-height: 80px !important
+      height: 80px!important
+      max-height: 80px !important
+      margin-top: auto !important
+      margin-bottom: auto !important
+      border-color: #88BFEA
+@media (min-width: 600px) and (max-width: 960px)
+  .banner-icon-group
+    margin-top: -40px
+    padding: 0 20px
+@media screen and (max-width: 600px)
+  .banner-icon-group
+    margin-top: 20px
+    padding: 0 20px
+    .banner-icon
+      flex-wrap: wrap
+      .v-btn.icon-item 
+        width: calc(50% - 1px)
+        height: 100px !important
+      .v-divider
+        min-height: 60px !important
+        height: 60px!important
+        max-height: 60px !important
+
+.mdi-custom.mdi-diamond-outline
+  width: 36px
+  height: 36px
+  background-size: 100%
+  background-image: url("@/assets/icon_introduce.svg")
+.mdi-custom.mdi-home-heart
+  width: 36px
+  height: 36px
+  background-size: 92%
+  background-image: url("@/assets/icon_welfare_model.svg")
+.mdi-custom.mdi-clipboard-check
+  width: 36px
+  height: 36px
+  background-size: 80%
+  background-image: url("@/assets/icon_confirm_application.svg")
+.mdi-custom.mdi-bulletin-board
+  width: 36px
+  height: 36px
+  background-size: 90%
+  background-image: url("@/assets/icon_notice.svg")
+
+
+//card-notice
+.card-notice
+  .v-card__title
+    font-weight: 700 !important
+  a, a:hover
+    color: rgba(0, 0, 0, 0.8) !important
+    text-decoration: none !important
+  .noice-main-item
+    padding:20px
+    background-color: rgba(0, 0, 0, 0.03)
+    border-radius: 8px
+    height: 200px
+    .date
+      margin-bottom: 10px
+    .title
+      font-size: 16px
+      font-weight: 600
+      margin-bottom: 10px
+      line-height: 1.3
+      display: -webkit-box
+      -webkit-line-clamp: 2
+      -webkit-box-orient: vertical
+      overflow: hidden
+      text-overflow: ellipsis
+    .description
+      display: -webkit-box
+      -webkit-line-clamp: 3
+      -webkit-box-orient: vertical
+      overflow: hidden
+      text-overflow: ellipsis
+  .list-notice
+    li
+      display: flex
+      align-items: center
+      padding: 5px 0
+      a
+        width: calc(100% - 100px)
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+      .date
+        margin-left: auto
+    li:before
+      top: 13px
+
+//card-support
+.card-support
+  .v-card__title
+    font-weight: 700 !important
+  .carousel-control
+    position: absolute
+    top: 10px
+    right: 0
+    display: flex
+    align-items: center
+    .carousel-count
+      margin-right: 10px
+      span
+        font-weight: 600
+  .v-carousel
+    border-radius: 8px !important
+  .v-window__prev, .v-window__next
+    display: none

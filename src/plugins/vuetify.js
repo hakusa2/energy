@@ -1,24 +1,24 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
-import colors from 'vuetify/lib/util/colors'
+import Vue from "vue";
+import Vuetify from "vuetify/lib/framework";
+//import colors from "vuetify/lib/util/colors";
 
 Vue.use(Vuetify);
 
 export default new Vuetify({
-    breakpoint: {
-        thresholds: {
-            xs:360,
-        },
-        mobileBreakpoint: 'xs'
+  /* breakpoint: {
+    thresholds: {
+      xs: 360,
     },
-    theme: {
-      themes: {
-        light: {
-          primary: colors.brown,
-          secondary: '#9C27B0',
-          accent: '#8c9eff',
-          error: '#b71c1c',
-        },
+    mobileBreakpoint: "xs",
+  }, */
+  theme: {
+    themes: {
+      light: {
+        primary: "#2C3263",
+        secondary: "#C3C3C3",
+        accent: "#0055A5",
+        error: "#D50037",
       },
     },
+  },
 });
