@@ -9,7 +9,7 @@
         </v-breadcrumbs>
       </v-container>
     </div>
-    <div class="page-bg border-top">
+    <div class="page-bg border-top h-100">
       <div class="page-container">
         <v-container>
           <v-row>
