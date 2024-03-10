@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import "@/styles/SCoreDream/SCoreDream.css";
+import "@/styles/pretendard/pretendard.css";
 import "@/styles/overrides.sass";
 
 export default {

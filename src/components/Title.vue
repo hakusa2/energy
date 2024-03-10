@@ -1,19 +1,9 @@
 <template>
-  <div class="page-title my-5">
+  <div class="page-title my-4">
     <v-row no-gutters class="align-center">
-      <v-col cols="auto">
+      <v-col>
         <h2 class="v-heading-title">{{ title }}</h2>
-      </v-col>
-      <v-col cols="auto" class="ml-auto">
-        <slot name="BtnGroup"></slot>
-      </v-col>
-    </v-row>
-    <v-row no-gutters class="align-start mt-3">
-      <v-col cols="auto">
         <slot name="TitleDescription"></slot>
-      </v-col>
-      <v-col cols="auto" class="ml-auto">
-        <slot name="FormGroup"></slot>
       </v-col>
     </v-row>
   </div>

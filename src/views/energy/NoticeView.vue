@@ -1,55 +1,82 @@
 <template>
-  <div class="page-container">
-    <v-container>
-      <Title :title="'공지사항'"></Title>
-      <Tables class="table-energy table-view">
-        <template v-slot:TableTitle> 주택용 태양광DR모델 신청안내 </template>
-        <template v-slot:TableDescription> 2024.12.29 </template>
-        <template v-slot:TableData>
-          <v-card class="card-view" elevation="0">
-            <v-img
-              src="@/assets/sample_notice.png"
-              contain
-              max-width="500"
-              class="mx-auto my-5"
-            ></v-img>
-            <v-card-text>
-              안녕하세요 성남시 에너지포털입니다 오늘 날씨가 참 좋습니다. 내일
-              날씨도 참 좋기를 바랍니다. 감사합니다.
-            </v-card-text>
-          </v-card>
-          <v-simple-table>
-            <template v-slot:default>
-              <tbody>
-                <tr>
-                  <td>[이전글] 4년 01월 01일 정기점검 안내</td>
-                  <td class="text-center">2024-01-01</td>
-                </tr>
-                <tr>
-                  <td>[다음글] 4년 01월 01일 정기점검 안내</td>
-                  <td class="text-center">2024-01-01</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-        </template>
-      </Tables>
-    </v-container>
+  <div class="page-sub">
+    <div class="page-header pb-4">
+      <v-container>
+        <v-breadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
+          <template v-slot:divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+        </v-breadcrumbs>
+      </v-container>
+    </div>
+    <div class="page-bg border-top">
+      <div class="page-container">
+        <v-container>
+          <v-row>
+            <v-col>
+              <div class="table-energy table-view">
+                <div class="view-header">
+                  <div class="view-title">
+                    [공지사항] 주택용 태양광DR사업 신청안내
+                  </div>
+                  <div class="view-date">2024.01.29</div>
+                </div>
+                <div class="view-body">
+                  <v-img
+                    src="@/assets/sample_notice.png"
+                    contain
+                    max-width="500"
+                  ></v-img>
+                  <p>
+                    안녕하세요 성남시 에너지포털입니다 오늘 날씨가 참 좋습니다.
+                    내일 날씨도 참 좋기를 바랍니다. 감사합니다.
+                  </p>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="text-right">
+              <v-btn
+                outlined
+                class="btn-outline-solid btn-secondary"
+                to="energynotice"
+              >
+                목록
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Title from "@/components/Title.vue";
-import Tables from "@/components/Tables.vue";
 
 export default {
   name: "NoticeView",
-  components: {
-    Title,
-    Tables,
-  },
-  data: () => ({}),
+  components: {},
+  data: () => ({
+    breadcrumbs: [
+      {
+        text: "home",
+        disabled: false,
+        href: "main",
+      },
+      {
+        text: "참여와소통",
+        disabled: false,
+        href: "energynotice",
+      },
+      {
+        text: "복지 소식",
+        disabled: true,
+        href: "energynotice",
+      },
+    ],
+  }),
 };
 </script>
 

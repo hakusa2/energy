@@ -12,6 +12,13 @@ $font-size-root: 14px;
 
 $btn-font-weight: 500;
 $btn-letter-spacing: -1;
+$btn-sizes: (
+  "x-small": 20,
+  "small": 28,
+  "default": 40,
+  "large": 48,
+  "x-large": 52,
+);
 $btn-font-sizes: (
   "x-small": 12px,
   "small": 13px,
@@ -21,3 +28,6 @@ $btn-font-sizes: (
 );
 
 $input-font-size: 14px;
+
+$tab-font-size: 14px;
+$tab-font-weight: 700;

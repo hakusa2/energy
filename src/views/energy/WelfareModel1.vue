@@ -1,92 +1,274 @@
 <template>
-  <div class="page-container">
-    <v-container>
-      <Title :title="'사회복지시설'">
-        <template v-slot:BtnGroup>
-          <v-btn depressed color="primary" width="200" to="/applysocialwelfare">
-            신청하기
-          </v-btn>
-        </template>
-        <template v-slot:TitleDescription>
-          PV, 소형 ESS, EV 설비를 융합하여 V2B 인프라를 구축하고 효율적인
-          에너지관리를 통해 에너지비용을 절감하는 복지모델
-        </template>
-      </Title>
-
-      <v-img src="@/assets/picture1.jpeg" max-height="300"></v-img>
-
-      <v-card class="card-tab mt-5 mb-10" flat>
-        <v-tabs v-model="tab" background-color="#F6F7FB" grow>
-          <v-tabs-slider color="white"></v-tabs-slider>
-          <v-tab> 지원대상 </v-tab>
-          <v-tab> 지원내용 </v-tab>
-          <v-tab> 신청방법</v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
-            <v-card flat class="card-tab-detail">
-              <v-card-title class="title-line">사업내용</v-card-title>
-              <v-card-text>
-                <p>
-                  아래 가입요건을 모두 충족하는 대한민국 거주 청년을 대상으로
-                  합니다.
-                </p>
-                <ol class="ol-list">
-                  <li>
-                    (나이요건) 신규 가입일 기준 만 19세 ~ 34세 이하인 청년<br />
-                    * 병역이행기간 최대 6년 추가 인정
-                  </li>
-                  <li class="mt-2">
-                    (개인소득요건) 직전과세기간의 총급여액이 7,500만원 이하이며,
-                    종합소득과세표준에 합산되는 종합소득금액이 6,300만원 이하인
-                    경우<br />
-                    * 단, 비과세소득만 있는 경우는 제외
-                  </li>
-                  <li class="mt-2">
-                    (금융소득요건) 가입일이 속한 과세기간의 직전 3개 과세기간 중
-                    1회 이상 금융소득<br />
-                    * 직전과세기간의 소득이 확정되기 이전에는 전전년도의 소득을
-                    기준으로 산정합니다.<br />
-                    * 국세청의 소득확인증명서를 통해 소득확인이 이루어집니다.
-                  </li>
-                </ol>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item>
-            <v-card flat class="card-tab-detail">
-              <v-card-text>지원내용</v-card-text>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item>
-            <v-card flat class="card-tab-detail">
-              <v-card-text>신청방법</v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs-items>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn depressed color="primary" to="/applysocialwelfare" width="200"
-            >신청하기</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-container>
+  <div class="page-sub">
+    <div class="page-header">
+      <v-container>
+        <v-breadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
+          <template v-slot:divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+        </v-breadcrumbs>
+        <Title :title="'건물형 인프라구축 사업'">
+          <template v-slot:TitleDescription>
+            <div class="heading-description">
+              건물에너지비용 저감을 위한 인프라 지원사업. 태양광, ESS,
+              전기차충전기
+            </div>
+          </template>
+        </Title>
+      </v-container>
+    </div>
+    <div class="page-bg border-top">
+      <div class="page-container">
+        <v-container>
+          <v-row>
+            <v-col>
+              <div class="model-detail-group">
+                <div class="item-image">
+                  <v-img src="@/assets/img_business1.png" height="280"></v-img>
+                </div>
+                <div class="item-group">
+                  <div class="item-title">사업내용</div>
+                  <div class="item-description">
+                    <ul class="ul-list list-dot">
+                      <li>
+                        <span class="font-weight-bold">사업개요</span>
+                        <ul class="ul-list list-dash py-2">
+                          <li>
+                            에너지비용 및 온실가스 절감을 동시에 실현하기 위한
+                            건물형 에너지 복지 인프라 구축
+                          </li>
+                          <li>
+                            성남시와 함께하는 온실가스 감축을 통한 성남시
+                            탄소중립 참여
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="font-weight-bold">패키지 구성</span>
+                        <ul class="ul-list list-dash py-2">
+                          <li>
+                            국가 또는 성남시가 지원하는 분산전원 또는
+                            에너지효율화 설비
+                          </li>
+                          <li>
+                            태양광 발전설비, 양방향 전기차 충전기, 소형
+                            ESS(Energy Storage System) 등
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="font-weight-bold">운영서비스</span>
+                        <ul class="ul-list list-dash py-2">
+                          <li>
+                            전력 피크관리 및 스마트 충장전을 통한 에너지
+                            비용절감
+                          </li>
+                          <li>DR, 온실가스 감축 외부사업 참여로 편익</li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="font-weight-bold">사업비지원비율</span>
+                        <ul class="ul-list list-dash py-2">
+                          <li>
+                            국비(50~60%) + 지방비(20~30%)를 통한 자부담금 최소화
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="item-title">지원대상</div>
+                  <div class="item-description">
+                    <ul class="ul-list list-dot">
+                      <li>
+                        <span class="font-weight-bold"
+                          >아래의 조건을 일부 또는모두 충족하는 성남시 관내
+                          건물을 대상으로 합니다.</span
+                        >
+                        <ul class="ul-list list-dash py-2">
+                          <li>
+                            (대상) 공공시설, 상가 및 꼬마빌딩, 체육시설 및
+                            주차장 등 성남시 관내에 위치한 건물
+                          </li>
+                          <li>
+                            (태양광 발전설비) 주차장, 옥상 및 지붕 면적이 00m²
+                            이상
+                          </li>
+                          <li>
+                            (소규모 ESS) 전기실 또는 옥상의 여유부지 00m² 이상
+                          </li>
+                          <li>
+                            (양방향 EV 충전기) EV 충전용 주차면수 1면 이상
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="font-weight-bold"
+                          >아래의 경우 지원이 제한될수 있습니다.</span
+                        >
+                        <ul class="ul-list list-dash py-2">
+                          <li>토지 소유주와 건물 소유주가 다를 경우</li>
+                          <li>불법증축물</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="item-title">참여절차</div>
+                  <div class="item-description">
+                    <div class="apply-process-group row align-stretch">
+                      <div class="col col-sm-12 col-md">
+                        <div class="process-item">
+                          <div class="process-title">서비스 신청</div>
+                          <div class="process-description">
+                            신청서를 작성하여 사업을 신청합니다.
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-12 col-sm-12 col-md-auto d-flex align-self-center justify-center"
+                      >
+                        <div class="process-icon">
+                          <v-icon class="mdi-custom"
+                            >mdi-chevron-double-right</v-icon
+                          >
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md">
+                        <div class="process-item">
+                          <div class="process-title">현장 실사</div>
+                          <div class="process-description">
+                            현장 실사를 통해 선정 여부를 확인합니다.
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-12 col-sm-12 col-md-auto d-flex align-self-center justify-center"
+                      >
+                        <div class="process-icon">
+                          <v-icon class="mdi-custom"
+                            >mdi-chevron-double-right</v-icon
+                          >
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md">
+                        <div class="process-item">
+                          <div class="process-title">최종 선정</div>
+                          <div class="process-description">
+                            현장심사 결과에 따라 최종 선정합니다.
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-12 col-sm-12 col-md-auto d-flex align-self-center justify-center"
+                      >
+                        <div class="process-icon">
+                          <v-icon class="mdi-custom"
+                            >mdi-chevron-double-right</v-icon
+                          >
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md">
+                        <div class="process-item">
+                          <div class="process-title">인프라 구축</div>
+                          <div class="process-description">
+                            복지사업 인프라 구축을 합니다.
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-12 col-sm-12 col-md-auto d-flex align-self-center justify-center"
+                      >
+                        <div class="process-icon">
+                          <v-icon class="mdi-custom"
+                            >mdi-chevron-double-right</v-icon
+                          >
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-12 col-md">
+                        <div class="process-item">
+                          <div class="process-title">사업 운영</div>
+                          <div class="process-description">
+                            지속적으로 관리 및 운영을 진행합니다.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="text-center">
+              <v-btn outlined large color="secondary" to="welfaremodel">
+                목록
+              </v-btn>
+              <v-btn depressed large color="primary" class="ml-4" disabled>
+                사업 신청 기간이 아닙니다
+              </v-btn>
+              <v-btn
+                depressed
+                large
+                color="primary"
+                class="ml-4"
+                to="applysocialwelfare1"
+              >
+                사업 신청
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-container>
+          <v-row>
+            <v-col>
+              <h3 class="text-body-h3">구축사례</h3>
+            </v-col>
+          </v-row>
+          <v-row class="flex-nowrap overflow-hidden">
+            <v-col cols="12" sm="6" md="4">
+              <DialogCase />
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <DialogCase />
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <DialogCase />
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
+import DialogCase from "@/components/DialogCase.vue";
 
 export default {
   name: "WelfareModel1",
   components: {
     Title,
+    DialogCase,
   },
   data: () => ({
-    tab: null,
+    breadcrumbs: [
+      {
+        text: "home",
+        disabled: false,
+        href: "main",
+      },
+      {
+        text: "세부사업내용",
+        disabled: false,
+        href: "welfaremodel",
+      },
+      {
+        text: "건물형 인프라구축 사업",
+        disabled: true,
+        href: "welfaremodel1",
+      },
+    ],
   }),
 };
 </script>

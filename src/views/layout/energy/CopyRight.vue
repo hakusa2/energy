@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="d-flex justify-space-between flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row w-100 px-2 py-5"
+  <v-container
+    class="d-flex justify-space-between flex-column flex-xs-column flex-sm-row flex-md-row flex-lg-row flex-xl-row w-100 py-5"
   >
-    <div
-      class="order-2 order-sm-2 order-md-1 order-lg-1 order-xl-1 contact-info"
-    >
+    <div class="contact-info">
       <p class="text-address mb-0">
         경기도 성남시 중원구 성남대로 997(여수동200번지) 성남시청
       </p>
@@ -15,12 +13,10 @@
         Copyright ⓒ 성남시에너지복지포털 All Rights Reserved.
       </p>
     </div>
-    <div
-      class="order-1 order-sm-1 order-md-2 order-lg-2 order-xl-2 brand-name mb-3"
-    >
-      성남시에너지포탈
+    <div class="brand-name mt-5 mb-3">
+      <v-img src="@/assets/logo.png" max-width="168" contain></v-img>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -36,10 +32,6 @@ export default {
 
 <style lang="scss">
 .contact-info {
-  font-size: 11px;
-}
-.brand-name {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 12px;
 }
 </style>

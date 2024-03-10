@@ -1,156 +1,174 @@
 <template>
-  <div class="page-container">
-    <v-container>
-      <Title :title="'신청이력 확인 (사회복지시설)'">
-        <template v-slot:BtnGroup>
-          <v-chip label>신청중</v-chip>
-          <v-chip label color="secondary">신청대기중</v-chip>
-          <v-chip label color="primary">신청완료</v-chip>
-          <v-chip label color="green" text-color="white"> 신청완료 </v-chip>
-        </template>
-        <template v-slot:TitleDescription>
-          우측 상단의 처리현황을 확인해주세요. 검토중인 신청내역은 수정하실 수
-          없습니다.
-        </template>
-      </Title>
-
-      <v-divider class="divider-dashed"></v-divider>
-      <v-card class="card-form" flat>
-        <v-card-title class="mb-5">신청인 정보 입력</v-card-title>
-        <v-form ref="form" v-model="valid" lazy-validation class="px-5">
+  <div class="page-sub">
+    <div class="page-header">
+      <v-container>
+        <v-breadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
+          <template v-slot:divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+        </v-breadcrumbs>
+      </v-container>
+    </div>
+    <div class="page-bg border-top">
+      <div class="page-container">
+        <v-container>
           <v-row>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>이름 <span class="icon-required"></span></v-label>
-                <v-text-field
-                  :rules="rules"
-                  solo
-                  placeholder="이름을 입력해주세요."
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>시설명</v-label>
-                <v-text-field
-                  solo
-                  placeholder="기관, 사업자의 시설명을 입력해주세요"
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>휴대폰 <span class="icon-required"></span></v-label>
-                <v-text-field
-                  :rules="rules"
-                  solo
-                  placeholder="'-' 없이 숫자만 입력해주세요"
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>직위</v-label>
-                <v-text-field
-                  solo
-                  placeholder="직위를 입력해주세요."
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>생년월일 <span class="icon-required"></span></v-label>
-                <v-text-field
-                  :rules="rules"
-                  solo
-                  placeholder="생년월일을 입력해주세요."
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" md="6" class="py-0">
-              <div class="form-group">
-                <v-label>이메일</v-label>
-                <v-text-field
-                  solo
-                  placeholder="이메일을 입력해주세요."
-                ></v-text-field>
-              </div>
-            </v-col>
-            <v-col cols="12" class="py-0">
-              <div class="form-group">
-                <v-label>주소</v-label>
-                <v-row>
-                  <v-col cols="12" md="6" class="d-flex">
-                    <v-dialog v-model="dialog" max-width="500px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                          color="primary"
-                          depressed
-                          v-bind="attrs"
-                          v-on="on"
-                          class="mr-3"
-                          height="48"
-                        >
-                          검색
-                        </v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-title> 주소 검색 </v-card-title>
-                        <div class="zipcode-group px-5">주소 검색 영역</div>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn depressed @click="dialog = false">
-                            취소
-                          </v-btn>
-                          <v-btn
-                            depressed
-                            color="primary"
-                            @click="dialog = false"
+            <v-col>
+              <v-card class="card-form" flat>
+                <div class="card-header">
+                  <div class="card-left">
+                    <div class="card-title">공동주택형 에너지서비스 사업</div>
+                    <div class="card-date">신청일시: 2023.12.18 17:44</div>
+                  </div>
+                  <div class="card-label">
+                    <v-chip class="chip-color1" color="#F2F3F3">검토중</v-chip>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-row>
+                      <v-col cols="12">
+                        <div class="form-group">
+                          <v-label>신청유형</v-label>
+                          <v-radio-group
+                            v-model="row"
+                            row
+                            class="pt-0 mt-1"
+                            readonly
+                            hide-details="auto"
                           >
-                            저장
-                          </v-btn>
-                          <v-spacer></v-spacer>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                    <v-text-field
-                      solo
-                      placeholder="지번 및 도로명주소를 입력 후 검색해주세요"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      solo
-                      placeholder="나머지 주소를 입력해주세요"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </div>
+                            <v-radio label="세대" value="radio-1"></v-radio>
+                            <v-radio label="단지" value="radio-2"></v-radio>
+                          </v-radio-group>
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <div class="form-group">
+                          <v-label>이름</v-label>
+                          <v-text-field
+                            dense
+                            outlined
+                            solo
+                            value="홍길동"
+                            readonly
+                            hide-details="auto"
+                          ></v-text-field>
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <div class="form-group">
+                          <v-label>휴대폰</v-label>
+                          <v-text-field
+                            dense
+                            outlined
+                            solo
+                            value="010 0000 0000"
+                            readonly
+                            hide-details="auto"
+                          ></v-text-field>
+                        </div>
+                      </v-col>
+                      <v-col cols="12" md="12">
+                        <div class="form-group">
+                          <v-label>이메일</v-label>
+                          <div class="d-flex">
+                            <v-text-field
+                              dense
+                              outlined
+                              solo
+                              value="example"
+                              readonly
+                              hide-details="auto"
+                            ></v-text-field>
+                            <div class="pt-2 px-2">@</div>
+                            <v-text-field
+                              dense
+                              outlined
+                              solo
+                              value="example.com"
+                              readonly
+                              hide-details="auto"
+                            ></v-text-field>
+                          </div>
+                        </div>
+                      </v-col>
+                      <v-col cols="12">
+                        <div class="form-group">
+                          <v-label>신청주소</v-label>
+                          <v-row>
+                            <v-col cols="12" md="12" class="pb-2">
+                              <v-text-field
+                                dense
+                                outlined
+                                solo
+                                value="경기 성남시 수정구 수정로 319"
+                                readonly
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="12" class="py-0">
+                              <v-text-field
+                                dense
+                                outlined
+                                solo
+                                value="0000동 0000호"
+                                readonly
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-form>
+                </div>
+              </v-card>
             </v-col>
           </v-row>
-        </v-form>
-        <v-divider class="divider-dashed"></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn depressed large> 신청취소 </v-btn>
-          <v-btn depressed large color="primary"> 수정 </v-btn>
-          <v-spacer></v-spacer>
-        </v-card-actions>
-      </v-card>
-    </v-container>
+          <v-row>
+            <v-col class="text-right">
+              <v-btn outlined class="btn-outline-solid btn-secondary" to="main">
+                뒤로
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Title from "@/components/Title.vue";
 
 export default {
   name: "ApplyCheckForm",
-  components: {
-    Title,
-  },
-  data: () => ({}),
+  components: {},
+  data: () => ({
+    breadcrumbs: [
+      {
+        text: "home",
+        disabled: false,
+        href: "main",
+      },
+      {
+        text: "세부사업내용",
+        disabled: false,
+        href: "welfaremodel",
+      },
+      {
+        text: "신청이력조회",
+        disabled: false,
+        href: "applycheck",
+      },
+      {
+        text: "신청이력확인",
+        disabled: true,
+        href: "applycheckform",
+      },
+    ],
+    row: "radio-1",
+  }),
 };
 </script>
 

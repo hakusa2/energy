@@ -7,17 +7,18 @@ Vue.use(Vuetify);
 export default new Vuetify({
   /* breakpoint: {
     thresholds: {
-      xs: 360,
+      xs: 430,
+      sm: 768,
     },
     mobileBreakpoint: "xs",
   }, */
   theme: {
     themes: {
       light: {
-        primary: "#2C3263",
-        secondary: "#C3C3C3",
-        accent: "#0055A5",
-        error: "#D50037",
+        primary: "#A6D086",
+        secondary: "#C6C2C2",
+        accent: "#000000",
+        error: "#FF3040",
       },
     },
   },

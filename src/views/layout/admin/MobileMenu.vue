@@ -1,7 +1,9 @@
 <template>
   <v-card tile elevation="0" class="card-mobile-menu">
-    <v-app-bar flat dark color="#333333" height="60px">
-      <v-toolbar-title>관리자</v-toolbar-title>
+    <v-app-bar flat color="white" height="60px">
+      <v-toolbar-title
+        ><v-img src="@/assets/logo.png" max-width="168" contain></v-img
+      ></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-close</v-icon>

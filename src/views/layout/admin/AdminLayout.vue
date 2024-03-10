@@ -1,24 +1,18 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      flat
-      clipped-left
-      clipped-right
-      color="#F4F4F4"
-      height="60px"
-      class="px-2"
-    >
-      <router-link class="d-inline-block" to="/admin">
-        <v-img src="@/assets/logo.svg" max-width="168" contain></v-img>
-      </router-link>
-      <v-spacer></v-spacer>
-      <TopMenu class="d-none d-md-flex" />
-      <v-app-bar-nav-icon
-        @click.stop="drawer = !drawer"
-        class="d-flex d-md-none"
-      >
-      </v-app-bar-nav-icon>
+    <v-app-bar absolute elevation="2" color="white" height="60px">
+      <v-container class="d-flex align-center">
+        <router-link class="d-inline-block" to="/admin">
+          <v-img src="@/assets/logo.png" max-width="168" contain></v-img>
+        </router-link>
+        <v-spacer></v-spacer>
+        <TopMenu class="d-none d-md-flex" />
+        <v-app-bar-nav-icon
+          @click.stop="drawer = !drawer"
+          class="d-flex d-md-none"
+        >
+        </v-app-bar-nav-icon>
+      </v-container>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -31,9 +25,13 @@
       <MobileMenu />
     </v-navigation-drawer>
 
-    <v-main>
+    <v-main class="admin-view pb-5">
       <router-view />
     </v-main>
+
+    <v-footer class="admin-footer">
+      <CopyRight />
+    </v-footer>
   </v-app>
 </template>
 
@@ -41,12 +39,14 @@
 // @ is an alias to /src
 import TopMenu from "./TopMenu.vue";
 import MobileMenu from "./MobileMenu.vue";
+import CopyRight from "./CopyRight.vue";
 
 export default {
   name: "AdminLayout",
   components: {
     TopMenu,
     MobileMenu,
+    CopyRight,
   },
   created() {},
   data: () => ({
@@ -57,4 +57,11 @@ export default {
 
 <style lang="scss">
 // energy > MainLayout.vue
+.v-main.admin-view {
+  background-color: #fafafa;
+}
+.theme--light.v-footer.admin-footer {
+  background-color: #ffffff;
+  border-top: 0 solid #f2f3f3;
+}
 </style>

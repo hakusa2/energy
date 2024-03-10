@@ -10,18 +10,62 @@ body
   height: 100vh
 
 .v-application
-  font-family: "SCoreDream", "Roboto", sans-serif !important
+  font-family: "Pretendard", "Roboto", sans-serif !important
 
-.page-container
+.page-bg
+  background-color: #FAFAFA
+  padding: 20px 0
+.page-bg.border-top
+  border-top: 1px solid #F2F3F3
+
+.page-header, .page-container
   max-width: 1520px
   margin-left: auto
   margin-right: auto
   padding-right: 12px
   padding-left: 12px
 
+//page-breadcrumbs
+.v-breadcrumbs.page-breadcrumbs
+  position: relative
+  padding: 16px 12px 0
+  align-items: center
+  a, .v-breadcrumbs__item--disabled
+    display: flex
+    line-height: 1
+    color: #000 !important
+  .v-breadcrumbs__item--disabled
+    font-weight: 700
+    opacity: 1
+  li:nth-child(even)
+    padding: 0 4px
+  li:first-child
+    a
+      display: block
+      width: 16px
+      height: 16px
+      font-size: 0
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 100%
+      background-image: url("@/assets/icon_home.png")
+.page-breadcrumbs:before
+  content: ""
+  position: absolute
+  top: 23px
+  left: 0
+  display: block
+  width: 3px
+  height: 3px
+  background-color: #3B3B3B
+
 //v-heading
 .v-heading-title
-  font-size: 20px
+  font-size: 24px
+.heading-description
+  //font-size: 16px
+  color: #7C828B
+  padding-top: 8px
 
 //cursor
 .cursor-pointer
@@ -31,7 +75,9 @@ body
 .text-required:before,
 .icon-required:before
   content: "* "
-  color: #13A95B
+  color: #E32727
+  font-size: 18px
+  line-height: 14px
 .text-break
   word-break: break-all
 
@@ -40,11 +86,19 @@ body
   width: 100%
 .h-100
   height: 100%
+.w-auto
+  min-width: auto !important
+  width: auto !important
+  max-width: auto !important
 
 //v-btn
 .v-btn:not(.v-btn--round).v-size--default.h-100
   min-height: 36px
   height: 100% !important
+
+.btn-outline-solid.btn-secondary
+  background-color: #E5E6E8
+  border: thin solid #C6C2C2
 
 //v-icon
 .mdi.mdi-custom:before
@@ -53,6 +107,11 @@ body
   background-position: center center
   background-repeat: no-repeat
   background-size: 100%
+.mdi-custom.mdi-chevron-double-right
+  width: 32px
+  height: 32px
+  background-size: 75%
+  background-image: url("@/assets/icon_arrow.png")
 .mdi-custom.mdi-clipboard-check-outline
   width: 32px
   height: 32px
@@ -67,34 +126,200 @@ body
   width: 36px
   height: 36px
   background-size: 80%
-  background-image: url("@/assets/icon_phone.svg")
+  background-image: url("@/assets/icon_call.png")
 .mdi-custom.mdi-email-outline
   width: 36px
   height: 36px
   background-size: 80%
-  background-image: url("@/assets/icon_email.svg")
+  background-image: url("@/assets/icon_email.png")
 
-//v-divider
-.v-divider.divider-dashed
-  border-style: dashed
+//text
+.text-body-h3
+  font-size: 20px
+  font-weight: 700
+  letter-spacing: -1px
+.text-body1
+  font-size: 24px
+  font-weight: 700
+  letter-spacing: -1px
+  line-height: 32px
+
+//introduce
+.introduce-group
+  background-color: #ffffff
+  border-radius: 8px
+  padding: 16px
+  height: 100%
+  .item-title
+    font-size: 18px
+    font-weight: 700
+    padding: 10px 0
+
+//model-group
+.model-group
+  background-color: #ffffff
+  border-radius: 8px
+  height: 100%
+  border: 1px solid #F2F3F3
+  .item-image
+    border-radius: 8px
+    overflow: hidden
+  .item-title
+    font-size: 18px
+    font-weight: 700
+    padding: 16px 16px 0
+  .item-description
+    padding: 12px 16px
+  .item-keyword
+    padding: 0 16px
+    .theme--light.v-chip
+      background: transparent
+      padding: 0
+      border-radius: 0
+    .theme--light.v-chip:hover::before
+      opacity: 0
+    .v-chip+.v-chip
+      margin-left: 8px
+  .item-action
+    text-align: right
+    padding: 12px 16px
+
+//model-case-group
+.model-case-group
+  height: 100%
+  .item-image
+    border-radius: 8px
+    overflow: hidden
+  .item-title
+    font-size: 16px
+    font-weight: 700
+  .item-address
+    padding: 8px 0
+  .item-chip
+    padding: 16px 0 12px
+    .theme--light.v-chip
+      background: transparent
+    .theme--light.v-chip:hover::before
+      opacity: 0
+    .v-chip+.v-chip
+      margin-left: 8px
+
+//model-detail-group
+.dialog-body
+  .model-detail-group
+    border: 0
+    .item-group
+      padding: 20px 8px
+.model-detail-group
+  background-color: #ffffff
+  border-radius: 8px
+  height: 100%
+  border: 1px solid #F2F3F3
+  .item-image
+    border-radius: 8px
+    overflow: hidden
+  .item-group
+    padding: 20px
+  .item-title
+    position: relative
+    font-size: 18px
+    font-weight: 700
+    padding: 8px 0 0 28px
+  .item-title:before
+    content: ""
+    position: absolute
+    top: 12px
+    left: 16px
+    display: block
+    width: 3px
+    height: 20px
+    background-color: #A6D086
+    border-radius: 3px
+  .item-description
+    padding: 12px 24px
+
+//apply-process-group
+.apply-process-group.row
+  margin-left: -20px
+  margin-right: -20px
+  .col
+    padding-left: 8px
+    padding-right: 8px
+  .process-item
+    height: 100%
+    padding: 16px
+    border: 1px solid #E5E6E8
+    border-radius: 8px
+    .process-title
+      font-weight: 700
+      margin-bottom: 12px
+@media (min-width: 600px) and (max-width: 960px)
+  .apply-process-group.row
+    .col
+      padding-top: 8px
+      padding-bottom: 8px
+  .mdi-custom.mdi-chevron-double-right
+    transform: rotate(90deg)
+@media screen and (max-width: 600px)
+  .apply-process-group.row
+    .col
+      padding-top: 8px
+      padding-bottom: 8px
+  .mdi-custom.mdi-chevron-double-right
+    transform: rotate(90deg)
+
+//list-control
+.list-control
+  display: flex
+  align-items: center
+  .carousel-count
+    margin-right: 10px
+    color: rgba(0, 0, 0, 0.15)
+    span
+      color: #000000
+      font-weight: 600
+
+//dialog
+.card-dialog
+  .dialog-header
+    position: relative
+    .dialog-close
+      position: absolute
+      top: 8px
+      right: 8px
+    .dialog-title
+      font-size: 20px !important
+      font-weight: 700 !important
+      letter-spacing: -1px !important
+  .dialog-body
+    position: relative
+    padding: 0 20px 20px
 
 //complete-group
 .complete-group
   .complete-title
-    font-size: 20px
-    font-weight: 600
+    font-size: 24px
+    font-weight: 700
   .complete-stext
     font-size: 14px
     font-weight: 500
 
 //terms-group
 .terms-group
-  border: 1px solid rgba(0, 0, 0, 0.2)
+  background-color: #ffffff
+  border: 1px solid #F2F3F3
   border-radius: 8px
   padding: 20px
   overflow: auto
 
 //form
+.input-certification
+  .v-text-field__suffix
+    color: #FF7E12
+.form-bg
+  background-color: #ffffff
+  border-radius: 8px
+  padding: 20px
 .form-group
   display: flex
   flex-direction: column
@@ -105,13 +330,25 @@ body
     font-size: 14px
     font-weight: 500
     color: rgba(0, 0, 0, 1)
+    white-space: nowrap
   .label-padding .v-label
     margin-bottom: 0 !important
+    color: #000000
+  .v-text-field--outlined fieldset
+    border-color: #CBCDD1
 .form-group.form-horizontal
   flex-direction: row
   .v-label
     width: 50px
     padding-top: 12px
+.v-radio
+  .v-label
+    margin-bottom: 0
+
+@media (min-width: 960px)
+  .form-group
+    .col-label
+      max-width: 80px
 
 .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
@@ -136,58 +373,88 @@ body
   .v-list-item--dense .v-list-item__title, .v-list-item--dense .v-list-item__subtitle, .v-list--dense .v-list-item .v-list-item__title, .v-list--dense .v-list-item .v-list-item__subtitle
       font-size: 13px
 
-//v-stepper
-.v-stepper__header
-  justify-content: center !important
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
-  .v-divider
-    max-width: 40px
-    border-style: dashed
-    border-width: 1px
-.v-stepper__content
-  padding: 8px 0 16px 0 !important
-.theme--light.v-stepper .v-stepper__label
-  font-weight: 500
-
 //v-expansion-panels
-.v-expansion-panel-header
-  font-size: 15px !important
-  font-weight: 600
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2)
-.v-expansion-panel-content
-  background-color: rgba(0, 0, 0, 0.025)
-  padding-top: 20px
-  padding-bottom: 20px
-.panel-content-title
-  font-size: 14px
-  font-weight: 600
-  margin-bottom: 12px
-.panel-content-text
-  line-height: 1.8
+.v-sheet.v-card.card-accordion
+  border-radius: 8px
+  overflow: hidden
+  .v-expansion-panel-header
+    font-size: 16px !important
+    font-weight: 700
+    border-bottom: 1px solid #F2F3F3
+    min-height: 56px
+    padding: 24px
+  .v-expansion-panel-content
+    padding-top: 20px
+    padding-bottom: 20px
+    border-bottom: 1px solid #F2F3F3
+  .panel-content-title
+    font-size: 16px
+    font-weight: 700
+    margin-bottom: 12px
+  .panel-content-text
+    line-height: 1.8
+    padding-left: 28px
+  .text-question
+    color: #A6D086
+    margin-right: 8px
+  .text-answer
+    color: #0095F6
+    margin-right: 8px
 
 //v-card
+.theme--light.v-card.card-transparent
+  background-color: transparent
+
+.card-form
+  background-color: #ffffff
+  border-radius: 8px
+  border: 1px solid #F2F3F3  
+  .card-title
+    font-size: 18px
+    font-weight: 700
+    margin-bottom: 8px
+    small
+      font-size: 14px
+      font-weight: 600
+      color: rgba(0, 0, 0, 0.45)
+  .card-header
+    display: flex
+    align-items: center
+    border-bottom: 1px solid #F2F3F3
+    padding: 16px
+    .card-date
+      color: rgba(0, 0, 0, 0.45)
+    .card-label
+      margin-left: auto
+  .card-body
+    padding: 32px 16px
+
+.theme--light.v-chip.chip-color1
+  color: rgba(0, 0, 0, 0.45)
+  font-weight: 600
+    
+
 .v-card.card-contact
+  margin-top: 40px
   .contact-stext
     font-size: 16px
-    font-weight: 600
-    text-align: center
+    font-weight: 700
+    padding: 4px 20px
   .contact-group
-    display: flex
-    justify-content: center
-    background-color: rgba(0, 0, 0, 0.025)
+    padding: 8px 20px
   .contact-item
     display: flex
     flex-direction: column
     border-radius: 8px
-    padding: 20px
     .contact-title
       font-size: 16px
-      font-weight: 600
+      font-weight: 700
       margin-bottom: 10px
       small
         font-size: 14px
         font-weight: 500
         color: rgba(0, 0, 0, 0.5)
+        letter-spacing: -1px
         margin-left: 8px
     .contact-text
       font-size: 20px
@@ -210,47 +477,6 @@ body
     font-size: 14px
     font-weight: 500
 
-.v-card.card-tab
-  .v-card__title
-    position: relative
-    font-size: 16px
-    font-weight: 700
-  .title-line
-    padding-left: 24px
-  .title-line:before
-    content: ""
-    position: absolute
-    top: 22px
-    left: 12px
-    display: block
-    width: 3px
-    height: 16px
-    background-color: #000000
-  .v-tab
-    font-size: 14px
-    font-weight: 700
-  .v-tab.v-tab--active
-    border-width: 1px 1px 0
-    border-color: #000
-    border-style: solid
-    background: #ffffff !important
-    .v-ripple__container
-      display: none
-  .v-tab--active:focus::before, .v-tab--active:hover::before, .v-tab--active::before
-    opacity: 0 !important
-  .v-slide-group__content
-    position: relative
-  .v-slide-group__content:before
-    content: ""
-    position: absolute
-    bottom: 0
-    left: 0
-    width: 100%
-    height: 1px
-    background-color: #000000
-  .v-tabs-slider-wrapper
-    transition: 0s cubic-bezier(0.25, 0.8, 0.5, 1)
-
 .v-card.card-tab-detail
   .v-card__title
     font-size: 15px
@@ -264,9 +490,9 @@ body
 .ul-list.list-dash
   list-style: none
   padding-left: 12px
-.ul-list.list-dash li
+.ul-list.list-dash>li
   position: relative
-.ul-list.list-dash li:before
+.ul-list.list-dash>li:before
   content: "-"
   position: absolute
   top: 0
@@ -275,9 +501,9 @@ body
 .ul-list.list-dot
   list-style: none
   padding-left: 12px
-.ul-list.list-dot li
+.ul-list.list-dot>li
   position: relative
-.ul-list.list-dot li:before
+.ul-list.list-dot>li:before
   content: ""
   position: absolute
   top: 9px
@@ -286,6 +512,9 @@ body
   width: 3px
   height: 3px
   background-color: rgba(0, 0, 0, 0.5)
+.ul-list.list-dot>li.col:before
+  top: 20px
+  left: 0
 
 .card-table
   .v-card__title
@@ -296,12 +525,6 @@ body
   .table-description
     font-size: 13px
     font-weight: 400
-
-.card-form
-  .theme--light.v-text-field--solo > .v-input__control > .v-input__slot
-    background-color: rgba(0, 0, 0, 0.06)
-  .v-card__actions
-    padding: 20px 0
 
 //v-pagination
 .v-pagination
@@ -345,21 +568,62 @@ body
     margin-bottom: 0
 
 .table-energy
+  background-color: transparent !important
+  a
+    color: #000000 !important
+    text-decoration: none !important
+  .theme--light.v-data-table
+    background-color: transparent
+    .v-data-table__wrapper
+      background-color: #ffffff
+      border-radius: 8px
+      overflow: hidden
   .v-data-table > .v-data-table__wrapper > table 
     thead:not(.v-data-table-header-mobile) > tr > th
       background-color: #3C5A80 !important
   table th.text-start
     text-align: center !important
 
-.table-energy.table-view > .v-card__title, .table-energy.table-view .v-data-table__wrapper
-  border-top: thin solid rgba(0, 0, 0, 0.12)
-  border-bottom: thin solid rgba(0, 0, 0, 0.12)
+.table-energy.card-table:not(.table-view) .v-data-table > .v-data-table__wrapper > table 
+  tbody > tr:not(.v-data-table__mobile-table-row) > td
+    border-width: 0 0 thin 0
+    border-style: solid 
+    border-color: #F2F3F3
+  tbody > tr.v-data-table__mobile-table-row > td:last-child
+    border-width: 0 0 thin 0
+    border-style: solid 
+    border-color: #F2F3F3
+
+.table-energy.table-view
+  background-color: #ffffff !important
+  border-radius: 8px
+  border: 1px solid #F2F3F3
+  .view-header
+    border-bottom: 1px solid #F2F3F3
+    padding: 16px
+    .view-title
+      font-size: 18px
+      font-weight: 700
+      margin-bottom: 8px
+    .view-date
+      color: rgba(0, 0, 0, 0.45)
+  .view-body
+    padding: 20px 16px
+    .v-image
+      margin: 0 0 20px
+
+
 
 .table-admin
+  background-color: transparent !important
   .v-card__title
     border-bottom: 1px solid #707070
   table th.text-start
     text-align: center !important
+  .theme--light.v-data-table
+    background-color: transparent
+    .v-data-table__wrapper
+      background-color: #ffffff
 
 .table-toolbar
   align-items: center
@@ -367,6 +631,7 @@ body
 
 //v-list
 .v-list.list-status
+  background: transparent !important
   .v-list-item + .v-list-item
     margin-top: 20px
   .v-list-item__title
@@ -387,8 +652,14 @@ body
 //main-banner
 .main-banner
   position: relative
+  .v-carousel, .v-carousel__item
+    //height: 700px !important
+  .v-responsive__sizer
+    height: 700px
+  .v-carousel, .v-carousel__item
+    height: 700px !important
   .v-image__image
-    background-position: center -300px !important
+    background-position: center center !important 
   .carousel-sheet
     position: absolute
     z-index: 2
@@ -397,9 +668,8 @@ body
     display: flex
     align-items: center
     justify-content: center
-    width: 50%
+    width: 100%
     height: 100%
-    background-color: rgba(18, 128, 214, 0.8)
     .carousel-text-group
       display: flex
       flex-direction: column
@@ -419,169 +689,74 @@ body
         margin-bottom: 20px
 @media (min-width: 1264px) and (max-width: 1904px)
   .main-banner
+    .v-responsive__sizer
+      height: 500px
+    .v-carousel, .v-carousel__item
+      height: 500px !important
     .v-image__image
-      background-position: center -200px !important
+      background-position: center center !important
 @media (min-width: 960px) and (max-width: 1264px)
-  .main-banner
+  .main-banner    
+    .v-responsive__sizer
+      height: 500px
+    .v-carousel, .v-carousel__item
+      height: 500px !important
     .v-image__image
-      background-position: center -100px !important
+      background-position: center center !important
 @media (min-width: 600px) and (max-width: 960px)
   .main-banner
+    .v-responsive__sizer
+      height: 500px
+    .v-carousel, .v-carousel__item
+      height: 500px !important
     .v-image__image
       background-position: center 0 !important
-    .v-carousel, .v-carousel__item
-      height: 400px !important
 @media screen and (max-width: 600px)
   .main-banner
-    .v-image__image
-      background-position: center -50px !important
+    .v-responsive__sizer
+      height: 500px
     .v-carousel, .v-carousel__item
-      height: 400px !important
-    .v-window__prev, .v-window__next
-      top: calc(100% - 110px)
-    .carousel-sheet
-      top: auto
-      bottom: 0
-      left: 0
-      width: 100%
-      height: 44%
-      background-color: rgba(18, 128, 214, 1)
-      .carousel-text-group
-        width: 64%
-        padding-left: 0
-        .title
-          font-size: 22px !important
-          font-weight: 700
-          line-height: 1.2
-          color: rgba(255, 255, 255, 1)
-          margin-bottom: 4px
-        .stext
-          font-size: 14px !important
-          font-weight: 500
-          color: rgba(255, 255, 255, 0.8)
-          margin-bottom: 8px          
-          display: -webkit-box
-          -webkit-line-clamp: 3
-          -webkit-box-orient: vertical
-          overflow: hidden
-          text-overflow: ellipsis
-        .action
-          margin-left: auto
+      height: 500px !important
+    .v-image__image
+      background-position: -350px center !important
 
-//banner-icon-group
-.banner-icon-group
-  position: relative
-  display: flex
-  justify-content: center
-  margin-top: -70px
-  z-index: 3
-  .banner-icon
-    display: flex
-    align-items: center
-    background-color: #ffffff
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)
-    .v-btn.icon-item 
-      width: 130px
-      height: 130px !important
-      .v-btn__content
-        display: flex
-        flex-direction: column
-        align-items: center
-        justify-items: center
-      .icon-name
-        font-weight: 600
-        margin-top: 8px
-    .v-divider
-      min-height: 80px !important
-      height: 80px!important
-      max-height: 80px !important
-      margin-top: auto !important
-      margin-bottom: auto !important
-      border-color: #88BFEA
-@media (min-width: 600px) and (max-width: 960px)
-  .banner-icon-group
-    margin-top: -40px
-    padding: 0 20px
-@media screen and (max-width: 600px)
-  .banner-icon-group
-    margin-top: 20px
-    padding: 0 20px
-    .banner-icon
-      flex-wrap: wrap
-      .v-btn.icon-item 
-        width: calc(50% - 1px)
-        height: 100px !important
-      .v-divider
-        min-height: 60px !important
-        height: 60px!important
-        max-height: 60px !important
-
-.mdi-custom.mdi-diamond-outline
-  width: 36px
-  height: 36px
-  background-size: 100%
-  background-image: url("@/assets/icon_introduce.svg")
-.mdi-custom.mdi-home-heart
-  width: 36px
-  height: 36px
-  background-size: 92%
-  background-image: url("@/assets/icon_welfare_model.svg")
-.mdi-custom.mdi-clipboard-check
-  width: 36px
-  height: 36px
-  background-size: 80%
-  background-image: url("@/assets/icon_confirm_application.svg")
-.mdi-custom.mdi-bulletin-board
-  width: 36px
-  height: 36px
-  background-size: 90%
-  background-image: url("@/assets/icon_notice.svg")
-
-
-//card-notice
-.card-notice
+//card-myhome-energy
+.card-myhome-energy
   .v-card__title
+    font-size: 20px !important
     font-weight: 700 !important
   a, a:hover
     color: rgba(0, 0, 0, 0.8) !important
     text-decoration: none !important
-  .noice-main-item
-    padding:20px
-    background-color: rgba(0, 0, 0, 0.03)
-    border-radius: 8px
-    height: 200px
-    .date
-      margin-bottom: 10px
-    .title
+
+.main-myenergy-result
+  display: flex
+  flex-direction: column
+  min-height: 272px
+  .result-title
+    display: flex
+    align-items: center
+    font-size: 16px
+    font-weight: 700
+    padding: 0 0 20px
+  .result-stitle
+    color: rgba(0, 0, 0, 0.4)
+    padding: 0 0 4px
+    font-weight: 500
+    span
+      font-weight: 700
+  .result-value
+    font-size: 28px
+    font-weight: 700
+    small
       font-size: 16px
+      font-weight: 500
+    .unit
+      font-size: 12px
+      font-weight: 400
+      color: rgba(0, 0, 0, 0.4)
       font-weight: 600
-      margin-bottom: 10px
-      line-height: 1.3
-      display: -webkit-box
-      -webkit-line-clamp: 2
-      -webkit-box-orient: vertical
-      overflow: hidden
-      text-overflow: ellipsis
-    .description
-      display: -webkit-box
-      -webkit-line-clamp: 3
-      -webkit-box-orient: vertical
-      overflow: hidden
-      text-overflow: ellipsis
-  .list-notice
-    li
-      display: flex
-      align-items: center
-      padding: 5px 0
-      a
-        width: calc(100% - 100px)
-        white-space: nowrap
-        overflow: hidden
-        text-overflow: ellipsis
-      .date
-        margin-left: auto
-    li:before
-      top: 13px
+      margin-left: 4px
 
 //card-support
 .card-support
@@ -589,15 +764,20 @@ body
     font-weight: 700 !important
   .carousel-control
     position: absolute
-    top: 10px
+    top: -8px
     right: 0
     display: flex
     align-items: center
     .carousel-count
       margin-right: 10px
+      color: rgba(0, 0, 0, 0.15)
       span
+        color: #000000
         font-weight: 600
   .v-carousel
+    //background-color: #ffffff
     border-radius: 8px !important
   .v-window__prev, .v-window__next
     display: none
+  //.v-image__image--cover
+    //background-size: contain
