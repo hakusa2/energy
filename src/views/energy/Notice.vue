@@ -35,6 +35,9 @@
               >
                 <template v-slot:[`item.title`]="{ item }">
                   <router-link :to="item.link">
+                    <span class="font-weight-bold mr-1">{{
+                      item.category
+                    }}</span>
                     {{ item.title }}
                   </router-link>
                 </template>
@@ -97,34 +100,40 @@ export default {
     initialize() {
       this.tabledata = [
         {
-          title: "[공지사항] 주택용 태양광DR사업 신청안내",
+          title: "주택용 태양광DR사업 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[공지사항]",
         },
         {
-          title: "[공지사항] 주택용 태양광DR사업 신청안내",
+          title: "주택용 태양광DR사업 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[보도자료]",
         },
         {
-          title: "[공지사항] 주택용 태양광DR사업 신청안내",
+          title: "주택용 태양광DR사업 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[보도자료]",
         },
         {
-          title: "[공지사항] 주택용 태양광DR모델 신청안내",
+          title: "주택용 태양광DR모델 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[보도자료]",
         },
         {
-          title: "[공지사항] 주택용 태양광DR모델 신청안내",
+          title: "주택용 태양광DR모델 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[공지사항]",
         },
         {
-          title: "[공지사항] 주택용 태양광DR모델 신청안내",
+          title: "주택용 태양광DR모델 신청안내",
           date: "2024-01-01",
           link: "/energynoticeview",
+          category: "[공지사항]",
         },
       ];
     },
