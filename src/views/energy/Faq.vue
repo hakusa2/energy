@@ -17,27 +17,28 @@
     <div class="page-bg border-top h-100">
       <div class="page-container">
         <v-container>
-          <v-card class="card-accordion" flat>
-            <v-expansion-panels accordion flat>
-              <v-expansion-panel v-for="(item, index) in faqdata"
-                  :key="index">
-                <v-expansion-panel-header>
-                  <div class="panel-content-header">
-                    <span class="text-question">Q.</span> {{ item.qtitle }}
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <div class="panel-content-title">
-                    <span class="text-answer">A.</span> {{ item.atitle }}
-                  </div>
-                  <div class="panel-content-text" v-for="(c, index) in item.descriptionList" :key="`item-${index}`">
-                      {{ c }} <br />
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-expansion-panels>
-            <!-- <v-pagination v-model="page" :length="6"></v-pagination> -->
-          </v-card>
+          <v-expansion-panels accordion flat class="panels-accordion">
+            <v-expansion-panel v-for="(item, index) in faqdata" :key="index">
+              <v-expansion-panel-header>
+                <div class="panel-content-header">
+                  <span class="text-question">Q.</span> {{ item.qtitle }}
+                </div>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <div class="panel-content-title">
+                  <span class="text-answer">A.</span> {{ item.atitle }}
+                </div>
+                <div
+                  class="panel-content-text"
+                  v-for="(c, index) in item.descriptionList"
+                  :key="`item-${index}`"
+                >
+                  {{ c }} <br />
+                </div>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <!-- <v-pagination v-model="page" :length="6"></v-pagination> -->
 
           <v-card class="card-contact" flat>
             <v-row>
@@ -91,7 +92,7 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "Faq",
@@ -128,20 +129,18 @@ export default {
   },
 
   methods: {
-    init(){
-      try{
-        axios.get('/api/faq/getList')
-          .then(response => {
-            this.faqdata = response.data;
-          });
-        axios.get('/api/etc/getAdvice')
-          .then(response => {
-            this.advicedata = response.data;
-          });
-      } catch(err){
+    init() {
+      try {
+        axios.get("/api/faq/getList").then((response) => {
+          this.faqdata = response.data;
+        });
+        axios.get("/api/etc/getAdvice").then((response) => {
+          this.advicedata = response.data;
+        });
+      } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
 };
 </script>
