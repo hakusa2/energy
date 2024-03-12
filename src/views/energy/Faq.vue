@@ -19,63 +19,19 @@
         <v-container>
           <v-card class="card-accordion" flat>
             <v-expansion-panels accordion flat>
-              <v-expansion-panel>
+              <v-expansion-panel v-for="(item, index) in faqdata"
+                  :key="index">
                 <v-expansion-panel-header>
                   <div class="panel-content-header">
-                    <span class="text-question">Q.</span> 에너지 복지시설은
-                    어떻게 신청하나요?
+                    <span class="text-question">Q.</span> {{ item.qtitle }}
                   </div>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <div class="panel-content-title">
-                    <span class="text-answer">A.</span> 에너지 복지시설은 다음과
-                    같은 방법으로 신청할 수 있어요.
+                    <span class="text-answer">A.</span> {{ item.atitle }}
                   </div>
-                  <div class="panel-content-text">
-                    홈페이지의 에너지복지사업 소개를 참고하셔서 자신에게
-                    해당하는 복지사업을 확인 후 에너지복지사업 신청" 버튼을 통해
-                    신청해주세요. 본 페이지 상단의 상담전화번호 혹은 이메일
-                    주소를 통하여 상담 문의를 진행해주세요.
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <div class="panel-content-header">
-                    <span class="text-question">Q.</span> 에너지 복지시설은
-                    어떻게 신청하나요?
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <div class="panel-content-title">
-                    <span class="text-answer">A.</span> 에너지 복지시설은 다음과
-                    같은 방법으로 신청할 수 있어요.
-                  </div>
-                  <div class="panel-content-text">
-                    홈페이지의 에너지복지사업 소개를 참고하셔서 자신에게
-                    해당하는 복지사업을 확인 후 에너지복지사업 신청" 버튼을 통해
-                    신청해주세요. 본 페이지 상단의 상담전화번호 혹은 이메일
-                    주소를 통하여 상담 문의를 진행해주세요.
-                  </div>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel>
-                <v-expansion-panel-header>
-                  <div class="panel-content-header">
-                    <span class="text-question">Q.</span> 에너지 복지시설은
-                    어떻게 신청하나요?
-                  </div>
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                  <div class="panel-content-title">
-                    <span class="text-answer">A.</span> 에너지 복지시설은 다음과
-                    같은 방법으로 신청할 수 있어요.
-                  </div>
-                  <div class="panel-content-text">
-                    홈페이지의 에너지복지사업 소개를 참고하셔서 자신에게
-                    해당하는 복지사업을 확인 후 에너지복지사업 신청" 버튼을 통해
-                    신청해주세요. 본 페이지 상단의 상담전화번호 혹은 이메일
-                    주소를 통하여 상담 문의를 진행해주세요.
+                  <div class="panel-content-text" v-for="(c, index) in item.descriptionList" :key="`item-${index}`">
+                      {{ c }} <br />
                   </div>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -106,7 +62,7 @@
                       <v-icon large class="mdi-custom"
                         >mdi-phone-in-talk</v-icon
                       >
-                      070-0000-0000
+                      {{ advicedata.phone }}
                     </div>
                   </div>
                 </div>
@@ -119,7 +75,7 @@
                       <v-icon large class="mdi-custom"
                         >mdi-email-outline</v-icon
                       >
-                      email@email.com
+                      {{ advicedata.email }}
                     </div>
                   </div>
                 </div>
@@ -135,6 +91,7 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
+import axios from 'axios';
 
 export default {
   name: "Faq",
@@ -142,6 +99,11 @@ export default {
     Title,
   },
   data: () => ({
+    faqdata: [],
+    advicedata: {
+      phone: "",
+      email: "",
+    },
     breadcrumbs: [
       {
         text: "home",
@@ -161,6 +123,26 @@ export default {
     ],
     page: 1,
   }),
+  created() {
+    this.init();
+  },
+
+  methods: {
+    init(){
+      try{
+        axios.get('/api/faq/getList')
+          .then(response => {
+            this.faqdata = response.data;
+          });
+        axios.get('/api/etc/getAdvice')
+          .then(response => {
+            this.advicedata = response.data;
+          });
+      } catch(err){
+        console.log(err);
+      }
+    }
+  },
 };
 </script>
 

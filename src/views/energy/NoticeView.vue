@@ -17,19 +17,18 @@
               <div class="table-energy table-view">
                 <div class="view-header">
                   <div class="view-title">
-                    [공지사항] 주택용 태양광DR사업 신청안내
+                    {{ noticedata.title }}
                   </div>
-                  <div class="view-date">2024.01.29</div>
+                  <div class="view-date">{{ noticedata.createdAt }}</div>
                 </div>
                 <div class="view-body">
                   <v-img
-                    src="@/assets/sample_notice.png"
+                    :src="noticedata.imageUrl"
                     contain
                     max-width="500"
                   ></v-img>
-                  <p>
-                    안녕하세요 성남시 에너지포털입니다 오늘 날씨가 참 좋습니다.
-                    내일 날씨도 참 좋기를 바랍니다. 감사합니다.
+                  <p v-for="(c, index) in descriptionList" :key="`item-${index}`">
+                      {{ c }} <br />
                   </p>
                 </div>
               </div>
@@ -54,11 +53,20 @@
 
 <script>
 // @ is an alias to /src
+import axios from 'axios';
 
 export default {
   name: "NoticeView",
   components: {},
   data: () => ({
+    noticedata: {
+      title: "",
+      description: "",
+      createdAt: "",
+      imageUrl:"",
+    },
+    descriptionList: [],
+    
     breadcrumbs: [
       {
         text: "home",
@@ -77,6 +85,26 @@ export default {
       },
     ],
   }),
+  created() {
+    this.init();
+  },
+
+  methods: {
+    init(){
+      try{
+        axios.get('/api/notice/getSingle?id='+ this.$route.query.id)
+          .then(response => {
+            //console.log(response.data);
+            this.noticedata = response.data;
+            //console.log(this.noticedata.title);
+            //this.noticedata.description = this.noticedata.description.replace("\n", "<br />");
+            this.descriptionList = this.noticedata.description.split('\n');
+          });
+      } catch(err){
+        console.log(err);
+      }
+    }
+  },
 };
 </script>
 

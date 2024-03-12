@@ -30,11 +30,12 @@
                 hide-default-header
                 hide-default-footer
                 item-key="name"
-                sort-by="date"
+                sort-by="id"
+                :sort-desc="true"
                 @page-count="pageCount = $event"
               >
                 <template v-slot:[`item.title`]="{ item }">
-                  <router-link :to="item.link">
+                  <router-link :to="`/energynoticeview?id=`+ [item.id]">
                     <span class="font-weight-bold mr-1">{{
                       item.category
                     }}</span>
@@ -44,7 +45,7 @@
 
                 <template v-slot:no-data> 등록된 글이 없습니다. </template>
               </v-data-table>
-              <v-pagination v-model="page" :length="pageCount"></v-pagination>
+              <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
             </template>
           </Tables>
         </v-container>
@@ -57,6 +58,7 @@
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
 import Tables from "@/components/Tables.vue";
+import axios from 'axios';
 
 export default {
   name: "Notice",
@@ -65,6 +67,7 @@ export default {
     Tables,
   },
   data: () => ({
+    selectedItem: [],
     breadcrumbs: [
       {
         text: "home",
@@ -87,56 +90,26 @@ export default {
     itemsPerPage: 10,
     headers: [
       { text: "제목", value: "title" },
-      { text: "등록일", align: "center", value: "date", width: "20%" },
+      { text: "등록일", align: "center", value: "createdAt", width: "20%" },
     ],
     tabledata: [],
   }),
 
   created() {
-    this.initialize();
+    this.init();
   },
 
   methods: {
-    initialize() {
-      this.tabledata = [
-        {
-          title: "주택용 태양광DR사업 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[공지사항]",
-        },
-        {
-          title: "주택용 태양광DR사업 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[보도자료]",
-        },
-        {
-          title: "주택용 태양광DR사업 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[보도자료]",
-        },
-        {
-          title: "주택용 태양광DR모델 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[보도자료]",
-        },
-        {
-          title: "주택용 태양광DR모델 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[공지사항]",
-        },
-        {
-          title: "주택용 태양광DR모델 신청안내",
-          date: "2024-01-01",
-          link: "/energynoticeview",
-          category: "[공지사항]",
-        },
-      ];
-    },
+    init(){
+      try{
+        axios.get('/api/notice/getList')
+          .then(response => {
+            this.tabledata = response.data;
+          });
+      } catch(err){
+        console.log(err);
+      }
+    }
   },
 };
 </script>

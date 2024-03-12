@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" scrollable width="1100">
+    <v-dialog v-model="dialogVisible" scrollable width="1100">
       <template v-slot:activator="{ on, attrs }">
         <div class="model-case-group" v-bind="attrs" v-on="on">
           <div class="item-image">
@@ -76,8 +76,13 @@ export default {
   props: {},
   computed: {},
   data: () => ({
-    dialog: false,
+    dialogVisible: false,
   }),
+  methods: {
+    close(){
+      this.dialogVisible = false;
+    }
+  },
 };
 </script>
 
