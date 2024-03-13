@@ -18,6 +18,17 @@ body
 .page-bg.border-top
   border-top: 1px solid #F2F3F3
 
+.sub-appbar .page-header,
+.main-appbar .page-header,
+.admin-appbar .page-header,
+.v-footer .page-footer
+  max-width: 1520px
+  width: 100%
+  margin-left: auto
+  margin-right: auto
+  padding-right: 12px
+  padding-left: 12px
+
 .page-header, .page-container
   max-width: 1520px
   margin-left: auto
@@ -355,7 +366,8 @@ body
     .col-label
       max-width: 80px
 
-.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
+.page-main .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot,
+.page-sub .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
 /* .v-text-field.v-text-field--enclosed .v-text-field__details
     padding: 0 !important */
@@ -515,14 +527,12 @@ body
   left: 0
 
 .card-table
-  .v-card__title
-    margin-bottom: 16px
   .table-title
-    font-size: 16px
+    font-size: 20px
     font-weight: 700
-  .table-description
-    font-size: 13px
-    font-weight: 400
+  .table-btn
+    font-size: 14px
+    font-weight: 500
 
 //v-pagination
 .v-pagination
@@ -534,21 +544,21 @@ body
 .card-table:not(.table-view) .v-data-table > .v-data-table__wrapper > table 
   border-collapse: collapse
   thead.v-data-table-header-mobile > tr > th
-    background-color: #f5f7f7
+    background-color: #F4F4F4
   thead:not(.v-data-table-header-mobile) > tr > th
-    border: thin solid rgba(0, 0, 0, 0.12)
-    background-color: #888888
-    color: #ffffff !important
+    border: thin solid #DDDDDD
+    background-color: #F4F4F4
+    color: #6C757D !important
     font-weight: 400
     .v-data-table-header__icon
-      color: rgba(255, 255, 255, 0.87) !important
+      //color: rgba(255, 255, 255, 0.87) !important
   tbody > tr:not(.v-data-table__mobile-table-row) > td
-    border: thin solid rgba(0, 0, 0, 0.12)
+    border: thin solid #DDDDDD
   tbody > tr.v-data-table__mobile-table-row > td:last-child
-    border-bottom: thin solid rgba(0, 0, 0, 0.12)
+    border-bottom: thin solid #DDDDDD
   tfoot > tr > td
-    border: thin solid rgba(0, 0, 0, 0.12)
-    background-color: #f5f7f7
+    border: thin solid #DDDDDD
+    background-color: #F4F4F4
     font-weight: 600
 .v-data-table th, .v-data-table td
   font-size: 14px !important
@@ -610,18 +620,18 @@ body
     .v-image
       margin: 0 0 20px
 
-
-
 .table-admin
   background-color: transparent !important
-  .v-card__title
-    border-bottom: 1px solid #707070
   table th.text-start
     text-align: center !important
   .theme--light.v-data-table
     background-color: transparent
     .v-data-table__wrapper
       background-color: #ffffff
+
+.text-damin-label  
+  font-size: 16px
+  font-weight: 500
 
 .table-toolbar
   align-items: center

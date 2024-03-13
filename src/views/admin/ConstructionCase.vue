@@ -2,7 +2,7 @@
   <div class="page-container">
     <v-container>
       <Tables class="table-admin">
-        <template v-slot:TableTitle> 사업신청관리 </template>
+        <template v-slot:TableTitle> 구축사례 </template>
         <template v-slot:TableBtn>
           신청가능여부
           <v-dialog v-model="dialog1" max-width="500px">
@@ -323,7 +323,7 @@
 import Tables from "@/components/Tables.vue";
 
 export default {
-  name: "BusinessApplication",
+  name: "ConstructionCase",
   components: { Tables },
   data: () => ({
     filters: [

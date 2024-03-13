@@ -21,7 +21,8 @@
                   <div class="form-group">
                     <v-label>아이디</v-label>
                     <v-text-field
-                      :rules="rules"
+                      v-model="id"
+                      :rules="idRules"
                       dense
                       outlined
                       solo
@@ -31,7 +32,8 @@
                   <div class="form-group">
                     <v-label>비밀번호</v-label>
                     <v-text-field
-                      :rules="rules"
+                      v-model="password"
+                      :rules="passwordRules"
                       dense
                       outlined
                       solo
@@ -42,7 +44,12 @@
               </v-flex>
             </v-card-text>
             <v-card-actions class="d-flex flex-column px-10">
-              <v-btn large block depressed color="primary" to="/admin"
+              <v-btn
+                large
+                block
+                depressed
+                color="primary"
+                to="/adminbusinessapplication"
                 >로그인</v-btn
               >
             </v-card-actions>
@@ -58,13 +65,29 @@ export default {
   name: "SignIn",
   components: {},
   data: () => ({
-    rules: [
-      (value) => !!value || "Required.",
-      (value) => (value && value.length >= 3) || "Min 3 characters",
+    valid: true,
+    id: "",
+    idRules: [
+      (v) => !!v || "잘못된 아이디를 입력하셨습니다. 다시 확인해주세요",
+      (v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
+    ],
+    password: "",
+    passwordRules: [
+      (v) => !!v || "잘못된 비밀번호를 입력하셨습니다. 다시 확인해주세요",
+      (v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
     ],
   }),
-
-  methods: {},
+  methods: {
+    validate() {
+      this.$refs.form.validate();
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    },
+  },
 };
 </script>
 

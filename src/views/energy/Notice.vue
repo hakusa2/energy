@@ -35,7 +35,7 @@
                 @page-count="pageCount = $event"
               >
                 <template v-slot:[`item.title`]="{ item }">
-                  <router-link :to="`/energynoticeview?id=`+ [item.id]">
+                  <router-link :to="`/energynoticeview?id=` + [item.id]">
                     <span class="font-weight-bold mr-1">{{
                       item.category
                     }}</span>
@@ -45,7 +45,11 @@
 
                 <template v-slot:no-data> 등록된 글이 없습니다. </template>
               </v-data-table>
-              <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
+              <v-pagination
+                v-model="page"
+                :length="pageCount"
+                total-visible="9"
+              ></v-pagination>
             </template>
           </Tables>
         </v-container>
@@ -58,7 +62,7 @@
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
 import Tables from "@/components/Tables.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "Notice",
@@ -90,7 +94,7 @@ export default {
     itemsPerPage: 10,
     headers: [
       { text: "제목", value: "title" },
-      { text: "등록일", align: "center", value: "createdAt", width: "20%" },
+      { text: "등록일", align: "right", value: "createdAt", width: "20%" },
     ],
     tabledata: [],
   }),
@@ -100,16 +104,15 @@ export default {
   },
 
   methods: {
-    init(){
-      try{
-        axios.get('/api/notice/getList')
-          .then(response => {
-            this.tabledata = response.data;
-          });
-      } catch(err){
+    init() {
+      try {
+        axios.get("/api/notice/getList").then((response) => {
+          this.tabledata = response.data;
+        });
+      } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
 };
 </script>

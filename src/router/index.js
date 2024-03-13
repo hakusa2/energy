@@ -163,6 +163,7 @@ export const router = new VueRouter({
       component: AuthLayout,
       children: [
         {
+          //관리자 로그인
           path: "/signin",
           name: "Signin",
           component: () => import("../views/auth/Signin.vue"),
@@ -174,39 +175,34 @@ export const router = new VueRouter({
       component: AdminLayout,
       children: [
         {
-          path: "/admin",
-          name: "Dashboard",
-          component: () => import("../views/admin/Dashboard.vue"),
+          //사업신청관리
+          path: "/adminbusinessapplication",
+          name: "BusinessApplication",
+          component: () => import("../views/admin/BusinessApplication.vue"),
         },
         {
-          path: "/promotion",
-          name: "Promotion",
-          component: () => import("../views/admin/Promotion.vue"),
+          //구축사례
+          path: "/adminconstructioncase",
+          name: "ConstructionCase",
+          component: () => import("../views/admin/ConstructionCase.vue"),
         },
         {
-          path: "/notice",
+          //복지소식
+          path: "/adminnotice",
           name: "Notice",
           component: () => import("../views/admin/Notice.vue"),
         },
         {
-          path: "/noticeview",
-          name: "NoticeView",
-          component: () => import("../views/admin/NoticeView.vue"),
+          //배너관리
+          path: "/adminpromotion",
+          name: "Promotion",
+          component: () => import("../views/admin/Promotion.vue"),
         },
         {
-          path: "/noticeedit",
-          name: "NoticeEdit",
-          component: () => import("../views/admin/NoticeEdit.vue"),
-        },
-        {
-          path: "/faq",
+          //자주하는질문
+          path: "/adminfaq",
           name: "Faq",
           component: () => import("../views/admin/Faq.vue"),
-        },
-        {
-          path: "/businessapplication",
-          name: "BusinessApplication",
-          component: () => import("../views/admin/BusinessApplication.vue"),
         },
       ],
     },

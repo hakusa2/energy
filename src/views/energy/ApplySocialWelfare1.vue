@@ -382,7 +382,11 @@
           </v-row>
           <v-row>
             <v-col class="text-center">
-              <v-btn outlined class="btn-outline-solid btn-secondary" to="welfaremodel1">
+              <v-btn
+                outlined
+                class="btn-outline-solid btn-secondary"
+                to="welfaremodel1"
+              >
                 뒤로
               </v-btn>
               <v-btn

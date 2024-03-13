@@ -1,19 +1,21 @@
 <template>
   <v-app>
     <v-app-bar absolute flat color="white" height="60px" class="main-appbar">
-      <v-container class="d-flex align-center">
-        <router-link class="d-inline-block" to="/main">
-          <v-img src="@/assets/logo_w.png" max-width="168" contain></v-img>
-        </router-link>
-        <v-spacer></v-spacer>
-        <TopMenu class="d-none d-md-flex" />
-        <v-app-bar-nav-icon
-          @click.stop="drawer = !drawer"
-          class="d-flex d-md-none"
-          dark
-        >
-        </v-app-bar-nav-icon>
-      </v-container>
+      <div class="page-header">
+        <v-container class="d-flex align-center">
+          <router-link class="d-inline-block" to="/main">
+            <v-img src="@/assets/logo_w.png" max-width="168" contain></v-img>
+          </router-link>
+          <v-spacer></v-spacer>
+          <TopMenu class="d-none d-md-flex" />
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+            class="d-flex d-md-none"
+            dark
+          >
+          </v-app-bar-nav-icon>
+        </v-container>
+      </div>
     </v-app-bar>
 
     <v-navigation-drawer
