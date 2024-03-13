@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <Terms />
                     <v-checkbox
-                      v-model="checkbox"
+                      v-model="checkbox1"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 신청 시 유의사항을 확인하였습니다."
                       class="label-padding mt-2"
@@ -38,7 +38,7 @@
                   <div class="form-group">
                     <Privacy />
                     <v-checkbox
-                      v-model="checkbox"
+                      v-model="checkbox2"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 개인정보 수집 및 이용에 동의합니다."
                       class="label-padding mt-2"
@@ -382,7 +382,7 @@
           </v-row>
           <v-row>
             <v-col class="text-center">
-              <v-btn outlined class="btn-outline-solid btn-secondary" to="main">
+              <v-btn outlined class="btn-outline-solid btn-secondary" to="welfaremodel1">
                 뒤로
               </v-btn>
               <v-btn
@@ -466,7 +466,8 @@ export default {
     ],
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: false,
+    checkbox1: false,
+    checkbox2: false,
   }),
   methods: {
     validate() {

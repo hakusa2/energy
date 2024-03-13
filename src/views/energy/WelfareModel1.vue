@@ -199,10 +199,10 @@
           </v-row>
           <v-row>
             <v-col class="text-center">
-              <v-btn outlined large color="secondary" to="welfaremodel">
+              <v-btn outlined large color="secondary" to="/welfaremodel">
                 목록
               </v-btn>
-              <v-btn depressed large color="primary" class="ml-4" disabled>
+              <v-btn depressed large color="primary" class="ml-4" disabled v-if="approvaldata.building === 'N'">
                 사업 신청 기간이 아닙니다
               </v-btn>
               <v-btn
@@ -211,6 +211,7 @@
                 color="primary"
                 class="ml-4"
                 to="applysocialwelfare1"
+                v-if="approvaldata.building === 'Y'"
               >
                 사업 신청
               </v-btn>
@@ -224,14 +225,63 @@
             </v-col>
           </v-row>
           <v-row class="flex-nowrap overflow-hidden">
-            <v-col cols="12" sm="6" md="4">
-              <DialogCase />
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <DialogCase />
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <DialogCase />
+            <v-col cols="12" sm="6" md="4" v-for="(item, index) in buildingdata" :key="index">
+              <v-dialog v-model="item.visible" scrollable width="1100">
+                <template v-slot:activator="{ on, attrs }">
+                  <div class="model-case-group" v-bind="attrs" v-on="on">
+                    <div class="item-image">
+                      <v-img src="@/assets/img_business5.png" height="240"></v-img>
+                    </div>
+                    <div class="item-chip">
+                      <v-chip outlined v-if="item.tagYn1 === 'Y'"> PV </v-chip>
+                      <v-chip outlined v-if="item.tagYn2 === 'Y'"> ESS </v-chip>
+                      <v-chip outlined v-if="item.tagYn3 === 'Y'"> EV </v-chip>
+                    </div>
+                    <div class="item-title">
+                      {{ item.groupName }} <v-icon>mdi-chevron-right</v-icon>
+                    </div>
+                    <div class="item-address">{{ item.addr1 }}&nbsp;{{ item.addr2 }}</div>
+                  </div>
+                </template>
+                <v-card class="card-dialog">
+                  <div class="dialog-header">
+                    <v-btn icon color="black" class="dialog-close" @click="buildingClose(index)">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                    <v-card-title class="dialog-title"> {{ item.groupName }} </v-card-title>
+                  </div>
+                  <div class="dialog-body">
+                    <div class="model-detail-group">
+                      <div class="item-image">
+                        <v-img src="@/assets/img_business5.png" height="320"></v-img>
+                      </div>
+                      <div class="item-group">
+                        <div class="item-title">구축 상세</div>
+                        <div class="item-description">
+                          <ul class="ul-list list-dot row">
+                            <li class="col col-12 col-sm-12 col-md-6">
+                              <span class="font-weight-bold">사업개요</span>
+                              <ul class="ul-list list-dash py-2">
+                                <li v-for="(c, index) in item.businessSummaryList" :key="`item-${index}`">
+                                  {{ c }}
+                                </li>
+                              </ul>
+                            </li>
+                            <li class="col col-12 col-sm-12 col-md-6">
+                              <span class="font-weight-bold">패키지 구성</span>
+                              <ul class="ul-list list-dash py-2">
+                                <li v-for="(c, index) in item.packageComposeList" :key="`item-${index}`">
+                                  {{ c }}
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </v-card>
+              </v-dialog>
             </v-col>
           </v-row>
         </v-container>
@@ -243,15 +293,21 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
-import DialogCase from "@/components/DialogCase.vue";
+import axios from 'axios';
 
 export default {
   name: "WelfareModel1",
   components: {
     Title,
-    DialogCase,
   },
   data: () => ({
+    approvaldata: {
+      building: "",
+      shop: "",
+      apartment: "",
+      detached:"",
+    },
+    buildingdata: [],
     breadcrumbs: [
       {
         text: "home",
@@ -270,6 +326,29 @@ export default {
       },
     ],
   }),
+  created() {
+    this.init();
+    //window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
+  },
+  methods: {
+    init(){
+      try{
+        axios.get('/api//etc/getApproval')
+          .then(response => {
+            this.approvaldata = response.data;
+          });
+        axios.get("/api/construction/getListTop3?type=1").then((response) => {
+          this.buildingdata = response.data;
+        });
+      } catch(err){
+        console.log(err);
+      }
+    },
+    buildingClose(index){
+      this.buildingdata[index].visible = false;
+    },
+  },
 };
 </script>
 

@@ -149,6 +149,9 @@ export default {
       },
     ],
   }),
+  created() {
+    document.body.scrollTop = 0;
+  },
 };
 </script>
 
