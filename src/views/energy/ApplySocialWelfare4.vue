@@ -389,6 +389,7 @@
                 depressed
                 color="primary"
                 to="applysocialwelfare5"
+                @click="save"
                 class="ml-2"
               >
                 신청하기
@@ -478,6 +479,10 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
+    save(){
+      alert('test');
+      
+    }
   },
 };
 </script>

@@ -28,7 +28,7 @@
                   <div class="form-group">
                     <Terms />
                     <v-checkbox
-                      v-model="checkbox1"
+                      v-model="checkagree1"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 신청 시 유의사항을 확인하였습니다."
                       class="label-padding mt-2"
@@ -38,7 +38,7 @@
                   <div class="form-group">
                     <Privacy />
                     <v-checkbox
-                      v-model="checkbox2"
+                      v-model="checkagree2"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 개인정보 수집 및 이용에 동의합니다."
                       class="label-padding mt-2"
@@ -52,36 +52,6 @@
                       정보입니다.</small
                     >
                   </div>
-                  <!-- <v-row>
-                    <v-col cols="12" sm="12" md="6">
-                      <div class="form-group">
-                        <v-row class="align-center">
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label>
-                              신청유형 <span class="icon-required"></span>
-                            </v-label>
-                          </v-col>
-                          <v-col cols="12" sm="12" md="10">
-                            <v-radio-group
-                              v-model="row"
-                              row
-                              class="pt-0 mt-1"
-                              readonly
-                              hide-details="auto"
-                            >
-                              <v-radio label="세대" value="radio-1"></v-radio>
-                              <v-radio label="단지" value="radio-2"></v-radio>
-                            </v-radio-group>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </v-col>
-                  </v-row> -->
                   <v-row>
                     <v-col cols="12" sm="12" md="6">
                       <div class="form-group">
@@ -126,26 +96,32 @@
                           <v-col class="pb-0">
                             <div class="d-flex">
                               <v-text-field
+                                ref="mobile"
                                 v-model="mobile"
                                 :rules="mobileRules"
+                                oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                                type="number"
                                 dense
                                 outlined
                                 solo
                                 placeholder="'-' 없이 숫자만 입력해주세요"
                                 required
+                                :disabled="isDisableMobile"
                               ></v-text-field>
                               <v-btn
                                 class="ml-2"
                                 outlined
                                 color="black"
                                 width="80"
+                                :disabled="isDisableMobileBtn"
+                                @click="mobileSend"
                               >
                                 인증요청
                               </v-btn>
                             </div>
                           </v-col>
                         </v-row>
-                        <!-- <v-row>
+                        <v-row>
                           <v-col
                             cols="12"
                             sm="12"
@@ -156,27 +132,34 @@
                           <v-col class="pt-0">
                             <div class="d-flex">
                               <v-text-field
-                                v-model="mobile1"
-                                :rules="mobileRules1"
+                                ref="auth"
+                                v-model="auth"
+                                :rules="authRules"
+                                oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                                counter="10"
+                                type="number"
                                 dense
                                 outlined
                                 solo
                                 placeholder="인증 번호 입력"
-                                suffix="3:00"
+                                :suffix="timerStr"
                                 class="input-certification"
                                 required
+                                :disabled="isDisableAuth"
                               ></v-text-field>
                               <v-btn
                                 class="ml-2"
                                 outlined
                                 color="black"
                                 width="80"
+                                :disabled="isDisableAuthBtn"
+                                @click="authSend"
                               >
                                 확인
                               </v-btn>
                             </div>
                           </v-col>
-                        </v-row> -->
+                        </v-row>
                       </div>
                     </v-col>
                   </v-row>
@@ -270,29 +253,33 @@
                           <v-col class="pb-0">
                             <v-row no-gutters>
                               <v-col cols="auto">
-                                <DialogZipcode />
+                                <v-btn outlined color="black" width="80" v-bind="attrs" @click="showAddr">
+                                  주소찾기
+                                </v-btn>
                               </v-col>
                               <v-col cols="3">
                                 <v-text-field
-                                  v-model="address"
+                                  v-model="zipcode"
                                   :rules="addressRules"
                                   dense
                                   outlined
                                   solo
                                   placeholder="16866"
                                   required
+                                  disabled
                                   class="ml-2"
                                 ></v-text-field>
                               </v-col>
                               <v-col>
                                 <v-text-field
-                                  v-model="address"
+                                  v-model="addr1"
                                   :rules="addressRules"
                                   dense
                                   outlined
                                   solo
                                   placeholder="산성역포레스티아아파트"
                                   required
+                                  disabled
                                   class="ml-2"
                                 ></v-text-field>
                               </v-col>
@@ -310,7 +297,7 @@
                           </v-col>
                           <v-col class="py-0">
                             <v-text-field
-                              v-model="address"
+                              v-model="addr2"
                               :rules="addressRules"
                               dense
                               outlined
@@ -324,58 +311,6 @@
                       </div>
                     </v-col>
                   </v-row>
-                  <!-- <v-row>
-                    <v-col cols="12" sm="12" md="6">
-                      <div class="form-group">
-                        <v-row class="align-center">
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label> 원격검침 </v-label>
-                          </v-col>
-                          <v-col>
-                            <v-radio-group
-                              v-model="row"
-                              row
-                              class="pt-0 mt-1"
-                              readonly
-                              hide-details="auto"
-                            >
-                              <v-radio label="유" value="radio-1"></v-radio>
-                              <v-radio label="무" value="radio-2"></v-radio>
-                            </v-radio-group>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="12" md="6">
-                      <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1"> 제조사 </v-label>
-                          </v-col>
-                          <v-col>
-                            <v-select
-                              dense
-                              outlined
-                              solo
-                              placeholder="선택해주세요"
-                            ></v-select>
-                          </v-col>
-                        </v-row>
-                      </div>
-                    </v-col>
-                  </v-row> -->
                 </v-form>
               </v-card>
             </v-col>
@@ -385,14 +320,14 @@
               <v-btn
                 outlined
                 class="btn-outline-solid btn-secondary"
-                to="welfaremodel1"
+                @click="back"
               >
                 뒤로
               </v-btn>
               <v-btn
                 depressed
                 color="primary"
-                to="applysocialwelfare5"
+                @click="save"
                 class="ml-2"
               >
                 신청하기
@@ -410,7 +345,7 @@
 import Title from "@/components/Title.vue";
 import Terms from "@/components/Terms.vue";
 import Privacy from "@/components/Privacy.vue";
-import DialogZipcode from "@/components/DialogZipcode.vue";
+
 
 export default {
   name: "ApplySocialWelfare1",
@@ -418,7 +353,7 @@ export default {
     Title,
     Terms,
     Privacy,
-    DialogZipcode,
+    
   },
   data: () => ({
     breadcrumbs: [
@@ -451,28 +386,64 @@ export default {
     name: "",
     nameRules: [
       (v) => !!v || "이름을 입력해주세요",
-      (v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
+      (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]*$/.test(v) || "잘못된 이름 양식이에요.",
+      (v) => !(v && (v.length >= 20)) || "이름은 20자리 이상 입력할 수 없습니다.",
     ],
     mobile: "",
     mobileRules: [
       (v) => !!v || "휴대폰 번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
+      (v) => /^[0-9]*$/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
+      (v) => !( v && (v.length >= 12)) || '휴대폰 번호는 12자리 이상 입력할 수 없습니다.',
+      (v) => !( v && (v.length <= 9)) || '휴대폰 번호 10자리 이상 입력해주세요.',
     ],
-    mobile1: "",
-    mobileRules1: [
+    auth: "",
+    authRules: [
       (v) => !!v || "인증번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "인증번호를 다시 확인해주세요.",
+      (v) => /^[0-9]*$/.test(v) || "인증번호를 다시 확인해주세요.",
+      (v) => !( v && (v.length != 6)) || '6자리의 인증번호를 입력해주세요.',
     ],
-    address: "",
+    zipcode: "",
+    addr1: "",
+    addr2: "",
     addressRules: [
       (v) => !!v || "주소를 입력해주세요",
       (v) => /.+@.+\..+/.test(v) || "주소를 다시 확인해주세요.",
     ],
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox1: false,
-    checkbox2: false,
+    checkagree1: false,
+    checkagree2: false,
+    isDisableMobile: false,
+    isDisableMobileBtn: true,
+    isDisableAuth: true,
+    isDisableAuthBtn: true,
+    timerStr: "03:00",
+    timer: null,
+    timeCounter: 180,
   }),
+  watch: {
+    mobile: {
+      handler() {
+        if (this.$refs && this.$refs.mobile) {
+          this.isDisableMobileBtn = !this.$refs.mobile.validate();
+        } else {
+          this.isDisableMobileBtn = true;
+        }
+      },
+    },
+    auth: {
+      handler() {
+        if (this.$refs && this.$refs.auth) {
+          this.isDisableAuthBtn = !this.$refs.auth.validate();
+        } else {
+          this.isDisableAuthBtn = true;
+        }
+      },
+    },
+  },
+  created: function () {
+      
+  },
   methods: {
     validate() {
       this.$refs.form.validate();
@@ -483,6 +454,98 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
+    mobileSend(){
+      this.isDisableMobile = true;
+      this.isDisableMobileBtn = true;
+      this.isDisableAuth = false;
+
+      this.timerStart();
+    },
+    authSend(){
+      this.isDisableAuth = true;
+      this.isDisableAuthBtn = true;
+
+      this.timerStop();
+    },
+    timerStart() {
+        this.timeCounter = 180;
+
+        var interval = setInterval(() => {
+            this.timeCounter--; //1초씩 감소
+            this.timerStr = this.prettyTime();
+            if (this.timeCounter <= 0) this.timerStop(interval);
+        }, 1000);
+
+        return interval;
+    },
+    timerStop(timerStr) {
+        this.timerStr = "03:00";
+        this.timeCounter = 0;
+        clearInterval(timerStr);
+    },
+    prettyTime: function () {
+        // 시간 형식으로 변환 리턴
+        let time = this.timeCounter / 60;
+        let minutes = parseInt(time);
+        let secondes = Math.round((time - minutes) * 60);
+
+        return (minutes.toString().padStart(2, "0") + ":" + secondes.toString().padStart(2, "0"));
+    },
+    back(){
+      this.$router.go(-1);
+    },
+    save(){
+      //alert(this.$refs.mobile.validate());
+      // if(this.$refs.mobile.validate()){
+      //   alert('test');
+      // }
+
+      //alert(this.$refs.pform.validate());
+
+      if(this.validate()){
+        
+        alert('test');
+      }
+
+      
+      
+      //this.$router.push('/applysocialwelfare5');
+    },
+
+    showAddr() {
+        new window.daum.Postcode({
+          oncomplete: (data) => {
+              // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+  
+              // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+              // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+              let fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+              let extraRoadAddr = ''; // 도로명 조합형 주소 변수
+  
+              // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+              // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+              if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                  extraRoadAddr += data.bname;
+              }
+              // 건물명이 있고, 공동주택일 경우 추가한다.
+              if(data.buildingName !== '' && data.apartment === 'Y'){
+                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+              }
+              // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+              if(extraRoadAddr !== ''){
+                  extraRoadAddr = ' (' + extraRoadAddr + ')';
+              }
+              // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+              if(fullRoadAddr !== ''){
+                  fullRoadAddr += extraRoadAddr;
+              }
+  
+              // 우편번호와 주소 정보를 해당 필드에 넣는다.
+              this.zip = data.zonecode; //5자리 새우편번호 사용
+              this.addr1 = fullRoadAddr;
+          }
+        }).open();
+      },
   },
 };
 </script>
