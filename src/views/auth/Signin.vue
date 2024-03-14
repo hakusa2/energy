@@ -1,60 +1,60 @@
 <template>
-  <v-content>
+  <v-content class="signin-main">
     <v-container fluid fill-height>
       <v-layout align-center justify-center>
-        <v-flex xs12 sm10 md6 lg4>
-          <v-card elevation="0" class="card-signin px-3">
-            <v-img
-              src="@/assets/logo.svg"
-              max-width="250"
-              class="ml-auto mr-auto mb-10"
-              contain
-            ></v-img>
-            <v-card-title class="justify-center">
-              성남시 에너지 포털 컨텐츠 관리시스템
-            </v-card-title>
-            <v-card-text
-              class="mt-7 mb-7 d-flex justify-center px-10 pt-8 pb-5"
-            >
-              <v-flex xs12 sm10 md8>
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <div class="form-group">
-                    <v-label>아이디</v-label>
-                    <v-text-field
-                      v-model="id"
-                      :rules="idRules"
-                      dense
-                      outlined
-                      solo
-                      placeholder="아이디를 입력해주세요"
-                    ></v-text-field>
-                  </div>
-                  <div class="form-group">
-                    <v-label>비밀번호</v-label>
-                    <v-text-field
-                      v-model="password"
-                      :rules="passwordRules"
-                      dense
-                      outlined
-                      solo
-                      placeholder="비밀번호를 입력해주세요"
-                    ></v-text-field>
-                  </div>
-                </v-form>
-              </v-flex>
-            </v-card-text>
-            <v-card-actions class="d-flex flex-column px-10">
-              <v-btn
-                large
-                block
-                depressed
-                color="primary"
-                to="/adminbusinessapplication"
-                >로그인</v-btn
-              >
-            </v-card-actions>
-          </v-card>
-        </v-flex>
+        <div class="signin-group">
+          <v-container>
+            <v-row class="align-center">
+              <v-col cols="12" sm="12" md="6" class="d-flex flex-column">
+                <v-img
+                  src="@/assets/logo.svg"
+                  max-width="290"
+                  class="mb-5"
+                  contain
+                ></v-img>
+                <div class="signin-title">
+                  성남시 에너지복지포털 관리자 사이트
+                </div>
+              </v-col>
+              <v-col cols="12" sm="12" md="6">
+                <div class="signin-stitle mb-5">관리자 로그인</div>
+                <div class="signin-form">
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <div class="form-group">
+                      <v-label>아이디</v-label>
+                      <v-text-field
+                        v-model="id"
+                        :rules="idRules"
+                        dense
+                        outlined
+                        placeholder="아이디를 입력해주세요"
+                      ></v-text-field>
+                    </div>
+                    <div class="form-group">
+                      <v-label>비밀번호</v-label>
+                      <v-text-field
+                        v-model="password"
+                        :rules="passwordRules"
+                        dense
+                        outlined
+                        placeholder="비밀번호를 입력해주세요"
+                      ></v-text-field>
+                    </div>
+                    <div class="signin-action">
+                      <v-btn
+                        depressed
+                        color="primary"
+                        to="/adminbusinessapplication"
+                        class="mt-2"
+                        >로그인</v-btn
+                      >
+                    </div>
+                  </v-form>
+                </div>
+              </v-col>
+            </v-row>
+          </v-container>
+        </div>
       </v-layout>
     </v-container>
   </v-content>
@@ -92,11 +92,27 @@ export default {
 </script>
 
 <style lang="scss">
-.card-signin .v-card__title {
-  border-top: 1px solid #707070;
-  border-bottom: 1px solid #707070;
+.signin-main {
+  width: 100%;
+  height: 100%;
+  background: url("@/assets/main_img3.png") no-repeat center center;
+  background-size: cover;
 }
-.card-signin .v-card__text {
-  background-color: #f8f8f8;
+.signin-group {
+  max-width: 1000px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 48px 60px;
+}
+.signin-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+.signin-stitle {
+  font-size: 22px;
+  font-weight: 600;
 }
 </style>

@@ -3,76 +3,9 @@
     <v-container>
       <Tables class="table-admin">
         <template v-slot:TableTitle> 구축사례 </template>
-        <template v-slot:TableBtn>
-          신청가능여부
-          <v-dialog v-model="dialog1" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="primary"
-                depressed
-                class="ml-1"
-                v-bind="attrs"
-                v-on="on"
-              >
-                변경
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="justify-center pb-5">
-                사업신청가능여부
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row class="align-center">
-                    <v-col cols="6" class="text-damin-label text-right">
-                      건물형 인프라구축 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      점포형 에너지비용절감 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      공동주택형 에너지서비스 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      단독주택형 에너지서비스 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text> 취소 </v-btn>
-                <v-btn text color="primary"> 확인 </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+        <!-- <template v-slot:TableBtn>
         </template>
-        <!-- <template v-slot:TableHeaderLeft>
+        <template v-slot:TableHeaderLeft>
         </template>
         <template v-slot:TableHeaderRight>
         </template> -->
@@ -171,7 +104,7 @@
             </v-card>
           </v-dialog>
 
-          <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn>
+          <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
           <v-pagination v-model="page" :length="pageCount"></v-pagination>
@@ -199,8 +132,8 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-select
-                        v-model="editedItem.status"
-                        label="상태"
+                        v-model="editedItem.category"
+                        label="사업종류"
                         hide-details="auto"
                       ></v-select>
                     </v-col>
@@ -217,7 +150,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             v-model="editedItem.applydate"
-                            label="신청일자"
+                            label="등록일자"
                             persistent-hint
                             v-bind="attrs"
                             @blur="date = parseDate(dateFormatted)"
@@ -234,8 +167,8 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-select
-                        v-model="editedItem.category"
-                        label="사업종류"
+                        v-model="editedItem.output"
+                        label="표시여부"
                         hide-details="auto"
                       ></v-select>
                     </v-col>
@@ -246,53 +179,69 @@
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.name"
-                        label="이름"
+                        label="시설명"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.birth"
-                        label="생년월일"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.contact"
-                        label="연락처"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.email"
-                        label="이메일"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
+                    <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.address"
                         label="주소"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="12" md="12">
+                    <v-col cols="12">
                       <v-text-field
                         v-model="editedItem.address"
                         label="상세주소"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select label="태양광" hide-details="auto"></v-select>
+                    <v-col cols="12" class="d-flex">
+                      <v-checkbox
+                        v-model="editedItem.tag"
+                        label="PV"
+                        hide-details
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="editedItem.tag"
+                        label="ESS"
+                        hide-details
+                        class="ml-2"
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="editedItem.tag"
+                        label="EV"
+                        hide-details
+                        class="ml-2"
+                      ></v-checkbox>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select label="모델명" hide-details="auto"></v-select>
+                    <v-col cols="12">
+                      <v-textarea
+                        name="input-7-1"
+                        label="사업개요"
+                        value="- 에너지 비용 및 온실가스 절감을 동시에 실현하기 위한 건물형 에너지 복지 인프라 구축
+- 성남시와 함께하는 온실가스 감축을 통한 성남시 탄소중립 참여"
+                        hide-details="auto"
+                      ></v-textarea>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        name="input-7-1"
+                        label="패키지구성"
+                        value="- 에너지 비용 및 온실가스 절감을 동시에 실현하기 위한 건물형 에너지 복지 인프라 구축
+- 성남시와 함께하는 온실가스 감축을 통한 성남시 탄소중립 참여"
+                        hide-details="auto"
+                      ></v-textarea>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-file-input
+                        label="대표이미지"
+                        hide-details="auto"
+                      ></v-file-input>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -326,13 +275,7 @@ export default {
   name: "ConstructionCase",
   components: { Tables },
   data: () => ({
-    filters: [
-      { title: "전체" },
-      { title: "신청완료" },
-      { title: "심사중" },
-      { title: "선정" },
-      { title: "미선정" },
-    ],
+    filters: [{ title: "전체" }, { title: "노출" }, { title: "미노출" }],
     toggle_exclusive: undefined,
     search: "",
     dialog1: false,
@@ -346,38 +289,32 @@ export default {
     itemsPerPage: 10,
     headers: [
       { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "신청일자", align: "center", value: "applydate" },
+      { text: "노출여부", align: "center", value: "output", sortable: false },
+      { text: "등록일자", align: "center", value: "applydate" },
       { text: "사업종류", align: "center", value: "category" },
-      { text: "이름", align: "center", value: "name", sortable: false },
-      { text: "생년월일", align: "center", value: "birth", sortable: false },
-      { text: "연락처", align: "center", value: "contact", sortable: false },
-      { text: "이메일", align: "center", value: "email", sortable: false },
-      { text: "신청주소", value: "address", sortable: false },
-      { text: "상태", align: "center", value: "status", sortable: false },
+      { text: "시설명", align: "center", value: "name", sortable: false },
+      { text: "주소", value: "address", sortable: false },
+      { text: "태그", align: "center", value: "tag", sortable: false },
     ],
     tabledata: [],
     editedIndex: -1,
     editedItem: {
       count: "",
+      output: "",
       applydate: "",
       category: "",
       name: "",
-      birth: "",
-      contact: "",
-      email: "",
       address: "",
-      status: "",
+      tag: "",
     },
     defaultItem: {
       count: "",
+      output: "",
       applydate: "",
       category: "",
       name: "",
-      birth: "",
-      contact: "",
-      email: "",
       address: "",
-      status: "",
+      tag: "",
     },
   }),
 
@@ -405,14 +342,12 @@ export default {
       this.tabledata = [
         {
           count: "1",
+          output: "노출",
           applydate: "2024-03-01",
           category: "건물형 인프라구축 사업",
-          name: "홍길동",
-          birth: "910201",
-          contact: "010-1234-5678",
-          email: "name@company.com",
-          address: "(14157) 서울시 금천구 대륭포스트타워 5차 1807호",
-          status: "신청완료",
+          name: "하얀마을 복지회관",
+          address: "경기도 성남시 분당구 대왕판교로 660",
+          tag: "PV, ESS, EV",
         },
       ];
     },

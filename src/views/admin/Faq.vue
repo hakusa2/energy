@@ -4,7 +4,6 @@
       <Tables class="table-admin">
         <template v-slot:TableTitle> 자주하는질문 </template>
         <template v-slot:TableBtn>
-          신청가능여부
           <v-dialog v-model="dialog1" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -14,51 +13,72 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                변경
+                연락처수정
               </v-btn>
             </template>
             <v-card>
               <v-card-title class="justify-center pb-5">
-                사업신청가능여부
+                연락처수정
               </v-card-title>
               <v-card-text>
                 <v-container>
-                  <v-row class="align-center">
-                    <v-col cols="6" class="text-damin-label text-right">
-                      건물형 인프라구축 사업
+                  <v-row>
+                    <v-col cols="12" sm="12" md="6">
+                      <v-text-field
+                        label="현재"
+                        value="010-1234-5678"
+                        hide-details="auto"
+                      ></v-text-field>
                     </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
+                    <v-col cols="12" sm="12" md="6">
+                      <v-text-field
+                        label="변경"
+                        hide-details="auto"
+                      ></v-text-field>
                     </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      점포형 에너지비용절감 사업
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text> 취소 </v-btn>
+                <v-btn text color="primary"> 확인 </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialog2" max-width="500px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                depressed
+                class="ml-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                이메일수정
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="justify-center pb-5">
+                이메일수정
+              </v-card-title>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="12" md="6">
+                      <v-text-field
+                        label="현재"
+                        value="example@example.com"
+                        hide-details="auto"
+                      ></v-text-field>
                     </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      공동주택형 에너지서비스 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
-                    </v-col>
-                    <v-col cols="6" class="text-damin-label text-right">
-                      단독주택형 에너지서비스 사업
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn-toggle v-model="toggle_exclusive" mandatory dense>
-                        <v-btn> 신청가능 </v-btn>
-                        <v-btn> 신청불가 </v-btn>
-                      </v-btn-toggle>
+                    <v-col cols="12" sm="12" md="6">
+                      <v-text-field
+                        label="변경"
+                        hide-details="auto"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -103,7 +123,7 @@
                     class="mt-0"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="auto" class="button-group">
+                <!-- <v-col cols="auto" class="button-group">
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn color="white" v-bind="attrs" v-on="on">
@@ -120,16 +140,16 @@
                       </v-list-item>
                     </v-list>
                   </v-menu>
-                </v-col>
+                </v-col> -->
               </v-row>
             </template>
 
-            <template v-slot:[`item.name`]="{ item }">
+            <template v-slot:[`item.title`]="{ item }">
               <a
                 class="text-link black--text text-decoration-underline"
                 @click="editItem(item)"
               >
-                {{ item.name }}
+                {{ item.title }}
               </a>
             </template>
 
@@ -171,7 +191,7 @@
             </v-card>
           </v-dialog>
 
-          <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn>
+          <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
           <v-pagination v-model="page" :length="pageCount"></v-pagination>
@@ -197,14 +217,7 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select
-                        v-model="editedItem.status"
-                        label="상태"
-                        hide-details="auto"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="12">
                       <v-menu
                         ref="menu1"
                         v-model="menu1"
@@ -232,67 +245,33 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select
-                        v-model="editedItem.category"
-                        label="사업종류"
-                        hide-details="auto"
-                      ></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.count"
-                        label="순번"
+                        v-model="editedItem.title"
+                        label="질문"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="이름"
+                        v-model="editedItem.answer"
+                        label="답변"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.birth"
-                        label="생년월일"
+                    <v-col cols="12">
+                      <v-textarea
+                        name="input-7-1"
+                        label="상세답변"
+                        value="홈페이지의 에너지 복지사업 소개"
                         hide-details="auto"
-                      ></v-text-field>
+                      ></v-textarea>
                     </v-col>
-                    <v-col cols="12" sm="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.contact"
-                        label="연락처"
+                    <v-col cols="12">
+                      <v-file-input
+                        label="이미지"
                         hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="6">
-                      <v-text-field
-                        v-model="editedItem.email"
-                        label="이메일"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.address"
-                        label="주소"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-text-field
-                        v-model="editedItem.address"
-                        label="상세주소"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select label="태양광" hide-details="auto"></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-select label="모델명" hide-details="auto"></v-select>
+                      ></v-file-input>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -346,38 +325,18 @@ export default {
     itemsPerPage: 10,
     headers: [
       { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "신청일자", align: "center", value: "applydate" },
-      { text: "사업종류", align: "center", value: "category" },
-      { text: "이름", align: "center", value: "name", sortable: false },
-      { text: "생년월일", align: "center", value: "birth", sortable: false },
-      { text: "연락처", align: "center", value: "contact", sortable: false },
-      { text: "이메일", align: "center", value: "email", sortable: false },
-      { text: "신청주소", value: "address", sortable: false },
-      { text: "상태", align: "center", value: "status", sortable: false },
+      { text: "질문", align: "center", value: "title", sortable: false },
+      { text: "답변", align: "center", value: "answer", sortable: false },
     ],
     tabledata: [],
     editedIndex: -1,
     editedItem: {
-      count: "",
-      applydate: "",
-      category: "",
-      name: "",
-      birth: "",
-      contact: "",
-      email: "",
-      address: "",
-      status: "",
+      title: "",
+      answer: "",
     },
     defaultItem: {
-      count: "",
-      applydate: "",
-      category: "",
-      name: "",
-      birth: "",
-      contact: "",
-      email: "",
-      address: "",
-      status: "",
+      title: "",
+      answer: "",
     },
   }),
 
@@ -405,14 +364,8 @@ export default {
       this.tabledata = [
         {
           count: "1",
-          applydate: "2024-03-01",
-          category: "건물형 인프라구축 사업",
-          name: "홍길동",
-          birth: "910201",
-          contact: "010-1234-5678",
-          email: "name@company.com",
-          address: "(14157) 서울시 금천구 대륭포스트타워 5차 1807호",
-          status: "신청완료",
+          title: "에너지복지시설은 어떻게 신청하나요?",
+          answer: "에너비 복지시설은 다음과 같은 방법으로 신청할 수 있습니다.",
         },
       ];
     },
