@@ -178,6 +178,7 @@
                           <v-col class="pb-0">
                             <div class="d-flex">
                               <v-text-field
+                                v-model="email1"
                                 dense
                                 outlined
                                 solo
@@ -185,6 +186,7 @@
                               ></v-text-field>
                               <div class="pt-2 px-2">@</div>
                               <v-select
+                                v-model="email2"
                                 dense
                                 outlined
                                 solo
@@ -253,7 +255,7 @@
                           <v-col class="pb-0">
                             <v-row no-gutters>
                               <v-col cols="auto">
-                                <DialogZipcode @move="inputAddr"/>
+                                <DialogZipcode @move="inputAddr" ref="childRef" />
                               </v-col>
                               <v-col cols="3">
                                 <v-text-field
@@ -385,7 +387,7 @@ export default {
     name: "",
     nameRules: [
       (v) => !!v || "이름을 입력해주세요",
-      (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]*$/.test(v) || "잘못된 이름 양식이에요.",
+      (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z]*$/.test(v) || "잘못된 이름 양식이에요.",
       (v) => !(v && (v.length >= 20)) || "이름은 20자리 이상 입력할 수 없습니다.",
     ],
     mobile: "",
@@ -406,9 +408,10 @@ export default {
     addr2: "",
     addressRules: [
       (v) => !!v || "주소를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "주소를 다시 확인해주세요.",
     ],
     select: null,
+    email1: "",
+    email2: "",
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkagree1: false,
     checkagree2: false,
@@ -441,7 +444,8 @@ export default {
     },
   },
   created: function () {
-      
+    //alert('main');
+    //this.$refs.childRef.showAddr();
   },
   methods: {
     validate() {
@@ -494,30 +498,30 @@ export default {
       this.$router.go(-1);
     },
     save(){
-      //alert(this.$refs.mobile.validate());
-      // if(this.$refs.mobile.validate()){
-      //   alert('test');
-      // }
+      alert(this.email1 + "@" + this.email2);
+      const formData = new FormData();
+      formData.append("bType", "1"); //건물형 인프라구축사업
+      formData.append("status", "1"); //신청완료
+      formData.append("name", this.name);
+      formData.append("email", this.email1 + "@" + this.email2);
+      formData.append("addr1", this.addr1);
 
-      //alert(this.$refs.pform.validate());
-      alert(DialogZipcode.dialog);
       if(this.validate()){
-        
+
         alert('test');
       }
 
-      
-      
+
+
       //this.$router.push('/applysocialwelfare5');
     },
 
     inputAddr(zip, addr1){
       this.zipcode = zip;
       this.addr1 = addr1;
-      //this.addr2 = addr2;
     },
 
-    
+
   },
 };
 </script>
