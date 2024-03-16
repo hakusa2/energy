@@ -1,7 +1,7 @@
 <template>
   <div class="page-main">
     <div class="main-banner">
-      <v-carousel v-model="model" hide-delimiters>
+      <v-carousel v-model="model" hide-delimiters show-arrows-on-hover>
         <v-carousel-item src="@/assets/main_img1.png">
           <div class="carousel-sheet">
             <div class="carousel-text-group">
@@ -13,7 +13,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/applysocialwelfare"
+                <v-btn depressed color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -31,7 +31,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/applysocialwelfare"
+                <v-btn depressed color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -49,7 +49,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/applysocialwelfare"
+                <v-btn depressed color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -292,7 +292,7 @@
             <v-col cols="12" sm="12" md="4">
               <v-card class="card-support card-transparent" flat>
                 <v-card-title class="pt-0 px-0">복지배너</v-card-title>
-                <div class="carousel-control">
+                <!-- <div class="carousel-control">
                   <div class="carousel-count"><span>1</span>/5</div>
                   <v-btn icon color="black">
                     <v-icon>mdi-chevron-left</v-icon>
@@ -300,12 +300,15 @@
                   <v-btn icon color="black">
                     <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
-                </div>
-                <v-carousel hide-delimiters cycle height="312">
+                </div> -->
+                <v-carousel v-model="banner"
+                hide-delimiters
+                cycle
+                height="312">
                   <v-carousel-item
                     v-for="(item, i) in banners"
                     :key="i"
-                    :src="item.src"
+                    src="@/assets/sample_banner.png"
                     :to="item.url"
                   >
                   </v-carousel-item>
@@ -322,22 +325,15 @@
 
 <script>
 // @ is an alias to /src
+import axios from 'axios';
 
 export default {
   name: "Main",
   components: {},
   data: () => ({
     model: 0,
-    banners: [
-      {
-        src: require("@/assets/sample_banner.png"),
-        url: "https://www.naver.com/", //새창으로 띄우기
-      },
-      {
-        src: require("@/assets/sample_support_project.png"),
-        url: "https://www.naver.com/", //새창으로 띄우기
-      },
-    ],
+    banner: 0,
+    banners: [],
     active: false,
     row: "radio-1",
     selectitems1: ["naver.com", "gmail.com"],
@@ -368,6 +364,9 @@ export default {
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
   }),
+  created() {
+    this.init();
+  },
   methods: {
     validate() {
       this.$refs.form.validate();
@@ -383,6 +382,15 @@ export default {
     },
     closeEditor(slider) {
       slider.showEdit = false;
+    },
+    init() {
+      try {
+        axios.get("/api/banner/getList").then((response) => {
+          this.banners = response.data;
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };

@@ -212,6 +212,7 @@
                           <v-col class="pb-0">
                             <div class="d-flex">
                               <v-select
+                                v-model="tel1"
                                 dense
                                 outlined
                                 solo
@@ -220,6 +221,7 @@
                               ></v-select>
                               <div class="pt-2 px-2">-</div>
                               <v-text-field
+                                v-model="tel2"
                                 dense
                                 outlined
                                 solo
@@ -227,6 +229,7 @@
                               ></v-text-field>
                               <div class="pt-2 px-2">-</div>
                               <v-text-field
+                                v-model="tel3"
                                 dense
                                 outlined
                                 solo
@@ -255,7 +258,7 @@
                           <v-col class="pb-0">
                             <v-row no-gutters>
                               <v-col cols="auto">
-                                <DialogZipcode @move="inputAddr" ref="childRef" />
+                                <DialogZipcode @move="inputAddr" />
                               </v-col>
                               <v-col cols="3">
                                 <v-text-field
@@ -346,7 +349,7 @@ import Title from "@/components/Title.vue";
 import Terms from "@/components/Terms.vue";
 import DialogZipcode from "@/components/DialogZipcode.vue"
 import Privacy from "@/components/Privacy.vue";
-
+import axios from 'axios';
 
 export default {
   name: "ApplySocialWelfare1",
@@ -369,7 +372,7 @@ export default {
         href: "welfaremodel",
       },
       {
-        text: "공동주택형 에너지서비스 사업",
+        text: "건물형 인프라구축 사업",
         disabled: false,
         href: "welfaremodel1",
       },
@@ -412,6 +415,9 @@ export default {
     select: null,
     email1: "",
     email2: "",
+    tel1: "",
+    tel2: "",
+    tel3: "",
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkagree1: false,
     checkagree2: false,
@@ -444,8 +450,7 @@ export default {
     },
   },
   created: function () {
-    //alert('main');
-    //this.$refs.childRef.showAddr();
+    document.body.scrollTop = 0;
   },
   methods: {
     validate() {
@@ -498,30 +503,42 @@ export default {
       this.$router.go(-1);
     },
     save(){
-      alert(this.email1 + "@" + this.email2);
-      const formData = new FormData();
-      formData.append("bType", "1"); //건물형 인프라구축사업
-      formData.append("status", "1"); //신청완료
-      formData.append("name", this.name);
-      formData.append("email", this.email1 + "@" + this.email2);
-      formData.append("addr1", this.addr1);
+      if(this.$refs.form.validate()){
+        const formData = new FormData();
+        formData.append("bType", "1"); //건물형 인프라구축사업
+        formData.append("status", "1"); //신청완료
+        formData.append("name", this.name);
+        formData.append("birth", "");
+        formData.append("mobile", this.mobile);
+        formData.append("phone", this.tel1 + "-" + this.tel2 + "-" + this.tel3);
+        formData.append("email", (this.email1 == null || this.email1 === "" || this.email2 == null || this.email2 === "") ? "" : this.email1 + "@" + this.email2);
+        formData.append("zipcode", this.zipcode);
+        formData.append("addr1", this.addr1);
+        formData.append("addr2", this.addr2);
+        formData.append("sunLightYn", "N");
+        formData.append("modelName", "");
+        formData.append("remoteYn", "N");
 
-      if(this.validate()){
+        try{
+          axios.post('/api/business/write', formData)
+            .then(response => {
+              if(response.data.code == "0"){
+                this.$router.push("/applysocialwelfare5");
+              } else {
+                console.log(response.data.message);
+              }
 
-        alert('test');
+            });
+        } catch(err){
+          console.log(err);
+        }
       }
-
-
-
-      //this.$router.push('/applysocialwelfare5');
     },
 
-    inputAddr(zip, addr1){
-      this.zipcode = zip;
+    inputAddr(zipcode, addr1){
+      this.zipcode = zipcode;
       this.addr1 = addr1;
     },
-
-
   },
 };
 </script>

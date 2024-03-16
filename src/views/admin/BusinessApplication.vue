@@ -412,7 +412,7 @@ export default {
           contact: "010-1234-5678",
           email: "name@company.com",
           address: "(14157) 서울시 금천구 대륭포스트타워 5차 1807호",
-          status: "신청완료",
+          status: "선정123",
         },
       ];
     },

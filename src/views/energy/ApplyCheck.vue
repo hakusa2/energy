@@ -64,8 +64,11 @@
                             <v-col class="pb-0">
                               <div class="d-flex">
                                 <v-text-field
+                                  ref="mobile"
                                   v-model="mobile"
                                   :rules="mobileRules"
+                                  oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                                  type="number"
                                   dense
                                   outlined
                                   solo
@@ -77,6 +80,8 @@
                                   outlined
                                   color="black"
                                   width="80"
+                                  :disabled="isDisableMobileBtn"
+                                  @click="mobileSend"
                                 >
                                   인증요청
                                 </v-btn>
@@ -94,21 +99,28 @@
                             <v-col class="pt-0">
                               <div class="d-flex">
                                 <v-text-field
-                                  v-model="mobile1"
-                                  :rules="mobileRules1"
+                                  ref="auth"
+                                  v-model="auth"
+                                  :rules="authRules"
+                                  oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                                  counter="10"
+                                  type="number"
                                   dense
                                   outlined
                                   solo
                                   placeholder="인증 번호 입력"
-                                  suffix="3:00"
+                                  :suffix="timerStr"
                                   class="input-certification"
                                   required
+                                  :disabled="isDisableAuth"
                                 ></v-text-field>
                                 <v-btn
                                   class="ml-2"
                                   outlined
                                   color="black"
                                   width="80"
+                                  :disabled="isDisableAuthBtn"
+                                  @click="authSend"
                                 >
                                   확인
                                 </v-btn>
@@ -126,7 +138,7 @@
                     large
                     depressed
                     color="primary"
-                    to="/applycheckform"
+                    @click="confirm"
                     width="120"
                     >신청 확인</v-btn
                   >
@@ -144,6 +156,7 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
+import axios from 'axios';
 
 export default {
   name: "ApplyCheck",
@@ -172,22 +185,56 @@ export default {
     name: "",
     nameRules: [
       (v) => !!v || "이름을 입력해주세요",
-      (v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
+      (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z]*$/.test(v) || "잘못된 이름 양식이에요.",
+      (v) => !(v && (v.length >= 20)) || "이름은 20자리 이상 입력할 수 없습니다.",
     ],
     mobile: "",
     mobileRules: [
       (v) => !!v || "휴대폰 번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
+      (v) => /^[0-9]*$/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
+      (v) => !( v && (v.length >= 12)) || '휴대폰 번호는 12자리 이상 입력할 수 없습니다.',
+      (v) => !( v && (v.length <= 9)) || '휴대폰 번호 10자리 이상 입력해주세요.',
     ],
-    mobile1: "",
-    mobileRules1: [
+    auth: "",
+    authRules: [
       (v) => !!v || "인증번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "인증번호를 다시 확인해주세요.",
+      (v) => /^[0-9]*$/.test(v) || "인증번호를 다시 확인해주세요.",
+      (v) => !( v && (v.length != 6)) || '6자리의 인증번호를 입력해주세요.',
     ],
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
+    isDisableMobile: false,
+    isDisableMobileBtn: true,
+    isDisableAuth: true,
+    isDisableAuthBtn: true,
+    timerStr: "03:00",
+    timer: null,
+    timeCounter: 180,
   }),
+  watch: {
+    mobile: {
+      handler() {
+        if (this.$refs && this.$refs.mobile) {
+          this.isDisableMobileBtn = !this.$refs.mobile.validate();
+        } else {
+          this.isDisableMobileBtn = true;
+        }
+      },
+    },
+    auth: {
+      handler() {
+        if (this.$refs && this.$refs.auth) {
+          this.isDisableAuthBtn = !this.$refs.auth.validate();
+        } else {
+          this.isDisableAuthBtn = true;
+        }
+      },
+    },
+  },
+  created: function () {
+    document.body.scrollTop = 0;
+  },
   methods: {
     validate() {
       this.$refs.form.validate();
@@ -197,6 +244,65 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
+    },
+    mobileSend(){
+      this.isDisableMobile = true;
+      this.isDisableMobileBtn = true;
+      this.isDisableAuth = false;
+
+      this.timerStart();
+    },
+    authSend(){
+      this.isDisableAuth = true;
+      this.isDisableAuthBtn = true;
+
+      this.timerStop();
+    },
+    timerStart() {
+        this.timeCounter = 180;
+
+        var interval = setInterval(() => {
+            this.timeCounter--; //1초씩 감소
+            this.timerStr = this.prettyTime();
+            if (this.timeCounter <= 0) this.timerStop(interval);
+        }, 1000);
+
+        return interval;
+    },
+    timerStop(timerStr) {
+        this.timerStr = "03:00";
+        this.timeCounter = 0;
+        clearInterval(timerStr);
+    },
+    prettyTime: function () {
+        // 시간 형식으로 변환 리턴
+        let time = this.timeCounter / 60;
+        let minutes = parseInt(time);
+        let secondes = Math.round((time - minutes) * 60);
+
+        return (minutes.toString().padStart(2, "0") + ":" + secondes.toString().padStart(2, "0"));
+    },
+    confirm(){
+      if(this.$refs.form.validate()){
+
+        const formData = new FormData();
+        formData.append("name", this.name);
+        formData.append("mobile", this.mobile);
+
+        try{
+          axios.post('/api/business/getCheck', formData)
+            .then(response => {
+              console.log(response);
+              if(response.data != ""){
+                this.$router.push("/applycheckform?id=" + response.data);
+              } else {
+                alert("신청내역이 없습니다.");
+              }
+            });
+        } catch(err){
+          console.log(err);
+        }
+      }
     },
   },
 };

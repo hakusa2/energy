@@ -334,7 +334,7 @@ export default {
   methods: {
     init(){
       try{
-        axios.get('/api//etc/getApproval')
+        axios.get('/api/etc/getApproval')
           .then(response => {
             this.approvaldata = response.data;
           });

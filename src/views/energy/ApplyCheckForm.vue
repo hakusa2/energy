@@ -17,11 +17,11 @@
               <v-card class="card-form" flat>
                 <div class="card-header">
                   <div class="card-left">
-                    <div class="card-title">공동주택형 에너지서비스 사업</div>
-                    <div class="card-date">신청일시: 2023.12.18 17:44</div>
+                    <div class="card-title">{{ businessdata.btypeName }}</div>
+                    <div class="card-date">신청일시: {{ businessdata.createdAt }}</div>
                   </div>
                   <div class="card-label">
-                    <v-chip class="chip-color1" color="#F2F3F3">검토중</v-chip>
+                    <v-chip class="chip-color1" color="#F2F3F3">{{ businessdata.statusName }}</v-chip>
                   </div>
                 </div>
                 <div class="card-body">
@@ -31,14 +31,14 @@
                         <div class="form-group">
                           <v-label>신청유형</v-label>
                           <v-radio-group
-                            v-model="row"
+                            v-model="businessdata.stype"
                             row
                             class="pt-0 mt-1"
                             readonly
                             hide-details="auto"
                           >
-                            <v-radio label="세대" value="radio-1"></v-radio>
-                            <v-radio label="단지" value="radio-2"></v-radio>
+                            <v-radio label="세대" value="1"></v-radio>
+                            <v-radio label="단지" value="2"></v-radio>
                           </v-radio-group>
                         </div>
                       </v-col>
@@ -49,7 +49,7 @@
                             dense
                             outlined
                             solo
-                            value="홍길동"
+                            :value="businessdata.name"
                             readonly
                             hide-details="auto"
                           ></v-text-field>
@@ -62,7 +62,7 @@
                             dense
                             outlined
                             solo
-                            value="010 0000 0000"
+                            :value="businessdata.mobile"
                             readonly
                             hide-details="auto"
                           ></v-text-field>
@@ -76,7 +76,7 @@
                               dense
                               outlined
                               solo
-                              value="example"
+                              :value="businessdata.email1"
                               readonly
                               hide-details="auto"
                             ></v-text-field>
@@ -85,7 +85,7 @@
                               dense
                               outlined
                               solo
-                              value="example.com"
+                              :value="businessdata.email2"
                               readonly
                               hide-details="auto"
                             ></v-text-field>
@@ -101,7 +101,7 @@
                                 dense
                                 outlined
                                 solo
-                                value="경기 성남시 수정구 수정로 319"
+                                :value="businessdata.addr1"
                                 readonly
                                 hide-details="auto"
                               ></v-text-field>
@@ -111,7 +111,7 @@
                                 dense
                                 outlined
                                 solo
-                                value="0000동 0000호"
+                                :value="businessdata.addr2"
                                 readonly
                                 hide-details="auto"
                               ></v-text-field>
@@ -127,7 +127,7 @@
           </v-row>
           <v-row>
             <v-col class="text-right">
-              <v-btn outlined class="btn-outline-solid btn-secondary" to="main">
+              <v-btn outlined class="btn-outline-solid btn-secondary" @click="back">
                 뒤로
               </v-btn>
             </v-col>
@@ -140,6 +140,7 @@
 
 <script>
 // @ is an alias to /src
+import axios from 'axios';
 
 export default {
   name: "ApplyCheckForm",
@@ -167,8 +168,47 @@ export default {
         href: "applycheckform",
       },
     ],
-    row: "radio-1",
+    businessdata: {
+      bType: "",
+      btypeName: "",
+      status: "",
+      statusName: "",
+      name: "",
+      birth:"",
+      mobile:"",
+      phone:"",
+      email:"",
+      zipcode:"",
+      addr1:"",
+      addr2:"",
+      sunLightYn:"",
+      modelName:"",
+      remoteYn:"",
+      createdAt: "",
+    },
   }),
+  created() {
+    this.init();
+    //alert(this.$route.query.id);
+    //oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+  },
+  methods: {
+    init(){
+      try{
+        axios.get('/api/business/getConfirm?id='+ this.$route.query.id)
+          .then(response => {
+            this.businessdata = response.data;
+
+
+          });
+      } catch(err){
+        console.log(err);
+      }
+    },
+    back(){
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 
