@@ -1,8 +1,8 @@
 <template>
   <v-card tile elevation="0" class="card-mobile-menu">
-    <v-app-bar flat color="white" height="60px">
+    <v-app-bar flat color="white" height="66px" class="mobile-appbar">
       <v-toolbar-title
-        ><v-img src="@/assets/logo.png" max-width="168" contain></v-img
+        ><v-img src="@/assets/logo.png" max-width="200" contain></v-img
       ></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>

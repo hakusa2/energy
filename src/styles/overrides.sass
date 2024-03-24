@@ -5,16 +5,19 @@ a:hover:not(.v-btn):not(.v-list-item)
 //layout
 html
   overflow: hidden !important
+  letter-spacing: -1px
+  line-height: 30px
 body
   overflow: auto
   height: 100vh
 
-.v-application
-  font-family: "Pretendard", "Roboto", sans-serif !important
+@media screen and (max-width: 600px)     
+  html
+    font-size: 16px !important
 
 .page-bg
   background-color: #FAFAFA
-  padding: 20px 0
+  padding: 40px 0
 .page-bg.border-top
   border-top: 1px solid #F2F3F3
 
@@ -40,9 +43,11 @@ body
   height: calc(100% - 60px)
 
 //page-breadcrumbs
+.v-breadcrumbs li .v-icon
+  font-size: 18px !important
 .v-breadcrumbs.page-breadcrumbs
   position: relative
-  padding: 16px 12px 0
+  padding: 24px 12px 0
   align-items: center
   a, .v-breadcrumbs__item--disabled
     display: flex
@@ -51,13 +56,15 @@ body
   .v-breadcrumbs__item--disabled
     font-weight: 700
     opacity: 1
+  li
+    margin-bottom: 20px
   li:nth-child(even)
     padding: 0 4px
   li:first-child
     a
       display: block
-      width: 16px
-      height: 16px
+      width: 20px
+      height: 20px
       font-size: 0
       background-position: center center
       background-repeat: no-repeat
@@ -66,32 +73,58 @@ body
 .page-breadcrumbs:before
   content: ""
   position: absolute
-  top: 23px
+  top: 32px
   left: 0
   display: block
-  width: 3px
-  height: 3px
+  width: 5px
+  height: 5px
   background-color: #3B3B3B
+  border-radius: 50%
 
 //v-heading
-.v-heading-title
-  font-size: 24px
 .heading-description
-  //font-size: 16px
   color: #7C828B
-  padding-top: 8px
+  padding-top: 12px
+
+@media screen and (min-width: 600px)
+  .v-heading-title
+    font-size: 36px
+
+@media screen and (max-width: 600px)   
+  .v-heading-title
+    font-size: 28px
 
 //cursor
 .cursor-pointer
   cursor: pointer
 
 //font
-.text-required:before,
+.text-required
+  display: inline-block
+  width: 13px
+  height: 13px
+  background-position: center center
+  background-repeat: no-repeat
+  background-size: 100%
+  background-image: url("@/assets/icon_required.png")
+  margin: 0 4px
+.icon-required
+  position: relative
+  display: inline-block
+  width: 15px
 .icon-required:before
-  content: "* "
-  color: #E32727
-  font-size: 18px
-  line-height: 14px
+  content: ""
+  position: absolute
+  top: -20px
+  left: 0
+  display: block
+  width: 13px
+  height: 13px
+  background-position: center center
+  background-repeat: no-repeat
+  background-size: 100%
+  background-image: url("@/assets/icon_required.png")
+
 .text-break
   word-break: break-all
 
@@ -150,15 +183,29 @@ body
   background-image: url("@/assets/icon_email.png")
 
 //text
-.text-body-h3
-  font-size: 20px
-  font-weight: 700
-  letter-spacing: -1px
-.text-body1
-  font-size: 24px
-  font-weight: 700
-  letter-spacing: -1px
-  line-height: 32px
+@media screen and (min-width: 600px)
+  .text-body-h3
+    font-size: 36px
+    font-weight: 700
+    letter-spacing: -1px
+    line-height: 48px
+  .text-body1
+    font-size: 32px
+    font-weight: 700
+    letter-spacing: -1px
+    line-height: 44px
+
+@media screen and (max-width: 600px)   
+  .text-body-h3
+    font-size: 32px
+    font-weight: 700
+    letter-spacing: -1px
+    line-height: 44px
+  .text-body1
+    font-size: 28px
+    font-weight: 700
+    letter-spacing: -1px
+    line-height: 40px   
 
 //introduce
 .introduce-group
@@ -171,6 +218,20 @@ body
     font-weight: 700
     padding: 10px 0
 
+@media screen and (min-width: 600px)
+  .introduce-group
+    .item-title
+      font-size: 24px
+      font-weight: 600
+      padding: 24px 0 16px
+
+@media screen and (max-width: 600px)   
+  .introduce-group
+    .item-title
+      font-size: 24px
+      font-weight: 600
+      padding: 24px 0 16px
+
 //model-group
 .model-group
   background-color: #ffffff
@@ -180,14 +241,10 @@ body
   .item-image
     border-radius: 8px
     overflow: hidden
-  .item-title
-    font-size: 18px
-    font-weight: 700
-    padding: 16px 16px 0
   .item-description
     padding: 12px 16px
   .item-keyword
-    padding: 0 16px
+    padding: 20px 16px 0
     .theme--light.v-chip
       background: transparent
       padding: 0
@@ -200,6 +257,22 @@ body
     text-align: right
     padding: 12px 16px
 
+@media screen and (min-width: 600px)
+  .model-group
+    .item-title
+      font-size: 24px
+      font-weight: 600
+      line-height: 36px
+      padding: 24px 16px 0
+
+@media screen and (max-width: 600px)    
+  .model-group
+    .item-title
+      font-size: 24px
+      font-weight: 600
+      line-height: 36px
+      padding: 24px 16px 0   
+
 //model-case-group
 .model-case-group
   height: 100%
@@ -207,12 +280,14 @@ body
     border-radius: 8px
     overflow: hidden
   .item-title
-    font-size: 16px
+    font-size: 24px
     font-weight: 700
+    .v-icon.v-icon
+      font-size: 30px
   .item-address
     padding: 8px 0
   .item-chip
-    padding: 16px 0 12px
+    padding: 40px 0 12px
     .theme--light.v-chip
       background: transparent
     .theme--light.v-chip:hover::before
@@ -238,17 +313,17 @@ body
     padding: 20px
   .item-title
     position: relative
-    font-size: 18px
-    font-weight: 700
-    padding: 8px 0 0 28px
+    font-size: 24px
+    font-weight: 600
+    padding: 16px 0 0 28px
   .item-title:before
     content: ""
     position: absolute
-    top: 12px
-    left: 16px
+    top: 21px
+    left: 8px
     display: block
-    width: 3px
-    height: 20px
+    width: 5px
+    height: 24px
     background-color: #A6D086
     border-radius: 3px
   .item-description
@@ -266,9 +341,21 @@ body
     padding: 16px
     border: 1px solid #E5E6E8
     border-radius: 8px
+    
+
+@media screen and (min-width: 600px)
+  .apply-process-group.row
     .process-title
+      font-size: 16px
       font-weight: 700
-      margin-bottom: 12px
+      margin-bottom: 16px
+@media screen and (max-width: 600px)
+  .apply-process-group.row
+    .process-title
+      font-size: 18px
+      font-weight: 700
+      margin-bottom: 16px   
+
 @media (min-width: 600px) and (max-width: 960px)
   .apply-process-group.row
     .col
@@ -296,29 +383,61 @@ body
       font-weight: 600
 
 //dialog
-.card-dialog
-  .dialog-header
-    position: relative
-    .dialog-close
-      position: absolute
-      top: 8px
-      right: 8px
-    .dialog-title
-      font-size: 20px !important
-      font-weight: 700 !important
-      letter-spacing: -1px !important
-  .dialog-body
-    position: relative
-    padding: 0 20px 20px
+@media screen and (min-width: 600px)
+  .card-dialog
+    .dialog-header
+      position: relative
+      .dialog-close
+        position: absolute
+        top: 20px
+        right: 20px
+      .dialog-title
+        padding: 40px
+        font-size: 44px !important
+        font-weight: 700 !important
+        letter-spacing: -1px !important
+    .dialog-body
+      position: relative
+      padding: 0 40px 40px
+
+@media screen and (max-width: 600px)   
+  .card-dialog
+    .dialog-header
+      position: relative
+      .dialog-close
+        position: absolute
+        top: 10px
+        right: 10px
+      .dialog-title
+        padding: 20px
+        font-size: 28px !important
+        font-weight: 700 !important
+        letter-spacing: -1px !important   
+    .dialog-body
+      position: relative
+      padding: 0 20px 20px 
 
 //complete-group
-.complete-group
-  .complete-title
-    font-size: 24px
-    font-weight: 700
-  .complete-stext
-    font-size: 14px
-    font-weight: 500
+@media screen and (min-width: 600px)
+  .complete-group
+    .complete-title
+      font-size: 44px
+      font-weight: 700
+      line-height: 56px
+    .complete-stext
+      font-size: 20px
+      font-weight: 400
+      line-height: 32px
+@media screen and (max-width: 600px)   
+  .complete-group
+    .complete-title
+      font-size: 32px
+      font-weight: 700
+      line-height: 44px
+    .complete-stext
+      font-size: 18px
+      font-weight: 400
+      line-height: 30px
 
 //terms-group
 .terms-group
@@ -336,15 +455,18 @@ body
   background-color: #ffffff
   border-radius: 8px
   padding: 20px
+.form-bg.border
+  border: 1px solid #F2F3F3
 .form-group
   display: flex
   flex-direction: column
   width: 100%
   .v-label
     display: block
-    margin-bottom: 8px
-    font-size: 14px
-    font-weight: 500
+    margin-bottom: 12px
+    font-size: 18px
+    font-weight: 400
+    letter-spacing: -1px
     color: rgba(0, 0, 0, 1)
     white-space: nowrap
   .label-padding .v-label
@@ -361,16 +483,24 @@ body
   .v-label
     margin-bottom: 0
 
+.col-zipcode
+  min-width: 100px !important
+
 @media (min-width: 960px)
   .form-group
     .col-label
-      max-width: 80px
+      max-width: 96px
 
 .page-main .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot,
 .page-sub .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
 /* .v-text-field.v-text-field--enclosed .v-text-field__details
     padding: 0 !important */
+
+.v-text-field__prefix, .v-text-field__suffix
+  font-size: 14px
+  font-weight: 500
+  color: #B0B4B9
 
 .filter-group, .button-group
   display: flex
@@ -380,8 +510,8 @@ body
   margin-left: auto
 
 .v-input--selection-controls .v-input__slot > .v-label, .v-input--selection-controls .v-radio > .v-label
-  font-size: 14px
-  font-weight: 500
+  font-size: 18px
+  font-weight: 400
 
 //v-menu
 .v-menu__content
@@ -393,17 +523,12 @@ body
 //v-expansion-panels
 .v-expansion-panels.panels-accordion
   .v-expansion-panel-header
-    font-weight: 700
     border-bottom: 1px solid #F2F3F3
+  .v-expansion-panel-header__icon
+    .v-icon.v-icon
+      font-size: 32px
   .v-expansion-panel-content
     border-bottom: 1px solid #F2F3F3
-  .panel-content-title
-    font-size: 16px
-    font-weight: 700
-    margin-bottom: 12px
-  .panel-content-text
-    line-height: 1.8
-    padding-left: 28px
   .text-question
     color: #A6D086
     margin-right: 8px
@@ -411,28 +536,66 @@ body
     color: #0095F6
     margin-right: 8px
 
+@media screen and (min-width: 600px)
+  .v-expansion-panels.panels-accordion
+    .v-expansion-panel-header
+      line-height: 36px
+      font-weight: 600
+    .panel-content-title
+      font-size: 24px
+      font-weight: 600
+      line-height: 36px
+      margin-bottom: 24px
+    .panel-content-text
+      line-height: 30px
+      font-weight: 400
+      padding-left: 32px
+
+@media screen and (max-width: 600px)
+  .v-expansion-panels.panels-accordion
+    .v-expansion-panel-header,
+    .v-expansion-panel--active > .v-expansion-panel-header
+      min-height: 80px
+    .v-expansion-panel-header
+      line-height: 36px
+      font-size: 24px
+      font-weight: 600
+    .panel-content-title
+      font-size: 24px
+      font-weight: 600
+      line-height: 36px
+      margin-bottom: 24px
+    .panel-content-text
+      line-height: 30px
+      font-weight: 400
+      padding-left: 32px
+
 //v-card
 .theme--light.v-card.card-transparent
   background-color: transparent
+
+.card-form.border
+  border: 1px solid #CBCDD1 !important
 
 .card-form
   background-color: #ffffff
   border-radius: 8px
   border: 1px solid #F2F3F3  
   .card-title
-    font-size: 18px
-    font-weight: 700
-    margin-bottom: 8px
+    font-size: 24px
+    font-weight: 600
+    line-height: 36px
+    margin-bottom: 12px
     small
-      font-size: 14px
-      font-weight: 600
+      font-size: 16px
+      font-weight: 400
       color: rgba(0, 0, 0, 0.45)
   .card-header
     display: flex
     align-items: center
     border-bottom: 1px solid #F2F3F3
     padding: 16px
-    .card-date
+    .card-date, .card-stext
       color: rgba(0, 0, 0, 0.45)
     .card-label
       margin-left: auto
@@ -447,8 +610,9 @@ body
 .v-card.card-contact
   margin-top: 40px
   .contact-stext
-    font-size: 16px
-    font-weight: 700
+    font-size: 24px
+    font-weight: 600
+    line-height: 36px
     padding: 4px 20px
   .contact-group
     padding: 8px 20px
@@ -457,18 +621,33 @@ body
     flex-direction: column
     border-radius: 8px
     .contact-title
-      font-size: 16px
-      font-weight: 700
-      margin-bottom: 10px
+      font-size: 24px
+      font-weight: 600
+      line-height: 36px
+      margin-bottom: 8px
       small
-        font-size: 14px
-        font-weight: 500
-        color: rgba(0, 0, 0, 0.5)
+        display: block
+        font-size: 16px
+        font-weight: 600
+        color: #7C828B
         letter-spacing: -1px
-        margin-left: 8px
     .contact-text
-      font-size: 20px
+      display: flex
+      align-items: center
+      font-size: 32px
       font-weight: 700
+      line-height: 44px
+      word-break: break-all
+
+@media screen and (min-width: 600px)
+  .v-card.card-contact  
+    .contact-title
+      height: 65px
+
+@media screen and (max-width: 600px)         
+  .v-card.card-contact  
+    .contact-title
+      height: auto
 
 .v-card.card-alert
   .v-card__text
@@ -516,19 +695,20 @@ body
 .ul-list.list-dot>li:before
   content: ""
   position: absolute
-  top: 9px
+  top: 11px
   left: -12px
   display: block
-  width: 3px
-  height: 3px
-  background-color: rgba(0, 0, 0, 0.5)
+  width: 4px
+  height: 4px
+  background-color: rgba(0, 0, 0, 0.9)
+  border-radius: 50%
 .ul-list.list-dot>li.col:before
-  top: 20px
+  top: 22px
   left: 0
 
 .card-table
   .table-title
-    font-size: 20px
+    font-size: 28px
     font-weight: 700
     min-height: 40px
   .table-btn
@@ -562,7 +742,7 @@ body
     background-color: #F4F4F4
     font-weight: 600
 .v-data-table th, .v-data-table td
-  font-size: 14px !important
+  //font-size: 14px !important
 .v-data-table__checkbox .v-input--selection-controls__input
     margin-right: 0 !important
 
@@ -575,6 +755,28 @@ body
     padding-top: 0
     padding-bottom: 0
     margin-bottom: 0
+
+@media screen and (min-width: 600px)
+  .table-energy
+    .v-data-table th, .v-data-table td
+      font-size: 18px !important
+    .v-data-table td.text-right
+      font-size: 16px !important
+      color: rgba(0, 0, 0, 0.45)
+    .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td 
+      height: 80px
+@media screen and (max-width: 600px)   
+  .table-energy
+    .v-data-table th, .v-data-table td
+      font-size: 16px !important
+    .v-data-table td.text-right
+      font-size: 16px !important
+      color: rgba(0, 0, 0, 0.45)
+    .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td 
+      height: 70px
+    .text-truncate
+      max-width: 200px
+      display: inline-block
 
 .table-energy
   background-color: transparent !important
@@ -592,6 +794,8 @@ body
       background-color: #3C5A80 !important
   table th.text-start
     text-align: center !important
+  .theme--light.v-pagination .v-pagination__item
+    background: transparent
 
 .table-energy.card-table:not(.table-view) .v-data-table > .v-data-table__wrapper > table 
   tbody > tr:not(.v-data-table__mobile-table-row) > td
@@ -609,17 +813,36 @@ body
   border: 1px solid #F2F3F3
   .view-header
     border-bottom: 1px solid #F2F3F3
-    padding: 16px
-    .view-title
-      font-size: 18px
-      font-weight: 700
-      margin-bottom: 8px
-    .view-date
-      color: rgba(0, 0, 0, 0.45)
+    padding: 16px    
   .view-body
     padding: 20px 16px
     .v-image
       margin: 0 0 20px
+
+@media screen and (min-width: 600px)
+  .table-energy.table-view
+    .view-header
+      .view-title
+        font-size: 28px
+        font-weight: 600
+        line-height: 40px
+        margin-bottom: 8px
+      .view-date
+        color: rgba(0, 0, 0, 0.45)
+
+@media screen and (max-width: 600px)   
+  .table-energy.table-view
+    .view-header
+      .view-title
+        font-size: 24px
+        font-weight: 600
+        line-height: 36px
+        margin-bottom: 8px
+      .view-date
+        font-size: 16px
+        font-weight: 400
+        line-height: 28px
+        color: rgba(0, 0, 0, 0.45)
 
 .table-admin
   background-color: transparent !important
@@ -664,9 +887,9 @@ body
   .v-carousel, .v-carousel__item
     //height: 700px !important
   .v-responsive__sizer
-    height: 700px
+    height: 900px
   .v-carousel, .v-carousel__item
-    height: 700px !important
+    height: 900px !important
   .v-image__image
     background-position: center center !important 
   .carousel-sheet
@@ -685,92 +908,136 @@ body
       width: 70%
       padding-left: 20px
       .title
-        font-size: 32px !important
-        font-weight: 700
-        line-height: 1.2
         color: rgba(255, 255, 255, 1)
-        margin-bottom: 20px
-        letter-spacing: -1px
+        letter-spacing: -2px
       .stext
-        font-size: 16px !important
-        font-weight: 500
         color: rgba(255, 255, 255, 0.8)
-        margin-bottom: 20px
+        letter-spacing: -1px
+
+@media screen and (min-width: 600px)
+  .main-banner
+    .carousel-text-group
+      .title
+        font-size: 44px !important
+        font-weight: 800
+        line-height: 56px
+        margin-bottom: 24px
+      .stext
+        font-size: 20px !important
+        font-weight: 400
+        margin-bottom: 40px
+
 @media (min-width: 1264px) and (max-width: 1904px)
   .main-banner
     .v-responsive__sizer
-      height: 500px
+      height: 900px
     .v-carousel, .v-carousel__item
-      height: 500px !important
+      height: 900px !important
     .v-image__image
       background-position: center center !important
 @media (min-width: 960px) and (max-width: 1264px)
   .main-banner    
     .v-responsive__sizer
-      height: 500px
+      height: 900px
     .v-carousel, .v-carousel__item
-      height: 500px !important
+      height: 900px !important
     .v-image__image
       background-position: center center !important
 @media (min-width: 600px) and (max-width: 960px)
   .main-banner
     .v-responsive__sizer
-      height: 500px
+      height: 700px
     .v-carousel, .v-carousel__item
-      height: 500px !important
+      height: 700px !important
     .v-image__image
       background-position: center 0 !important
 @media screen and (max-width: 600px)
   .main-banner
     .v-responsive__sizer
-      height: 500px
+      height: 700px
     .v-carousel, .v-carousel__item
-      height: 500px !important
+      height: 700px !important
     .v-image__image
-      background-position: -350px center !important
+      background-position: -580px center !important   
+    .carousel-text-group
+      .title
+        font-size: 32px !important
+        font-weight: 800
+        line-height: 46px
+        margin-bottom: 16px
+      .stext
+        font-size: 16px !important
+        font-weight: 400
 
 //card-myhome-energy
+@media screen and (max-width: 1200px)
+  .col-myhome-energy
+    flex: 0 0 100% !important
+    max-width: 100% !important
+
+@media screen and (min-width: 600px)
+  .card-myhome-energy
+    .v-card__title
+      font-size: 36px !important
+      font-weight: 700 !important
+@media screen and (max-width: 600px)   
+  .card-myhome-energy
+    .v-card__title
+      font-size: 28px !important
+      font-weight: 700 !important   
+
 .card-myhome-energy
   .v-card__title
-    font-size: 20px !important
-    font-weight: 700 !important
+    letter-spacing: -1px
+    margin-bottom: 20px
   a, a:hover
     color: rgba(0, 0, 0, 0.8) !important
     text-decoration: none !important
+  .form-main
+    min-height: 478px
 
 .main-myenergy-result
   display: flex
   flex-direction: column
-  min-height: 272px
+  min-height: 438px
+  .row
+    flex: 0 0 auto !important
+    margin-bottom: 12px
   .result-title
     display: flex
     align-items: center
-    font-size: 16px
-    font-weight: 700
-    padding: 0 0 20px
+    font-size: 24px
+    font-weight: 600
+    letter-spacing: -1px
+    padding: 0 0 40px
   .result-stitle
-    color: rgba(0, 0, 0, 0.4)
-    padding: 0 0 4px
+    font-size: 20px
     font-weight: 500
+    letter-spacing: -1px
+    color: rgba(0, 0, 0, 0.4)
+    padding: 0 0 24px
     span
       font-weight: 700
   .result-value
-    font-size: 28px
+    font-size: 32px
     font-weight: 700
     small
+      font-size: 20px
+      font-weight: 400
+    .unit
       font-size: 16px
       font-weight: 500
-    .unit
-      font-size: 12px
-      font-weight: 400
       color: rgba(0, 0, 0, 0.4)
       font-weight: 600
       margin-left: 4px
 
 //card-support
+.col-support
+  max-width: 478px !important
 .card-support
   .v-card__title
-    font-weight: 700 !important
+    letter-spacing: -1px
+    margin-bottom: 20px
   .carousel-control
     position: absolute
     top: -8px
@@ -790,3 +1057,40 @@ body
     display: none
   //.v-image__image--cover
     //background-size: contain
+
+@media screen and (min-width: 600px)
+  .card-support
+    .v-card__title
+      font-size: 36px !important
+      font-weight: 700 !important
+
+@media screen and (max-width: 600px)   
+  .card-support
+    .v-card__title
+      font-size: 28px !important
+      font-weight: 700 !important   
+
+.admin-view, .admin-dialog, .admin-alert
+  font-size: 14px
+  letter-spacing: 0
+  .v-btn:not(.v-btn--round).v-size--default
+    height: 40px
+    min-width: auto
+    padding: 0 24px
+  .v-btn.v-size--default
+    font-size: 14px
+  .v-input input
+    font-size: 14px
+  .v-input--selection-controls .v-input__slot > .v-label, .v-input--selection-controls .v-radio > .v-label
+    font-size: 14px
+  .v-textarea textarea
+    font-size: 14px
+    line-height: 1.6
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td, .v-data-table > .v-data-table__wrapper > table > thead > tr > td, .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td
+    font-size: inherit
+  .v-chip.v-size--default
+    border-radius: 8px
+    font-size: 14px
+.admin-dialog.v-card
+  >.v-card__title
+    font-weight: 700 !important

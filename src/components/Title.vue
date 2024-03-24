@@ -1,5 +1,5 @@
 <template>
-  <div class="page-title my-4">
+  <div class="page-title mt-1 mb-6">
     <v-row no-gutters class="align-center">
       <v-col>
         <h2 class="v-heading-title">{{ title }}</h2>

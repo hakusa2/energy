@@ -16,13 +16,14 @@
         </Title>
       </v-container>
     </div>
-    <div class="page-bg border-top">
+
+    <div class="page-bg border-top h-100">
       <div class="page-container">
         <v-container>
           <v-row>
             <v-col>
               <v-card flat class="card-applycheck card-transparent">
-                <div class="form-bg">
+                <div class="form-bg border">
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <v-row>
                       <v-col cols="12" sm="12" md="6">
@@ -40,7 +41,6 @@
                               <v-text-field
                                 v-model="name"
                                 :rules="nameRules"
-                                dense
                                 outlined
                                 solo
                                 placeholder="홍길동"
@@ -69,7 +69,6 @@
                                   :rules="mobileRules"
                                   oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
                                   type="number"
-                                  dense
                                   outlined
                                   solo
                                   placeholder="'-' 없이 숫자만 입력해주세요"
@@ -105,7 +104,6 @@
                                   oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
                                   counter="10"
                                   type="number"
-                                  dense
                                   outlined
                                   solo
                                   placeholder="인증 번호 입력"
@@ -132,7 +130,7 @@
                     </v-row>
                   </v-form>
                 </div>
-                <v-card-actions>
+                <v-card-actions class="mt-10">
                   <v-spacer></v-spacer>
                   <v-btn
                     large
@@ -156,7 +154,7 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "ApplyCheck",
@@ -186,20 +184,22 @@ export default {
     nameRules: [
       (v) => !!v || "이름을 입력해주세요",
       (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z]*$/.test(v) || "잘못된 이름 양식이에요.",
-      (v) => !(v && (v.length >= 20)) || "이름은 20자리 이상 입력할 수 없습니다.",
+      (v) => !(v && v.length >= 20) || "이름은 20자리 이상 입력할 수 없습니다.",
     ],
     mobile: "",
     mobileRules: [
       (v) => !!v || "휴대폰 번호를 입력해주세요",
       (v) => /^[0-9]*$/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
-      (v) => !( v && (v.length >= 12)) || '휴대폰 번호는 12자리 이상 입력할 수 없습니다.',
-      (v) => !( v && (v.length <= 9)) || '휴대폰 번호 10자리 이상 입력해주세요.',
+      (v) =>
+        !(v && v.length >= 12) ||
+        "휴대폰 번호는 12자리 이상 입력할 수 없습니다.",
+      (v) => !(v && v.length <= 9) || "휴대폰 번호 10자리 이상 입력해주세요.",
     ],
     auth: "",
     authRules: [
       (v) => !!v || "인증번호를 입력해주세요",
       (v) => /^[0-9]*$/.test(v) || "인증번호를 다시 확인해주세요.",
-      (v) => !( v && (v.length != 6)) || '6자리의 인증번호를 입력해주세요.',
+      (v) => !(v && v.length != 6) || "6자리의 인증번호를 입력해주세요.",
     ],
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
@@ -245,61 +245,63 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    mobileSend(){
+    mobileSend() {
       this.isDisableMobile = true;
       this.isDisableMobileBtn = true;
       this.isDisableAuth = false;
 
       this.timerStart();
     },
-    authSend(){
+    authSend() {
       this.isDisableAuth = true;
       this.isDisableAuthBtn = true;
 
       this.timerStop();
     },
     timerStart() {
-        this.timeCounter = 180;
+      this.timeCounter = 180;
 
-        var interval = setInterval(() => {
-            this.timeCounter--; //1초씩 감소
-            this.timerStr = this.prettyTime();
-            if (this.timeCounter <= 0) this.timerStop(interval);
-        }, 1000);
+      var interval = setInterval(() => {
+        this.timeCounter--; //1초씩 감소
+        this.timerStr = this.prettyTime();
+        if (this.timeCounter <= 0) this.timerStop(interval);
+      }, 1000);
 
-        return interval;
+      return interval;
     },
     timerStop(timerStr) {
-        this.timerStr = "03:00";
-        this.timeCounter = 0;
-        clearInterval(timerStr);
+      this.timerStr = "03:00";
+      this.timeCounter = 0;
+      clearInterval(timerStr);
     },
     prettyTime: function () {
-        // 시간 형식으로 변환 리턴
-        let time = this.timeCounter / 60;
-        let minutes = parseInt(time);
-        let secondes = Math.round((time - minutes) * 60);
+      // 시간 형식으로 변환 리턴
+      let time = this.timeCounter / 60;
+      let minutes = parseInt(time);
+      let secondes = Math.round((time - minutes) * 60);
 
-        return (minutes.toString().padStart(2, "0") + ":" + secondes.toString().padStart(2, "0"));
+      return (
+        minutes.toString().padStart(2, "0") +
+        ":" +
+        secondes.toString().padStart(2, "0")
+      );
     },
-    confirm(){
-      if(this.$refs.form.validate()){
-
+    confirm() {
+      if (this.$refs.form.validate()) {
         const formData = new FormData();
         formData.append("name", this.name);
         formData.append("mobile", this.mobile);
 
-        try{
-          axios.post('/api/business/getCheck', formData)
-            .then(response => {
-              console.log(response);
-              if(response.data != ""){
-                this.$router.push("/applycheckform?id=" + response.data);
-              } else {
-                alert("신청내역이 없습니다.");
-              }
-            });
-        } catch(err){
+        try {
+          axios.post("/api/business/getCheck", formData).then((response) => {
+            console.log(response);
+            if (response.data != "") {
+              this.$router.push("/applycheckform?id=" + response.data);
+            } else {
+              alert("신청내역이 없습니다.");
+            }
+          });
+        } catch (err) {
           console.log(err);
         }
       }

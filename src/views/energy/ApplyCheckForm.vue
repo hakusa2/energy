@@ -14,14 +14,18 @@
         <v-container>
           <v-row>
             <v-col>
-              <v-card class="card-form" flat>
+              <v-card class="card-form border" flat>
                 <div class="card-header">
                   <div class="card-left">
                     <div class="card-title">{{ businessdata.btypeName }}</div>
-                    <div class="card-date">신청일시: {{ businessdata.createdAt }}</div>
+                    <div class="card-date">
+                      신청일시: {{ businessdata.createdAt }}
+                    </div>
                   </div>
                   <div class="card-label">
-                    <v-chip class="chip-color1" color="#F2F3F3">{{ businessdata.statusName }}</v-chip>
+                    <v-chip large class="chip-color1" color="#F2F3F3">{{
+                      businessdata.statusName
+                    }}</v-chip>
                   </div>
                 </div>
                 <div class="card-body">
@@ -29,7 +33,7 @@
                     <v-row>
                       <v-col cols="12">
                         <div class="form-group">
-                          <v-label>신청유형</v-label>
+                          <v-label class="mb-6">신청유형</v-label>
                           <v-radio-group
                             v-model="businessdata.stype"
                             row
@@ -37,16 +41,23 @@
                             readonly
                             hide-details="auto"
                           >
-                            <v-radio label="세대" value="1"></v-radio>
-                            <v-radio label="단지" value="2"></v-radio>
+                            <v-radio
+                              color="black"
+                              label="세대"
+                              value="1"
+                            ></v-radio>
+                            <v-radio
+                              color="black"
+                              label="단지"
+                              value="2"
+                            ></v-radio>
                           </v-radio-group>
                         </div>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12">
                         <div class="form-group">
                           <v-label>이름</v-label>
                           <v-text-field
-                            dense
                             outlined
                             solo
                             :value="businessdata.name"
@@ -55,11 +66,10 @@
                           ></v-text-field>
                         </div>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="12">
                         <div class="form-group">
                           <v-label>휴대폰</v-label>
                           <v-text-field
-                            dense
                             outlined
                             solo
                             :value="businessdata.mobile"
@@ -73,16 +83,14 @@
                           <v-label>이메일</v-label>
                           <div class="d-flex">
                             <v-text-field
-                              dense
                               outlined
                               solo
                               :value="businessdata.email1"
                               readonly
                               hide-details="auto"
                             ></v-text-field>
-                            <div class="pt-2 px-2">@</div>
+                            <div class="pt-3 px-3">@</div>
                             <v-text-field
-                              dense
                               outlined
                               solo
                               :value="businessdata.email2"
@@ -98,7 +106,6 @@
                           <v-row>
                             <v-col cols="12" md="12" class="pb-2">
                               <v-text-field
-                                dense
                                 outlined
                                 solo
                                 :value="businessdata.addr1"
@@ -108,7 +115,6 @@
                             </v-col>
                             <v-col cols="12" md="12" class="py-0">
                               <v-text-field
-                                dense
                                 outlined
                                 solo
                                 :value="businessdata.addr2"
@@ -127,7 +133,12 @@
           </v-row>
           <v-row>
             <v-col class="text-right">
-              <v-btn outlined class="btn-outline-solid btn-secondary" @click="back">
+              <v-btn
+                outlined
+                large
+                class="btn-outline-solid btn-secondary"
+                @click="back"
+              >
                 뒤로
               </v-btn>
             </v-col>
@@ -140,7 +151,7 @@
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "ApplyCheckForm",
@@ -174,16 +185,16 @@ export default {
       status: "",
       statusName: "",
       name: "",
-      birth:"",
-      mobile:"",
-      phone:"",
-      email:"",
-      zipcode:"",
-      addr1:"",
-      addr2:"",
-      sunLightYn:"",
-      modelName:"",
-      remoteYn:"",
+      birth: "",
+      mobile: "",
+      phone: "",
+      email: "",
+      zipcode: "",
+      addr1: "",
+      addr2: "",
+      sunLightYn: "",
+      modelName: "",
+      remoteYn: "",
       createdAt: "",
     },
   }),
@@ -193,19 +204,18 @@ export default {
     //oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
   },
   methods: {
-    init(){
-      try{
-        axios.get('/api/business/getConfirm?id='+ this.$route.query.id)
-          .then(response => {
+    init() {
+      try {
+        axios
+          .get("/api/business/getConfirm?id=" + this.$route.query.id)
+          .then((response) => {
             this.businessdata = response.data;
-
-
           });
-      } catch(err){
+      } catch (err) {
         console.log(err);
       }
     },
-    back(){
+    back() {
       this.$router.go(-1);
     },
   },

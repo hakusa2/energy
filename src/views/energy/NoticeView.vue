@@ -1,6 +1,6 @@
 <template>
   <div class="page-sub">
-    <div class="page-header pb-4">
+    <div class="page-header">
       <v-container>
         <v-breadcrumbs :items="breadcrumbs" class="page-breadcrumbs">
           <template v-slot:divider>
@@ -27,8 +27,11 @@
                     contain
                     max-width="500"
                   ></v-img>
-                  <p v-for="(c, index) in descriptionList" :key="`item-${index}`">
-                      {{ c }} <br />
+                  <p
+                    v-for="(c, index) in descriptionList"
+                    :key="`item-${index}`"
+                  >
+                    {{ c }} <br />
                   </p>
                 </div>
               </div>
@@ -38,6 +41,7 @@
             <v-col class="text-right">
               <v-btn
                 outlined
+                large
                 class="btn-outline-solid btn-secondary"
                 to="energynotice"
               >
@@ -53,7 +57,7 @@
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "NoticeView",
@@ -63,10 +67,10 @@ export default {
       title: "",
       description: "",
       createdAt: "",
-      imageUrl:"",
+      imageUrl: "",
     },
     descriptionList: [],
-    
+
     breadcrumbs: [
       {
         text: "home",
@@ -90,20 +94,21 @@ export default {
   },
 
   methods: {
-    init(){
-      try{
-        axios.get('/api/notice/getSingle?id='+ this.$route.query.id)
-          .then(response => {
+    init() {
+      try {
+        axios
+          .get("/api/notice/getSingle?id=" + this.$route.query.id)
+          .then((response) => {
             //console.log(response.data);
             this.noticedata = response.data;
             //console.log(this.noticedata.title);
             //this.noticedata.description = this.noticedata.description.replace("\n", "<br />");
-            this.descriptionList = this.noticedata.description.split('\n');
+            this.descriptionList = this.noticedata.description.split("\n");
           });
-      } catch(err){
+      } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
 };
 </script>

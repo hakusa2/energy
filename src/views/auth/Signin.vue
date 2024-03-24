@@ -7,8 +7,8 @@
             <v-row class="align-center">
               <v-col cols="12" sm="12" md="6" class="d-flex flex-column">
                 <v-img
-                  src="@/assets/logo.svg"
-                  max-width="290"
+                  src="@/assets/logo_signin.png"
+                  max-width="344"
                   class="mb-5"
                   contain
                 ></v-img>
@@ -17,7 +17,7 @@
                 </div>
               </v-col>
               <v-col cols="12" sm="12" md="6">
-                <div class="signin-stitle mb-5">관리자 로그인</div>
+                <div class="signin-stitle mb-8">관리자 로그인</div>
                 <div class="signin-form">
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <div class="form-group">
@@ -43,6 +43,7 @@
                     <div class="signin-action">
                       <v-btn
                         depressed
+                        small
                         color="primary"
                         to="/adminbusinessapplication"
                         class="mt-2"
@@ -108,11 +109,18 @@ export default {
   padding: 48px 60px;
 }
 .signin-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 500;
 }
 .signin-stitle {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
+}
+.signin-form .form-group .v-label {
+  font-size: 20px;
+  font-weight: 400;
+}
+.signin-form .v-text-field input {
+  font-size: 16px;
 }
 </style>

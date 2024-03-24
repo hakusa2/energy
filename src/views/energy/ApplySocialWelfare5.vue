@@ -9,7 +9,7 @@
             >
               <v-img
                 src="@/assets/img_complete.png"
-                max-height="280"
+                max-height="590"
                 contain
               ></v-img>
               <div class="complete-title my-3">사업 신청이 완료되었습니다</div>
@@ -20,7 +20,7 @@
             </v-flex>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn depressed color="primary" to="/main"> 홈으로 </v-btn>
+              <v-btn large depressed color="primary" to="/main"> 홈으로 </v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>

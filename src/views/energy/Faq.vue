@@ -42,7 +42,7 @@
 
           <v-card class="card-contact" flat>
             <v-row>
-              <v-col cols="12" sm="12" md="4">
+              <v-col cols="12" sm="12" md="auto">
                 <div class="contact-stext">
                   궁금하신 내용이 해결이 안될 경우<br />
                   전화나 이메일로 문의 바랍니다
@@ -60,9 +60,12 @@
                       전화상담<small>월~금 09:00 ~ 18:00</small>
                     </div>
                     <div class="contact-text">
-                      <v-icon large class="mdi-custom"
-                        >mdi-phone-in-talk</v-icon
-                      >
+                      <v-img
+                        src="@/assets/icon_call.png"
+                        max-width="40"
+                        contain
+                        class="mr-5"
+                      ></v-img>
                       {{ advicedata.phone }}
                     </div>
                   </div>
@@ -73,9 +76,12 @@
                   <div class="contact-item">
                     <div class="contact-title">이메일상담</div>
                     <div class="contact-text">
-                      <v-icon large class="mdi-custom"
-                        >mdi-email-outline</v-icon
-                      >
+                      <v-img
+                        src="@/assets/icon_email.png"
+                        max-width="40"
+                        contain
+                        class="mr-5"
+                      ></v-img>
                       {{ advicedata.email }}
                     </div>
                   </div>

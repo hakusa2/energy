@@ -25,6 +25,8 @@ export default {
 <style lang="scss">
 // energy > CopyRight.vue
 .contact-info.admin-contact-info {
+  font-size: 12px;
   color: #b3a1a1;
+  letter-spacing: 0;
 }
 </style>

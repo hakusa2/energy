@@ -1,5 +1,5 @@
 <template>
-  <div class="terms-group" style="height: 160px">
+  <div class="terms-group" style="height: 200px">
     <p>아래 가입요건을 모두 충족하는 대한민국 거주 청년을 대상으로 합니다.</p>
     <ul class="ul-list list-dash">
       <li>

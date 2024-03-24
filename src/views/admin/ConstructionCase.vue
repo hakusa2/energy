@@ -80,7 +80,7 @@
                 삭제
               </v-btn>
             </template>
-            <v-card class="card-alert">
+            <v-card class="card-alert admin-alert">
               <v-card-text>삭제하시겠습니까?</v-card-text>
               <v-card-actions class="pa-0">
                 <v-row no-gutters>
@@ -122,7 +122,7 @@
                 신규작성
               </v-btn>
             </template>
-            <v-card>
+            <v-card class="admin-dialog">
               <v-card-title>
                 {{ formTitle }}
               </v-card-title>

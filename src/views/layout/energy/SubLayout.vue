@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar absolute flat color="white" height="60px" class="sub-appbar">
+    <v-app-bar app flat color="white" height="66px" class="sub-appbar">
       <div class="page-header">
         <v-container class="d-flex align-center">
           <router-link class="d-inline-block" to="/main">
-            <v-img src="@/assets/logo.png" max-width="168" contain></v-img>
+            <v-img src="@/assets/logo.png" max-width="193" contain></v-img>
           </router-link>
           <v-spacer></v-spacer>
           <TopMenu class="d-none d-md-flex" />

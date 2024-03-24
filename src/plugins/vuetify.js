@@ -5,13 +5,6 @@ import Vuetify from "vuetify/lib/framework";
 Vue.use(Vuetify);
 
 export default new Vuetify({
-  /* breakpoint: {
-    thresholds: {
-      xs: 430,
-      sm: 768,
-    },
-    mobileBreakpoint: "xs",
-  }, */
   theme: {
     themes: {
       light: {

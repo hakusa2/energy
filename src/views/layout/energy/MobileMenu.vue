@@ -1,8 +1,8 @@
 <template>
   <v-card tile elevation="0" class="card-mobile-menu">
-    <v-app-bar flat color="white" height="60px">
+    <v-app-bar flat color="white" height="66px" class="mobile-appbar">
       <v-toolbar-title
-        ><v-img src="@/assets/logo.png" max-width="168" contain></v-img
+        ><v-img src="@/assets/logo.png" max-width="200" contain></v-img
       ></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -10,7 +10,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-list class="mt-5">
+    <v-list class="mt-10">
       <v-list-item-group v-model="selectedItem" color="#0055a5">
         <v-list-item to="/introduce">
           <v-list-item-content>
@@ -96,30 +96,41 @@ export default {
   width: 100%;
   height: 100%;
 }
+.v-application .white.mobile-appbar {
+  border-bottom: 1px solid #f2f3f3 !important;
+  padding: 0 20px 0 10px;
+}
 .card-mobile-menu .v-list {
   height: 100%;
   overflow: auto;
   padding: 0;
 }
+.card-mobile-menu .v-list-item {
+  padding: 0 20px;
+  min-height: 78px;
+}
+.card-mobile-menu .v-list-item__content {
+  padding: 20px 0;
+}
 .card-mobile-menu .v-list .v-list-item__title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
 }
 .card-mobile-menu .v-list .v-list-group__items .v-list-item__title {
   position: relative;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
   color: rgba(0, 0, 0, 0.65);
-  padding-left: 10px;
+  padding-left: 12px;
 }
 .card-mobile-menu .v-list .v-list-group__items .v-list-item__title:before {
   content: "";
   position: absolute;
-  top: 7px;
+  top: 8px;
   left: 0;
   display: block;
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.65);
 }
@@ -128,7 +139,10 @@ export default {
   .v-list-group--no-action
   > .v-list-group__items
   > .v-list-item {
-  padding-left: 24px;
-  min-height: 36px;
+  padding-left: 32px;
+  min-height: 46px;
+}
+.card-mobile-menu .v-icon.v-icon {
+  font-size: 32px;
 }
 </style>

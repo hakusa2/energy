@@ -101,12 +101,15 @@ export default {
   font-weight: 700;
 }
 .topmenu-item .v-btn.btn-confirm {
+  font-size: 16px;
   font-weight: 500;
+  height: 46px;
+  border-radius: 20px;
 }
 .topmenu-item .v-btn:not(.btn-confirm) {
-  font-size: 16px;
+  font-size: 18px;
   min-width: 0;
-  height: 60px;
+  height: 66px;
   padding: 0;
   border-bottom: 3px solid transparent;
 }
@@ -129,9 +132,11 @@ export default {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.12);
 }
 .rounded-topmeu-dropdown .v-list-item {
-  font-size: 12px;
+  min-height: 36px;
+}
+.rounded-topmeu-dropdown .v-list-item .v-list-item__title {
+  font-size: 16px;
   font-weight: 600;
-  min-height: 30px;
 }
 .rounded-topmeu-dropdown
   .theme--light.v-list-item:not(.v-list-item--active):not(

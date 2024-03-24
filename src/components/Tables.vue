@@ -1,6 +1,6 @@
 <template>
   <v-card class="card-table" elevation="0">
-    <v-card-title class="px-0 pb-0">
+    <v-card-title class="px-0 pb-0 pt-0 mt-10 mb-5">
       <v-row no-gutters>
         <v-col cols="6" class="mr-auto">
           <div class="table-title"><slot name="TableTitle"></slot></div>

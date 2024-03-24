@@ -13,7 +13,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/welfareModel"
+                <v-btn depressed large color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -31,7 +31,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/welfareModel"
+                <v-btn depressed large color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -49,7 +49,7 @@
                 성남시 에너지복지사업 신청의 전 과정을 확인해보세요
               </div>
               <div class="action">
-                <v-btn depressed color="primary" to="/welfareModel"
+                <v-btn depressed large color="primary" to="/welfareModel"
                   >사업소개 <v-icon>mdi-chevron-right</v-icon></v-btn
                 >
               </div>
@@ -62,7 +62,7 @@
       <div class="page-container">
         <v-container>
           <v-row class="align-stretch">
-            <v-col cols="12" sm="12" md="8">
+            <v-col class="col-myhome-energy">
               <v-card class="card-myhome-energy card-transparent" flat>
                 <v-card-title class="pt-0 px-0"
                   >우리집 에너지 진단</v-card-title
@@ -74,7 +74,7 @@
                     lazy-validation
                     v-if="!active"
                   >
-                    <v-row>
+                    <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="6">
                         <div class="form-group">
                           <v-row>
@@ -88,7 +88,6 @@
                             </v-col>
                             <v-col>
                               <v-select
-                                dense
                                 outlined
                                 solo
                                 placeholder="13평 이하"
@@ -111,7 +110,6 @@
                             </v-col>
                             <v-col>
                               <v-select
-                                dense
                                 outlined
                                 solo
                                 placeholder="1명"
@@ -122,7 +120,7 @@
                         </div>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="12" class="pt-sm-0 pt-md-3">
                         <div class="form-group">
                           <v-row>
@@ -138,7 +136,6 @@
                               <v-row no-gutters>
                                 <v-col cols="3">
                                   <v-select
-                                    dense
                                     outlined
                                     solo
                                     placeholder="1월"
@@ -147,7 +144,6 @@
                                 </v-col>
                                 <v-col>
                                   <v-text-field
-                                    dense
                                     outlined
                                     solo
                                     placeholder="0,000 "
@@ -162,7 +158,7 @@
                         </div>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="6">
                         <div class="form-group">
                           <v-row class="align-center">
@@ -181,15 +177,23 @@
                                 class="pt-0 mt-1"
                                 hide-details="auto"
                               >
-                                <v-radio label="유" value="radio-1"></v-radio>
-                                <v-radio label="무" value="radio-2"></v-radio>
+                                <v-radio
+                                  label="유"
+                                  color="black"
+                                  value="radio-1"
+                                ></v-radio>
+                                <v-radio
+                                  label="무"
+                                  color="black"
+                                  value="radio-2"
+                                ></v-radio>
                               </v-radio-group>
                             </v-col>
                           </v-row>
                         </div>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="12">
                         <div class="form-group">
                           <v-row>
@@ -203,7 +207,6 @@
                             </v-col>
                             <v-col>
                               <v-text-field
-                                dense
                                 outlined
                                 solo
                                 placeholder="0,000 "
@@ -215,7 +218,7 @@
                         </div>
                       </v-col>
                     </v-row>
-                    <v-row>
+                    <v-row class="mt-10">
                       <v-col class="text-right">
                         <v-btn
                           depressed
@@ -228,21 +231,21 @@
                     </v-row>
                   </v-form>
 
-                  <div class="main-myenergy-result" v-else>
-                    <div class="result-title">
+                  <div class="main-myenergy-result align-start" v-else>
+                    <div class="result-title w-100">
                       <v-img
                         src="@/assets/icon_circle_lightning.png"
-                        max-width="40"
+                        max-width="48"
                         contain
                         class="mr-3"
                       ></v-img>
-                      계산결과
+                      계산 결과
                     </div>
-                    <div class="result-stitle primary--text">
+                    <div class="result-stitle primary--text w-100">
                       <span classs="mr-2">우리집</span> 이번달
                       사용량(발전량)/요금
                     </div>
-                    <v-row>
+                    <v-row class="w-100">
                       <v-col cols="6">
                         <div class="result-value">
                           0,000<small>(000)</small>
@@ -255,11 +258,11 @@
                         </div>
                       </v-col>
                     </v-row>
-                    <div class="result-stitle mt-3">
+                    <div class="result-stitle">
                       <span classs="mr-2">동일 평형</span>
                       이번달 평균 사용량/요금
                     </div>
-                    <v-row>
+                    <v-row class="w-100">
                       <v-col cols="6">
                         <div class="result-value">
                           0,000 <span class="unit">kWh</span>
@@ -271,25 +274,23 @@
                         </div>
                       </v-col>
                     </v-row>
-                    <v-row class="">
-                      <v-col class="d-flex justify-space-between mt-auto">
-                        <v-btn text color="secondary" to="myenergy">
-                          가전 사용량 계산하기 ->
-                        </v-btn>
-                        <v-btn
-                          depressed
-                          color="primary"
-                          @click="active = !active"
-                        >
-                          다시 계산
-                        </v-btn>
-                      </v-col>
-                    </v-row>
+                    <div class="d-flex justify-space-between mt-auto w-100">
+                      <v-btn text color="secondary" to="myenergy">
+                        가전 사용량 계산하기 ->
+                      </v-btn>
+                      <v-btn
+                        depressed
+                        color="primary"
+                        @click="active = !active"
+                      >
+                        다시 계산
+                      </v-btn>
+                    </div>
                   </div>
                 </div>
               </v-card>
             </v-col>
-            <v-col cols="12" sm="12" md="4">
+            <v-col cols="12" sm="12" md="12" class="col-support">
               <v-card class="card-support card-transparent" flat>
                 <v-card-title class="pt-0 px-0">복지배너</v-card-title>
                 <!-- <div class="carousel-control">
@@ -301,10 +302,7 @@
                     <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
                 </div> -->
-                <v-carousel v-model="banner"
-                hide-delimiters
-                cycle
-                height="312">
+                <v-carousel v-model="banner" hide-delimiters cycle height="478">
                   <v-carousel-item
                     v-for="(item, i) in banners"
                     :key="i"
@@ -325,7 +323,7 @@
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "Main",

@@ -24,7 +24,7 @@
             >로그아웃</v-btn
           >
         </template>
-        <v-card class="card-alert">
+        <v-card class="card-alert admin-alert">
           <v-card-text>로그아웃 하시겠습니까?</v-card-text>
           <v-card-actions class="pa-0">
             <v-row no-gutters>

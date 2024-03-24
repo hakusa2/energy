@@ -13,7 +13,7 @@
       <v-container>
         <v-row class="align-center">
           <v-col cols="12" sm="12" md="5" class="order-2 order-sm-2 order-md-1">
-            <div class="text-body1 my-5">
+            <div class="text-body-h3 my-5">
               성남시 에너지복지사업은
               <br />에너지비용을 <span class="primary--text">낮추고 </span>
               <br class="d-sm-none d-md-block" />
@@ -27,8 +27,9 @@
               부가수익을 얻을 수 있게 해주는 지원사업입니다.
             </p>
             <p>
-              에너지비용은 낮추고, 시민복지는 올리는 성남시 에너지복지사업에
-              많은 관심과 참여 부탁드립니다.
+              에너지비용은 낮추고, 시민복지는 올리는
+              <br class="d-sm-none d-md-block" />성남시 에너지복지사업에 많은
+              관심과 참여 부탁드립니다.
             </p>
           </v-col>
           <v-col cols="12" sm="12" md="7" class="order-1 order-sm-1 order-md-2">
@@ -42,7 +43,7 @@
         <v-container>
           <v-row class="align-center">
             <v-col cols="12" sm="12" md="12">
-              <div class="text-body1 my-5">
+              <div class="text-body1 mb-5">
                 누가 참여할 수 있고, 어떤 혜택이 있나요?
               </div>
               <p>
@@ -59,7 +60,7 @@
                     <div class="item-icon">
                       <v-img
                         src="@/assets/icon_introduce1.png"
-                        max-width="36"
+                        max-width="48"
                         contain
                       ></v-img>
                     </div>
@@ -76,7 +77,7 @@
                     <div class="item-icon">
                       <v-img
                         src="@/assets/icon_introduce2.png"
-                        max-width="36"
+                        max-width="48"
                         contain
                       ></v-img>
                     </div>
@@ -93,7 +94,7 @@
                     <div class="item-icon">
                       <v-img
                         src="@/assets/icon_introduce3.png"
-                        max-width="36"
+                        max-width="48"
                         contain
                       ></v-img>
                     </div>
@@ -109,7 +110,7 @@
                     <div class="item-icon">
                       <v-img
                         src="@/assets/icon_introduce4.png"
-                        max-width="36"
+                        max-width="48"
                         contain
                       ></v-img>
                     </div>
@@ -126,7 +127,7 @@
 
           <v-row class="justify-center justify-sm-center justify-md-end">
             <v-col class="col-auto">
-              <v-btn outlined color="primary" to="welfaremodel">
+              <v-btn outlined large color="primary" to="welfaremodel">
                 세부사업 보러가기 ->
               </v-btn>
             </v-col>
@@ -134,10 +135,10 @@
         </v-container>
       </div>
     </div>
-    <div class="page-container py-5">
+    <div class="page-container py-10">
       <v-container>
         <v-row class="align-center">
-          <v-col cols="12" sm="12" md="5" class="order-2 order-sm-2 order-md-1">
+          <v-col cols="12" sm="12" md="7" class="order-2 order-sm-2 order-md-1">
             <div class="text-body1 my-5">성남시 에너지복지포털은</div>
             <p>
               성남시민에게 에너지분야의 다양한 복지정보를 제공하고
@@ -147,7 +148,7 @@
               업 정보 등을 제공합니다.
             </p>
           </v-col>
-          <v-col cols="12" sm="12" md="7" class="order-1 order-sm-1 order-md-2">
+          <v-col cols="12" sm="12" md="5" class="order-1 order-sm-1 order-md-2">
             <v-img src="@/assets/img_introduce2.png" contain></v-img>
           </v-col>
         </v-row>

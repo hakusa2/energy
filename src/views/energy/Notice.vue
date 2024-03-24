@@ -33,9 +33,13 @@
                 sort-by="id"
                 :sort-desc="true"
                 @page-count="pageCount = $event"
+                mobile-breakpoint="0"
               >
                 <template v-slot:[`item.title`]="{ item }">
-                  <router-link :to="`/energynoticeview?id=` + [item.id]">
+                  <router-link
+                    :to="`/energynoticeview?id=` + [item.id]"
+                    class="text-truncate"
+                  >
                     <span class="font-weight-bold mr-1">{{
                       item.category
                     }}</span>
@@ -49,6 +53,7 @@
                 v-model="page"
                 :length="pageCount"
                 total-visible="9"
+                class="mt-8"
               ></v-pagination>
             </template>
           </Tables>
@@ -93,7 +98,7 @@ export default {
     pageCount: 0,
     itemsPerPage: 10,
     headers: [
-      { text: "제목", value: "title" },
+      { text: "제목", value: "title", width: "80%" },
       { text: "등록일", align: "right", value: "createdAt", width: "20%" },
     ],
     tabledata: [],

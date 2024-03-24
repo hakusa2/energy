@@ -31,24 +31,24 @@
                       v-model="checkagree1"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 신청 시 유의사항을 확인하였습니다."
-                      class="label-padding mt-2"
+                      class="label-padding mt-6"
                     ></v-checkbox>
                   </div>
-                  <div class="card-title mt-3">개인정보 수집 및 이용 동의</div>
+                  <div class="card-title mt-5">개인정보 수집 및 이용 동의</div>
                   <div class="form-group">
                     <Privacy />
                     <v-checkbox
                       v-model="checkagree2"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 개인정보 수집 및 이용에 동의합니다."
-                      class="label-padding mt-2"
+                      class="label-padding mt-6"
                     ></v-checkbox>
                   </div>
 
-                  <div class="card-title mt-3 mb-5">
+                  <div class="card-title mt-5 mb-10">
                     신청인 정보 입력
                     <small class="ml-3">
-                      <span class="icon-required"></span>는 필수 입력
+                      <span class="text-required"></span>는 필수 입력
                       정보입니다.</small
                     >
                   </div>
@@ -70,7 +70,6 @@
                             <v-text-field
                               v-model="name"
                               :rules="nameRules"
-                              dense
                               outlined
                               solo
                               placeholder="홍길동"
@@ -101,7 +100,6 @@
                                 :rules="mobileRules"
                                 oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
                                 type="number"
-                                dense
                                 outlined
                                 solo
                                 placeholder="'-' 없이 숫자만 입력해주세요"
@@ -138,7 +136,6 @@
                                 oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
                                 counter="10"
                                 type="number"
-                                dense
                                 outlined
                                 solo
                                 placeholder="인증 번호 입력"
@@ -179,15 +176,13 @@
                             <div class="d-flex">
                               <v-text-field
                                 v-model="email1"
-                                dense
                                 outlined
                                 solo
                                 placeholder="email"
                               ></v-text-field>
-                              <div class="pt-2 px-2">@</div>
+                              <div class="pt-3 px-3">@</div>
                               <v-select
                                 v-model="email2"
-                                dense
                                 outlined
                                 solo
                                 placeholder="선택해주세요"
@@ -213,24 +208,21 @@
                             <div class="d-flex">
                               <v-select
                                 v-model="tel1"
-                                dense
                                 outlined
                                 solo
                                 placeholder="선택해주세요"
                                 :items="selectitems2"
                               ></v-select>
-                              <div class="pt-2 px-2">-</div>
+                              <div class="pt-3 px-3">-</div>
                               <v-text-field
                                 v-model="tel2"
-                                dense
                                 outlined
                                 solo
                                 placeholder="0000"
                               ></v-text-field>
-                              <div class="pt-2 px-2">-</div>
+                              <div class="pt-3 px-3">-</div>
                               <v-text-field
                                 v-model="tel3"
-                                dense
                                 outlined
                                 solo
                                 placeholder="0000"
@@ -260,11 +252,10 @@
                               <v-col cols="auto">
                                 <DialogZipcode @move="inputAddr" />
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="1" class="col-zipcode">
                                 <v-text-field
                                   v-model="zipcode"
                                   :rules="addressRules"
-                                  dense
                                   outlined
                                   solo
                                   placeholder="16866"
@@ -277,7 +268,6 @@
                                 <v-text-field
                                   v-model="addr1"
                                   :rules="addressRules"
-                                  dense
                                   outlined
                                   solo
                                   placeholder="산성역포레스티아아파트"
@@ -302,7 +292,6 @@
                             <v-text-field
                               v-model="addr2"
                               :rules="addressRules"
-                              dense
                               outlined
                               solo
                               placeholder="000동 0000호"
@@ -322,17 +311,13 @@
             <v-col class="text-center">
               <v-btn
                 outlined
+                large
                 class="btn-outline-solid btn-secondary"
                 @click="back"
               >
                 뒤로
               </v-btn>
-              <v-btn
-                depressed
-                color="primary"
-                @click="save"
-                class="ml-2"
-              >
+              <v-btn depressed large color="primary" @click="save" class="ml-2">
                 신청하기
               </v-btn>
             </v-col>
@@ -347,9 +332,9 @@
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
 import Terms from "@/components/Terms.vue";
-import DialogZipcode from "@/components/DialogZipcode.vue"
+import DialogZipcode from "@/components/DialogZipcode.vue";
 import Privacy from "@/components/Privacy.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "ApplySocialWelfare2",
@@ -391,27 +376,27 @@ export default {
     nameRules: [
       (v) => !!v || "이름을 입력해주세요",
       (v) => /^[ㄱ-ㅎ|가-힣|a-z|A-Z]*$/.test(v) || "잘못된 이름 양식이에요.",
-      (v) => !(v && (v.length >= 20)) || "이름은 20자리 이상 입력할 수 없습니다.",
+      (v) => !(v && v.length >= 20) || "이름은 20자리 이상 입력할 수 없습니다.",
     ],
     mobile: "",
     mobileRules: [
       (v) => !!v || "휴대폰 번호를 입력해주세요",
       (v) => /^[0-9]*$/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
-      (v) => !( v && (v.length >= 12)) || '휴대폰 번호는 12자리 이상 입력할 수 없습니다.',
-      (v) => !( v && (v.length <= 9)) || '휴대폰 번호 10자리 이상 입력해주세요.',
+      (v) =>
+        !(v && v.length >= 12) ||
+        "휴대폰 번호는 12자리 이상 입력할 수 없습니다.",
+      (v) => !(v && v.length <= 9) || "휴대폰 번호 10자리 이상 입력해주세요.",
     ],
     auth: "",
     authRules: [
       (v) => !!v || "인증번호를 입력해주세요",
       (v) => /^[0-9]*$/.test(v) || "인증번호를 다시 확인해주세요.",
-      (v) => !( v && (v.length != 6)) || '6자리의 인증번호를 입력해주세요.',
+      (v) => !(v && v.length != 6) || "6자리의 인증번호를 입력해주세요.",
     ],
     zipcode: "",
     addr1: "",
     addr2: "",
-    addressRules: [
-      (v) => !!v || "주소를 입력해주세요",
-    ],
+    addressRules: [(v) => !!v || "주소를 입력해주세요"],
     select: null,
     email1: "",
     email2: "",
@@ -462,48 +447,52 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    mobileSend(){
+    mobileSend() {
       this.isDisableMobile = true;
       this.isDisableMobileBtn = true;
       this.isDisableAuth = false;
 
       this.timerStart();
     },
-    authSend(){
+    authSend() {
       this.isDisableAuth = true;
       this.isDisableAuthBtn = true;
 
       this.timerStop();
     },
     timerStart() {
-        this.timeCounter = 180;
+      this.timeCounter = 180;
 
-        var interval = setInterval(() => {
-            this.timeCounter--; //1초씩 감소
-            this.timerStr = this.prettyTime();
-            if (this.timeCounter <= 0) this.timerStop(interval);
-        }, 1000);
+      var interval = setInterval(() => {
+        this.timeCounter--; //1초씩 감소
+        this.timerStr = this.prettyTime();
+        if (this.timeCounter <= 0) this.timerStop(interval);
+      }, 1000);
 
-        return interval;
+      return interval;
     },
     timerStop(timerStr) {
-        this.timerStr = "03:00";
-        this.timeCounter = 0;
-        clearInterval(timerStr);
+      this.timerStr = "03:00";
+      this.timeCounter = 0;
+      clearInterval(timerStr);
     },
     prettyTime: function () {
-        // 시간 형식으로 변환 리턴
-        let time = this.timeCounter / 60;
-        let minutes = parseInt(time);
-        let secondes = Math.round((time - minutes) * 60);
+      // 시간 형식으로 변환 리턴
+      let time = this.timeCounter / 60;
+      let minutes = parseInt(time);
+      let secondes = Math.round((time - minutes) * 60);
 
-        return (minutes.toString().padStart(2, "0") + ":" + secondes.toString().padStart(2, "0"));
+      return (
+        minutes.toString().padStart(2, "0") +
+        ":" +
+        secondes.toString().padStart(2, "0")
+      );
     },
-    back(){
+    back() {
       this.$router.go(-1);
     },
-    save(){
-      if(this.$refs.form.validate()){
+    save() {
+      if (this.$refs.form.validate()) {
         const formData = new FormData();
         formData.append("bType", "2"); //점포형 에너지비용절감 사업
         formData.append("status", "1"); //신청완료
@@ -511,7 +500,15 @@ export default {
         formData.append("birth", "");
         formData.append("mobile", this.mobile);
         formData.append("phone", this.tel1 + "-" + this.tel2 + "-" + this.tel3);
-        formData.append("email", (this.email1 == null || this.email1 === "" || this.email2 == null || this.email2 === "") ? "" : this.email1 + "@" + this.email2);
+        formData.append(
+          "email",
+          this.email1 == null ||
+            this.email1 === "" ||
+            this.email2 == null ||
+            this.email2 === ""
+            ? ""
+            : this.email1 + "@" + this.email2
+        );
         formData.append("zipcode", this.zipcode);
         formData.append("addr1", this.addr1);
         formData.append("addr2", this.addr2);
@@ -519,23 +516,21 @@ export default {
         formData.append("modelName", "");
         formData.append("remoteYn", "N");
 
-        try{
-          axios.post('/api/business/write', formData)
-            .then(response => {
-              if(response.data.code == "0"){
-                this.$router.push("/applysocialwelfare5");
-              } else {
-                console.log(response.data.message);
-              }
-
-            });
-        } catch(err){
+        try {
+          axios.post("/api/business/write", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.$router.push("/applysocialwelfare5");
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
           console.log(err);
         }
       }
     },
 
-    inputAddr(zipcode, addr1){
+    inputAddr(zipcode, addr1) {
       this.zipcode = zipcode;
       this.addr1 = addr1;
     },

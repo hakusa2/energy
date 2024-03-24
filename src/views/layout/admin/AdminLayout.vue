@@ -4,13 +4,13 @@
       absolute
       elevation="2"
       color="white"
-      height="60px"
+      height="74px"
       class="admin-appbar"
     >
       <div class="page-header">
         <v-container class="d-flex align-center">
           <router-link class="d-inline-block" to="/adminbusinessapplication">
-            <v-img src="@/assets/logo.png" max-width="168" contain></v-img>
+            <v-img src="@/assets/logo.png" max-width="193" contain></v-img>
           </router-link>
           <v-spacer></v-spacer>
           <TopMenu class="d-none d-md-flex" />
@@ -71,5 +71,11 @@ export default {
 .theme--light.v-footer.admin-footer {
   background-color: #ffffff;
   border-top: 0 solid #f2f3f3;
+}
+.admin-appbar .topmenu-item .v-btn.btn-confirm {
+  font-size: 18px;
+  font-weight: 500;
+  height: 40px;
+  border-radius: 20px;
 }
 </style>

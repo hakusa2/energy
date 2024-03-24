@@ -24,7 +24,7 @@
             <v-col cols="12" sm="12" md="6">
               <div class="model-group">
                 <div class="item-image">
-                  <v-img src="@/assets/img_business1.png" height="280"></v-img>
+                  <v-img src="@/assets/img_business1.png" height="380"></v-img>
                 </div>
                 <div class="item-title">건물형 인프라구축 사업</div>
                 <div class="item-description">
@@ -50,7 +50,7 @@
             <v-col cols="12" sm="12" md="6">
               <div class="model-group">
                 <div class="item-image">
-                  <v-img src="@/assets/img_business2.jpg" height="280"></v-img>
+                  <v-img src="@/assets/img_business2.jpg" height="380"></v-img>
                 </div>
                 <div class="item-title">점포형 에너지비용절감 사업</div>
                 <div class="item-description">
@@ -74,7 +74,7 @@
             <v-col cols="12" sm="12" md="6">
               <div class="model-group">
                 <div class="item-image">
-                  <v-img src="@/assets/img_business3.jpg" height="280"></v-img>
+                  <v-img src="@/assets/img_business3.jpg" height="380"></v-img>
                 </div>
                 <div class="item-title">공동주택형 에너지서비스 사업</div>
                 <div class="item-description">
@@ -98,7 +98,7 @@
             <v-col cols="12" sm="12" md="6">
               <div class="model-group">
                 <div class="item-image">
-                  <v-img src="@/assets/img_business4.jpg" height="280"></v-img>
+                  <v-img src="@/assets/img_business4.jpg" height="380"></v-img>
                 </div>
                 <div class="item-title">단독주택형 에너지서비스 사업</div>
                 <div class="item-description">

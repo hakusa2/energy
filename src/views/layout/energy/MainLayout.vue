@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar absolute flat color="white" height="60px" class="main-appbar">
+    <v-app-bar absolute flat color="white" height="66px" class="main-appbar">
       <div class="page-header">
         <v-container class="d-flex align-center">
           <router-link class="d-inline-block" to="/main">
-            <v-img src="@/assets/logo_w.png" max-width="168" contain></v-img>
+            <v-img src="@/assets/logo_w.png" max-width="193" contain></v-img>
           </router-link>
           <v-spacer></v-spacer>
           <TopMenu class="d-none d-md-flex" />
@@ -61,6 +61,7 @@ export default {
 <style lang="scss">
 .right-navigation-drawer.v-navigation-drawer--absolute {
   position: fixed;
+  width: 320px !important;
 }
 @media (max-width: 600px) {
   .right-navigation-drawer.v-navigation-drawer--absolute {
