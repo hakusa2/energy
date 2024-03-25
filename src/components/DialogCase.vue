@@ -24,7 +24,7 @@
           </v-btn>
           <v-card-title class="dialog-title"> 하얀마을 복지회관 </v-card-title>
         </div>
-        <div class="dialog-body">
+        <v-card-text class="dialog-body">
           <div class="model-detail-group">
             <div class="item-image">
               <v-img src="@/assets/img_business5.png" height="320"></v-img>
@@ -63,7 +63,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </div>
@@ -79,9 +79,9 @@ export default {
     dialogVisible: false,
   }),
   methods: {
-    close(){
+    close() {
       this.dialogVisible = false;
-    }
+    },
   },
 };
 </script>

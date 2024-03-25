@@ -98,7 +98,7 @@
                       {{ item.groupName }}
                     </v-card-title>
                   </div>
-                  <div class="dialog-body">
+                  <v-card-text class="dialog-body">
                     <div class="model-detail-group">
                       <div class="item-image">
                         <v-img
@@ -136,7 +136,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </v-card-text>
                 </v-card>
               </v-dialog>
             </v-col>
@@ -225,7 +225,7 @@
                     {{ item.groupName }}
                   </v-card-title>
                 </div>
-                <div class="dialog-body">
+                <v-card-text class="dialog-body">
                   <div class="model-detail-group">
                     <div class="item-image">
                       <v-img
@@ -263,7 +263,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </v-card-text>
               </v-card>
             </v-dialog>
           </v-col>
@@ -352,7 +352,7 @@
                       {{ item.groupName }}
                     </v-card-title>
                   </div>
-                  <div class="dialog-body">
+                  <v-card-text class="dialog-body">
                     <div class="model-detail-group">
                       <div class="item-image">
                         <v-img
@@ -390,7 +390,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </v-card-text>
                 </v-card>
               </v-dialog>
             </v-col>
@@ -479,7 +479,7 @@
                     {{ item.groupName }}
                   </v-card-title>
                 </div>
-                <div class="dialog-body">
+                <v-card-text class="dialog-body">
                   <div class="model-detail-group">
                     <div class="item-image">
                       <v-img
@@ -517,7 +517,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </v-card-text>
               </v-card>
             </v-dialog>
           </v-col>

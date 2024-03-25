@@ -246,13 +246,13 @@
                       사용량(발전량)/요금
                     </div>
                     <v-row class="w-100">
-                      <v-col cols="6">
+                      <v-col>
                         <div class="result-value">
                           0,000<small>(000)</small>
                           <span class="unit">kWh</span>
                         </div>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col>
                         <div class="result-value">
                           0,000 <span class="unit">원</span>
                         </div>
@@ -263,12 +263,12 @@
                       이번달 평균 사용량/요금
                     </div>
                     <v-row class="w-100">
-                      <v-col cols="6">
+                      <v-col>
                         <div class="result-value">
                           0,000 <span class="unit">kWh</span>
                         </div>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col>
                         <div class="result-value">
                           0,000 <span class="unit">원</span>
                         </div>

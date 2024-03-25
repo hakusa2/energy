@@ -492,7 +492,8 @@ body
       max-width: 96px
 
 .page-main .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot,
-.page-sub .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
+.page-sub .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot,
+.form-group .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0), 0px 1px 5px 0px rgba(0, 0, 0, 0) !important
 /* .v-text-field.v-text-field--enclosed .v-text-field__details
     padding: 0 !important */
@@ -602,6 +603,35 @@ body
   .card-body
     padding: 32px 16px
 
+.card-form.detail-house
+  .card-header
+    flex-direction: column
+    align-items: flex-start
+  .card-title
+    font-size: 20px
+    font-weight: 700
+    line-height: 32px
+    margin-bottom: 24px
+  .card-chip
+    width: 100%
+    ul
+      list-style: none
+      display: flex
+      flex-wrap: wrap
+      flex: 1 1 auto
+      margin: -8px
+      width: 100%
+      padding: 0
+      li
+        padding: 8px
+    .v-chip
+      padding: 8px 16px
+    .v-chip.v-size--default
+      font-size: 16px
+      font-weight: 400
+      height: 36px
+      border-radius: 30px
+
 .theme--light.v-chip.chip-color1
   color: rgba(0, 0, 0, 0.45)
   font-weight: 600
@@ -665,6 +695,11 @@ body
   .v-card__text
     font-size: 14px
     font-weight: 500
+
+.theme--light.v-card.card-tab
+  background-color: transparent
+  > .theme--light.v-tabs-items
+    background-color: transparent
 
 .v-card.card-tab-detail
   .v-card__title
@@ -1031,6 +1066,71 @@ body
       font-weight: 600
       margin-left: 4px
 
+.sub-myenergy-result
+  display: flex
+  align-items: flex-start
+  .energy-image
+    margin-right: 60px
+  .row
+    flex: 0 0 auto !important
+    margin-bottom: 0
+  .result-stitle
+    font-size: 20px
+    font-weight: 400
+    line-height: 32px
+    color: rgba(0, 0, 0, 0.4)
+    padding: 0 0 24px
+    span
+      font-weight: 700
+  .result-value
+    font-size: 32px
+    font-weight: 700
+    small
+      font-size: 20px
+      font-weight: 400
+    .unit
+      font-size: 16px
+      font-weight: 500
+      color: rgba(0, 0, 0, 0.4)
+      font-weight: 600
+      margin-left: 4px
+
+.house-item-list
+  display: flex
+  flex-direction: column
+  width: 100%
+  .house-item
+    display: flex
+    align-items: stretch
+    .item-title
+      width: 120px
+      border-right: 1px solid #F2F3F3
+      margin-right: 24px
+      font-weight: 600
+      color: rgba(0, 0, 0, 0.65)
+    .item-form
+      width: 100%
+      .form-group
+        flex-direction: row
+        label
+          font-size: 16px
+          min-width: 130px
+          padding-right: 16px
+          padding-top: 8px
+        .v-text-field.v-text-field--solo .v-input__control
+          min-height: 44px
+        .v-text-field--filled > .v-input__control > .v-input__slot, .v-text-field--full-width > .v-input__control > .v-input__slot, .v-text-field--outlined > .v-input__control > .v-input__slot
+          min-height: 44px
+      .col-xl, .col-xl-auto, .col-xl-12, .col-xl-11, .col-xl-10, .col-xl-9, .col-xl-8, .col-xl-7, .col-xl-6, .col-xl-5, .col-xl-4, .col-xl-3, .col-xl-2, .col-xl-1, .col-lg, .col-lg-auto, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md, .col-md-auto, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm, .col-sm-auto, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col, .col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1
+        padding: 4px 12px
+  .house-item-add
+    margin-left: 120px
+    text-align: center
+    margin-top: 16px
+    margin-bottom: 40px
+    .v-btn
+      font-weight: 400
+
 //card-support
 .col-support
   max-width: 478px !important
@@ -1094,3 +1194,51 @@ body
 .admin-dialog.v-card
   >.v-card__title
     font-weight: 700 !important
+
+.v-tabs.tab-energy
+    .v-tabs-slider-wrapper
+      height: 4px !important
+    .v-tab.v-tab--active
+      font-weight: 700
+@media (min-width: 600px) and (max-width: 960px)
+  .v-tabs.tab-energy
+    .v-tabs-bar
+      height: 56px
+    .v-tabs-slider-wrapper
+      display: none
+    .v-tab
+      position: relative
+      max-width: 50%
+      width: 100%
+      line-height: 24px
+    .v-tab.v-tab--active:after
+      content: ""
+      position: absolute
+      left: 0
+      bottom: 0
+      display: block
+      width: 100%
+      height: 4px
+      background-color: #A6D086
+@media screen and (max-width: 600px)
+  .v-tabs.tab-energy
+    .v-tabs-bar
+      height: 56px
+    .v-tabs-slider-wrapper
+      display: none
+    .v-tab
+      position: relative
+      max-width: 50%
+      width: 100%
+      font-size: 18px
+      line-height: 24px
+    .v-tab.v-tab--active:after
+      content: ""
+      position: absolute
+      left: 0
+      bottom: 0
+      display: block
+      width: 100%
+      height: 4px
+      background-color: #A6D086
+
