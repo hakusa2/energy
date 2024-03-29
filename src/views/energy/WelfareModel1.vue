@@ -242,7 +242,7 @@
                   <div class="model-case-group" v-bind="attrs" v-on="on">
                     <div class="item-image">
                       <v-img
-                        src="@/assets/img_business5.png"
+                        :src="item.imageUrl"
                         height="300"
                       ></v-img>
                     </div>
@@ -283,7 +283,7 @@
                     <div class="model-detail-group">
                       <div class="item-image">
                         <v-img
-                          src="@/assets/img_business5.png"
+                          :src="item.imageUrl"
                           height="500"
                         ></v-img>
                       </div>

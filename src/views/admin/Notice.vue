@@ -18,9 +18,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
-            item-key="name"
+            item-key="id"
             show-select
-            sort-by="count"
+
             @page-count="pageCount = $event"
           >
             <template v-slot:top>
@@ -40,7 +40,7 @@
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn color="white" v-bind="attrs" v-on="on">
-                        필터
+                        {{ filterText }}
                         <v-icon right> mdi-tune </v-icon>
                       </v-btn>
                     </template>
@@ -49,7 +49,7 @@
                         v-for="(item, index) in filters"
                         :key="index"
                       >
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title class="cursor-pointer" @click="menuActionClick(item.title)">{{ item.title }} </v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -107,7 +107,7 @@
           <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+          <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
         </template>
         <template v-slot:TableFooterRight>
           <v-dialog v-model="dialog" max-width="700px">
@@ -118,6 +118,7 @@
                 class="ml-1"
                 v-bind="attrs"
                 v-on="on"
+                @click="newform"
               >
                 신규작성
               </v-btn>
@@ -133,6 +134,7 @@
                     <v-col cols="12" sm="6" md="6">
                       <v-select
                         v-model="editedItem.category"
+                        :items="categorys"
                         label="분류"
                         hide-details="auto"
                       ></v-select>
@@ -149,24 +151,29 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="editedItem.applydate"
+                            :value="editedItem.createdAt"
                             label="신청일자"
                             persistent-hint
                             v-bind="attrs"
-                            @blur="date = parseDate(dateFormatted)"
                             v-on="on"
+                            readonly
+                            disabled="true"
                             hide-details="auto"
                           ></v-text-field>
                         </template>
-                        <v-date-picker
-                          v-model="date"
+                        <!-- <v-date-picker
+                          v-model="newDate"
                           no-title
                           @input="menu1 = false"
-                        ></v-date-picker>
+                          @change="editedItem.createdAt = parseDate(newDate)"
+                          :header-date-format="getHeaderTitleMonth"
+                          @click="close"
+                        ></v-date-picker> -->
                       </v-menu>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
+                        ref="title"
                         v-model="editedItem.title"
                         label="제목"
                         hide-details="auto"
@@ -174,14 +181,15 @@
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
-                        name="input-7-1"
+                        v-model="editedItem.description"
                         label="내용"
-                        value="안녕하세요"
                         hide-details="auto"
                       ></v-textarea>
                     </v-col>
                     <v-col cols="12">
                       <v-file-input
+                        v-model="editedItem.imageFile"
+                        :value="editedItem.imageFile"
                         label="대표이미지"
                         hide-details="auto"
                       ></v-file-input>
@@ -201,7 +209,6 @@
       </Tables>
       <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
         {{ snackText }}
-
         <template v-slot:action="{ attrs }">
           <v-btn v-bind="attrs" text @click="snack = false"> Close </v-btn>
         </template>
@@ -213,12 +220,16 @@
 <script>
 // @ is an alias to /src
 import Tables from "@/components/Tables.vue";
+import axios from "axios";
 
 export default {
   name: "Notice",
   components: { Tables },
   data: () => ({
     filters: [{ title: "전체" }, { title: "공지사항" }, { title: "보도자료" }],
+    categorys: ["[공지사항]", "[보도자료]"],
+    datatest: "",
+    newDate: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     toggle_exclusive: undefined,
     search: "",
     dialog1: false,
@@ -230,12 +241,8 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
-    headers: [
-      { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "분류", align: "center", value: "category" },
-      { text: "제목", align: "center", value: "title", sortable: false },
-      { text: "신청일자", align: "center", value: "applydate" },
-    ],
+    selected: [],
+    deletekey: [],
     tabledata: [],
     editedIndex: -1,
     editedItem: {
@@ -248,9 +255,18 @@ export default {
       category: "",
       title: "",
     },
+    filterText: "필터",
   }),
 
   computed: {
+    headers() {
+        return [
+          { text: "순번", align: "center", value: "id", sortable: false },
+          { text: "분류", align: "center", value: "category", filter:this.categoryFilter},
+          { text: "제목", align: "center", value: "title", sortable: false },
+          { text: "신청일자", align: "center", value: "createdAt" },
+        ]
+      },
     formTitle() {
       return this.editedIndex === -1 ? "글쓰기" : "수정하기";
     },
@@ -271,14 +287,15 @@ export default {
 
   methods: {
     initialize() {
-      this.tabledata = [
-        {
-          count: "1",
-          category: "공지사항",
-          title: "주택용 태양광 DR 모델 신청안내",
-          applydate: "2024-03-01",
-        },
-      ];
+      try {
+        axios.get("/api/notice/getList").then((response) => {
+          this.tabledata = response.data;
+        });
+
+
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     editItem(item) {
@@ -294,11 +311,38 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.tabledata.splice(this.editedIndex, 1);
-      this.closeDelete();
-      this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Deleted";
+      for(let idx in this.selected){
+        this.deletekey.push(this.selected[idx].id);
+      }
+
+      if(this.deletekey == null || this.deletekey.length == 0){
+        this.snack = true;
+        this.closeDelete();
+        this.snackColor = "error";
+        this.snackText = "삭제할 데이터가 없습니다.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("id", this.deletekey);
+
+      try {
+        axios.post("/api/notice/remove", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.closeDelete();
+            this.snack = true;
+            this.snackColor = "error";
+            this.snackText = "Deleted";
+
+            this.initialize();
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      //this.tabledata.splice(this.editedIndex, 1);
     },
 
     close() {
@@ -318,16 +362,104 @@ export default {
     },
 
     save() {
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.tabledata[this.editedIndex], this.editedItem);
+      // } else { //new
+      //   this.tabledata.push(this.editedItem);
+      // }
+
+      const formData = new FormData();
+      formData.append("title", this.editedItem.title);
+      formData.append("type", this.editedItem.category);
+      formData.append("description", this.editedItem.description);
+      formData.append("image", this.editedItem.imageFile);
+      formData.append("id", this.editedItem.id);
+
       if (this.editedIndex > -1) {
-        Object.assign(this.tabledata[this.editedIndex], this.editedItem);
-      } else {
-        this.tabledata.push(this.editedItem);
+        try {
+          axios.post("/api/notice/modify", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } else { //new
+        try {
+          axios.post("/api/notice/write", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }
-      this.close();
-      this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
     },
+
+    menuActionClick(action) {
+      if(action === "전체")
+        this.filterText = "필터";
+      else
+        this.filterText = action;
+    },
+
+    categoryFilter(value) {
+      if(this.filterText === "필터" || value.indexOf(this.filterText) > 0){
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    parseDate (date) {
+      if (!date) return null
+
+      const [year, month, day] = date.split('-')
+      return `${year}.${month.padStart(2, '0')}.${day.padStart(2, '0')}`
+    },
+
+    getHeaderTitleMonth(date) {
+      const monthName = [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+      ];
+      let i = new Date(date).getMonth(date);
+      const year = new Date(date).getFullYear(date);
+      const month = monthName[i];
+      return `${year}.${month}`;
+    },
+
+    newform(){
+      this.editedItem.category = "[공지사항]";
+      //this.editedItem.createdAt = this.parseDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10));
+    },
+
   },
 };
 </script>

@@ -72,6 +72,7 @@
                                   outlined
                                   solo
                                   placeholder="'-' 없이 숫자만 입력해주세요"
+                                  :disabled="isDisableMobile"
                                   required
                                 ></v-text-field>
                                 <v-btn
@@ -82,7 +83,7 @@
                                   :disabled="isDisableMobileBtn"
                                   @click="mobileSend"
                                 >
-                                  인증요청
+                                  {{ authbtnname }}
                                 </v-btn>
                               </div>
                             </v-col>
@@ -102,7 +103,7 @@
                                   v-model="auth"
                                   :rules="authRules"
                                   oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                  counter="10"
+                                  counter="6"
                                   type="number"
                                   outlined
                                   solo
@@ -211,6 +212,9 @@ export default {
     timerStr: "03:00",
     timer: null,
     timeCounter: 180,
+    authbtnname: "인증요청",
+    authcount: 1,
+    authcheck: false,
   }),
   watch: {
     mobile: {
@@ -246,15 +250,30 @@ export default {
       this.$refs.form.resetValidation();
     },
     mobileSend() {
+      this.authbtnname = "재발송";
       this.isDisableMobile = true;
-      this.isDisableMobileBtn = true;
       this.isDisableAuth = false;
 
-      this.timerStart();
+      if(this.authcount === 1){
+        this.timerStart();
+        this.smsSend();
+      } else {
+        if(this.timeCounter < 170){
+          this.timeCounter = 180;
+          this.smsSend();
+        } else {
+          alert("10초이내 재발송할 수 없습니다.")
+        }
+      }
+      this.authcount++;
+    },
+    smsSend(){
+
     },
     authSend() {
       this.isDisableAuth = true;
       this.isDisableAuthBtn = true;
+      this.isDisableMobileBtn = true;
 
       this.timerStop();
     },
@@ -291,6 +310,11 @@ export default {
         const formData = new FormData();
         formData.append("name", this.name);
         formData.append("mobile", this.mobile);
+
+        if(!this.authcheck){
+          alert("휴대폰 인증이 되지 않았습니다.");
+          return;
+        }
 
         try {
           axios.post("/api/business/getCheck", formData).then((response) => {

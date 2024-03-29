@@ -4,7 +4,7 @@
       <Tables class="table-admin">
         <template v-slot:TableTitle> 자주하는질문 </template>
         <template v-slot:TableBtn>
-          <v-dialog v-model="dialog1" max-width="500px">
+          <v-dialog v-model="dialogPhone" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -25,13 +25,15 @@
                   <v-row>
                     <v-col cols="12" sm="12" md="6">
                       <v-text-field
+                        v-model="phoneValue"
                         label="현재"
-                        value="010-1234-5678"
                         hide-details="auto"
+                        disabled="true"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="6">
                       <v-text-field
+                        v-model="newPhoneValue"
                         label="변경"
                         hide-details="auto"
                       ></v-text-field>
@@ -42,13 +44,13 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text> 취소 </v-btn>
-                <v-btn text color="primary"> 확인 </v-btn>
+                <v-btn text @click="closePhone"> 취소 </v-btn>
+                <v-btn text color="primary" @click="savePhone"> 확인 </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="dialog2" max-width="500px">
+          <v-dialog v-model="dialogEmail" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="primary"
@@ -70,13 +72,15 @@
                     <v-col cols="12" sm="12" md="6">
                       <v-text-field
                         label="현재"
-                        value="example@example.com"
+                        v-model="emailValue"
                         hide-details="auto"
+                        disabled="true"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="6">
                       <v-text-field
                         label="변경"
+                        v-model="newEmailValue"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
@@ -86,8 +90,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text> 취소 </v-btn>
-                <v-btn text color="primary"> 확인 </v-btn>
+                <v-btn text @click="closeEmail"> 취소 </v-btn>
+                <v-btn text color="primary" @click="saveEmail"> 확인 </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -105,9 +109,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
-            item-key="name"
+            item-key="id"
             show-select
-            sort-by="count"
+
             @page-count="pageCount = $event"
           >
             <template v-slot:top>
@@ -144,12 +148,12 @@
               </v-row>
             </template>
 
-            <template v-slot:[`item.title`]="{ item }">
+            <template v-slot:[`item.qtitle`]="{ item }">
               <a
                 class="text-link black--text text-decoration-underline"
                 @click="editItem(item)"
               >
-                {{ item.title }}
+                {{ item.qtitle }}
               </a>
             </template>
 
@@ -194,7 +198,7 @@
           <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+          <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
         </template>
         <template v-slot:TableFooterRight>
           <v-dialog v-model="dialog" max-width="700px">
@@ -229,50 +233,51 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="editedItem.applydate"
+                            :value="editedItem.createdAt"
                             label="신청일자"
                             persistent-hint
                             v-bind="attrs"
                             @blur="date = parseDate(dateFormatted)"
                             v-on="on"
+                            readonly
+                            disabled="true"
                             hide-details="auto"
                           ></v-text-field>
                         </template>
-                        <v-date-picker
+                        <!-- <v-date-picker
                           v-model="date"
                           no-title
                           @input="menu1 = false"
-                        ></v-date-picker>
+                        ></v-date-picker> -->
                       </v-menu>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.title"
+                        v-model="editedItem.qtitle"
                         label="질문"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.answer"
+                        v-model="editedItem.atitle"
                         label="답변"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
-                        name="input-7-1"
+                        v-model="editedItem.description"
                         label="상세답변"
-                        value="홈페이지의 에너지 복지사업 소개"
                         hide-details="auto"
                       ></v-textarea>
                     </v-col>
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                       <v-file-input
                         label="이미지"
                         hide-details="auto"
                       ></v-file-input>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -300,6 +305,7 @@
 <script>
 // @ is an alias to /src
 import Tables from "@/components/Tables.vue";
+import axios from "axios";
 
 export default {
   name: "Faq",
@@ -314,7 +320,12 @@ export default {
     ],
     toggle_exclusive: undefined,
     search: "",
-    dialog1: false,
+    emailValue: "",
+    newEmailValue: "",
+    phoneValue: "",
+    newPhoneValue: "",
+    dialogPhone: false,
+    dialogEmail: false,
     dialog: false,
     dialogDelete: false,
     snack: false,
@@ -324,11 +335,13 @@ export default {
     pageCount: 0,
     itemsPerPage: 10,
     headers: [
-      { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "질문", align: "center", value: "title", sortable: false },
-      { text: "답변", align: "center", value: "answer", sortable: false },
+      { text: "순번", align: "center", value: "id", sortable: false },
+      { text: "질문", align: "center", value: "qtitle", sortable: false },
+      { text: "답변", align: "center", value: "atitle", sortable: false },
     ],
     tabledata: [],
+    selected: [],
+    deletekey: [],
     editedIndex: -1,
     editedItem: {
       title: "",
@@ -353,6 +366,12 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
+    dialogPhone(val) {
+      val || this.close();
+    },
+    dialogEmail(val) {
+      val || this.closeDelete();
+    },
   },
 
   created() {
@@ -361,13 +380,18 @@ export default {
 
   methods: {
     initialize() {
-      this.tabledata = [
-        {
-          count: "1",
-          title: "에너지복지시설은 어떻게 신청하나요?",
-          answer: "에너비 복지시설은 다음과 같은 방법으로 신청할 수 있습니다.",
-        },
-      ];
+      try {
+        axios.get("/api/faq/getList").then((response) => {
+          this.tabledata = response.data;
+        });
+
+        axios.get("/api/etc/getAdvice").then((response) => {
+          this.phoneValue = response.data.phone;
+          this.emailValue = response.data.email
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     editItem(item) {
@@ -383,11 +407,38 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.tabledata.splice(this.editedIndex, 1);
-      this.closeDelete();
-      this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Deleted";
+      for(let idx in this.selected){
+        this.deletekey.push(this.selected[idx].id);
+      }
+
+      if(this.deletekey == null || this.deletekey.length == 0){
+        this.snack = true;
+        this.closeDelete();
+        this.snackColor = "error";
+        this.snackText = "삭제할 데이터가 없습니다.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("id", this.deletekey);
+
+      try {
+        axios.post("/api/faq/remove", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.closeDelete();
+            this.snack = true;
+            this.snackColor = "error";
+            this.snackText = "Deleted";
+
+            this.initialize();
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      // this.tabledata.splice(this.editedIndex, 1);
     },
 
     close() {
@@ -406,16 +457,101 @@ export default {
       });
     },
 
+    closePhone(){
+      this.dialogPhone = false;
+    },
+
+    closeEmail(){
+      this.dialogEmail = false;
+    },
+
     save() {
+      const formData = new FormData();
+      formData.append("qTitle", this.editedItem.qtitle);
+      formData.append("aTitle", this.editedItem.atitle);
+      formData.append("description", this.editedItem.description);
+      formData.append("id", this.editedItem.id);
+
       if (this.editedIndex > -1) {
-        Object.assign(this.tabledata[this.editedIndex], this.editedItem);
-      } else {
-        this.tabledata.push(this.editedItem);
+        try {
+          axios.post("/api/faq/modify", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } else { //new
+        try {
+          axios.post("/api/faq/write", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }
-      this.close();
-      this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
+    },
+
+    savePhone() {
+      const formData = new FormData();
+      formData.append("code", "phone");
+      formData.append("data", this.newPhoneValue);
+
+      try {
+        axios.post("/api/etc/modify", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.phoneValue = this.newPhoneValue;
+            this.newPhoneValue = "";
+            this.closePhone();
+            this.snack = true;
+            this.snackColor = "success";
+            this.snackText = "Data saved";
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    saveEmail() {
+      const formData = new FormData();
+      formData.append("code", "email");
+      formData.append("data", this.newEmailValue);
+      try {
+        axios.post("/api/etc/modify", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.emailValue = this.newEmailValue;
+            this.newEmailValue = "";
+            this.closeEmail();
+            this.snack = true;
+            this.snackColor = "success";
+            this.snackText = "Data saved";
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };

@@ -18,9 +18,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
-            item-key="name"
+            item-key="id"
             show-select
-            sort-by="count"
+
             @page-count="pageCount = $event"
           >
             <template v-slot:top>
@@ -40,7 +40,7 @@
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn color="white" v-bind="attrs" v-on="on">
-                        필터
+                        {{ filterText }}
                         <v-icon right> mdi-tune </v-icon>
                       </v-btn>
                     </template>
@@ -49,7 +49,7 @@
                         v-for="(item, index) in filters"
                         :key="index"
                       >
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title class="cursor-pointer" @click="menuActionClick(item.title)">{{ item.title }} </v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -107,7 +107,7 @@
           <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+          <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
         </template>
         <template v-slot:TableFooterRight>
           <v-dialog v-model="dialog" max-width="700px">
@@ -118,6 +118,7 @@
                 class="ml-1"
                 v-bind="attrs"
                 v-on="on"
+                @click="newform"
               >
                 신규작성
               </v-btn>
@@ -132,7 +133,8 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-select
-                        v-model="editedItem.category"
+                        v-model="editedItem.type"
+                        :items="types"
                         label="분류"
                         hide-details="auto"
                       ></v-select>
@@ -149,25 +151,23 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="editedItem.applydate"
+                            v-model="editedItem.createdAt"
                             label="신청일자"
                             persistent-hint
                             v-bind="attrs"
                             @blur="date = parseDate(dateFormatted)"
                             v-on="on"
+                            readonly
+                            disabled="true"
                             hide-details="auto"
                           ></v-text-field>
                         </template>
-                        <v-date-picker
-                          v-model="date"
-                          no-title
-                          @input="menu1 = false"
-                        ></v-date-picker>
                       </v-menu>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-select
-                        v-model="editedItem.output"
+                        v-model="editedItem.signYn"
+                        :items="signs"
                         label="표시여부"
                         hide-details="auto"
                       ></v-select>
@@ -180,14 +180,15 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-text-field label="URL" hide-details="auto">
+                      <v-text-field label="URL" hide-details="auto" v-model="editedItem.linkUrl">
                         <template v-slot:append-outer>
-                          <v-btn text> 테스트 </v-btn>
+                          <v-btn @click="urlTest" text> 테스트 </v-btn>
                         </template>
                       </v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-file-input
+                        v-model="editedItem.imageFile"
                         label="이미지"
                         hide-details="auto"
                       ></v-file-input>
@@ -219,12 +220,15 @@
 <script>
 // @ is an alias to /src
 import Tables from "@/components/Tables.vue";
+import axios from "axios";
 
 export default {
   name: "Promotion",
   components: { Tables },
   data: () => ({
     filters: [{ title: "전체" }, { title: "프로모션" }, { title: "관계사" }],
+    types: ["프로모션", "관계사"],
+    signs: ["O", "X"],
     toggle_exclusive: undefined,
     search: "",
     dialog1: false,
@@ -236,14 +240,9 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
-    headers: [
-      { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "노출여부", align: "center", value: "output", sortable: false },
-      { text: "분류", align: "center", value: "category" },
-      { text: "제목", align: "center", value: "title", sortable: false },
-      { text: "신청일자", align: "center", value: "applydate" },
-    ],
+    selected: [],
     tabledata: [],
+    deletekey: [],
     editedIndex: -1,
     editedItem: {
       applydate: "",
@@ -257,9 +256,20 @@ export default {
       category: "",
       title: "",
     },
+    filterText: "필터",
   }),
 
   computed: {
+    headers() {
+        return [
+          { text: "순번", align: "center", value: "id", sortable: false },
+          { text: "노출여부", align: "center", value: "signYn", sortable: false },
+          { text: "분류", align: "center", value: "type", filter:this.typeFilter },
+          { text: "제목", align: "center", value: "title", sortable: false },
+          { text: "신청일자", align: "center", value: "createdAt" },
+        ]
+      },
+
     formTitle() {
       return this.editedIndex === -1 ? "글쓰기" : "수정하기";
     },
@@ -280,15 +290,24 @@ export default {
 
   methods: {
     initialize() {
-      this.tabledata = [
-        {
-          count: "1",
-          output: "노출",
-          category: "공지사항",
-          title: "주택용 태양광 DR 모델 신청안내",
-          applydate: "2024-03-01",
-        },
-      ];
+      try {
+        axios.get("/api/banner/getList").then((response) => {
+          this.tabledata = response.data;
+        });
+
+
+      } catch (err) {
+        console.log(err);
+      }
+      // this.tabledata = [
+      //   {
+      //     count: "1",
+      //     output: "노출",
+      //     category: "공지사항",
+      //     title: "주택용 태양광 DR 모델 신청안내",
+      //     applydate: "2024-03-01",
+      //   },
+      // ];
     },
 
     editItem(item) {
@@ -304,11 +323,37 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.tabledata.splice(this.editedIndex, 1);
-      this.closeDelete();
-      this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Deleted";
+      for(let idx in this.selected){
+        this.deletekey.push(this.selected[idx].id);
+      }
+
+      if(this.deletekey == null || this.deletekey.length == 0){
+        this.snack = true;
+        this.closeDelete();
+        this.snackColor = "error";
+        this.snackText = "삭제할 데이터가 없습니다.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("id", this.deletekey);
+
+      try {
+        axios.post("/api/banner/remove", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.closeDelete();
+            this.snack = true;
+            this.snackColor = "error";
+            this.snackText = "Deleted";
+
+            this.initialize();
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     close() {
@@ -328,15 +373,85 @@ export default {
     },
 
     save() {
+      // if (this.editedIndex > -1) {
+      //   Object.assign(this.tabledata[this.editedIndex], this.editedItem);
+      // } else {
+      //   this.tabledata.push(this.editedItem);
+      // }
+      // this.close();
+      // this.snack = true;
+      // this.snackColor = "success";
+      // this.snackText = "Data saved";
+
+      const formData = new FormData();
+      formData.append("type", this.editedItem.type);
+      formData.append("title", this.editedItem.title);
+      formData.append("image", this.editedItem.imageFile);
+      formData.append("link", this.editedItem.linkUrl);
+      formData.append("sign", this.editedItem.signYn);
+      formData.append("id", this.editedItem.id);
+
       if (this.editedIndex > -1) {
-        Object.assign(this.tabledata[this.editedIndex], this.editedItem);
-      } else {
-        this.tabledata.push(this.editedItem);
+        try {
+          axios.post("/api/banner/modify", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } else { //new
+        try {
+          axios.post("/api/banner/write", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
       }
-      this.close();
-      this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
+    },
+
+    menuActionClick(action) {
+      if(action === "전체")
+        this.filterText = "필터";
+      else
+        this.filterText = action;
+    },
+
+    typeFilter(value) {
+      if(this.filterText === "필터" || value === this.filterText){
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    newform(){
+      this.editedItem.type = "프로모션";
+      this.editedItem.signYn = "O";
+    },
+
+    urlTest(){
+      if(this.editedItem.linkUrl != null && this.editedItem.linkUrl.length > 0){
+        window.open(this.editedItem.linkUrl, "_blank");
+      }
     },
   },
 };

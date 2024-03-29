@@ -18,9 +18,9 @@
             :page.sync="page"
             :items-per-page="itemsPerPage"
             hide-default-footer
-            item-key="name"
+            item-key="id"
             show-select
-            sort-by="count"
+
             @page-count="pageCount = $event"
           >
             <template v-slot:top>
@@ -40,7 +40,7 @@
                   <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn color="white" v-bind="attrs" v-on="on">
-                        필터
+                        {{ filterText }}
                         <v-icon right> mdi-tune </v-icon>
                       </v-btn>
                     </template>
@@ -49,7 +49,7 @@
                         v-for="(item, index) in filters"
                         :key="index"
                       >
-                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        <v-list-item-title class="cursor-pointer" @click="menuActionClick(item.title)">{{ item.title }} </v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -57,12 +57,12 @@
               </v-row>
             </template>
 
-            <template v-slot:[`item.name`]="{ item }">
+            <template v-slot:[`item.groupName`]="{ item }">
               <a
                 class="text-link black--text text-decoration-underline"
                 @click="editItem(item)"
               >
-                {{ item.name }}
+                {{ item.groupName }}
               </a>
             </template>
 
@@ -107,7 +107,7 @@
           <!-- <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn> -->
         </template>
         <template v-slot:TableFooterCenter>
-          <v-pagination v-model="page" :length="pageCount"></v-pagination>
+          <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
         </template>
         <template v-slot:TableFooterRight>
           <v-dialog v-model="dialog" max-width="700px">
@@ -118,6 +118,7 @@
                 class="ml-1"
                 v-bind="attrs"
                 v-on="on"
+                @click="newform"
               >
                 신규작성
               </v-btn>
@@ -132,8 +133,9 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-select
-                        v-model="editedItem.category"
+                        v-model="editedItem.btypeName"
                         label="사업종류"
+                        :items="types"
                         hide-details="auto"
                       ></v-select>
                     </v-col>
@@ -154,66 +156,64 @@
                             persistent-hint
                             v-bind="attrs"
                             @blur="date = parseDate(dateFormatted)"
+                            disabled="true"
                             v-on="on"
                             hide-details="auto"
                           ></v-text-field>
                         </template>
-                        <v-date-picker
-                          v-model="date"
-                          no-title
-                          @input="menu1 = false"
-                        ></v-date-picker>
                       </v-menu>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-select
-                        v-model="editedItem.output"
+                        v-model="editedItem.mark"
                         label="표시여부"
+                        :items="marks"
                         hide-details="auto"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
-                        v-model="editedItem.count"
+                        v-model="editedItem.id"
                         label="순번"
+                        disabled="true"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.name"
+                        v-model="editedItem.groupName"
                         label="시설명"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.address"
+                        v-model="editedItem.addr1"
                         label="주소"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.address"
+                        v-model="editedItem.addr2"
                         label="상세주소"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" class="d-flex">
                       <v-checkbox
-                        v-model="editedItem.tag"
+                        v-model="editedItem.tag1"
                         label="PV"
                         hide-details
                       ></v-checkbox>
                       <v-checkbox
-                        v-model="editedItem.tag"
+                        v-model="editedItem.tag2"
                         label="ESS"
                         hide-details
                         class="ml-2"
                       ></v-checkbox>
                       <v-checkbox
-                        v-model="editedItem.tag"
+                        v-model="editedItem.tag3"
                         label="EV"
                         hide-details
                         class="ml-2"
@@ -223,8 +223,7 @@
                       <v-textarea
                         name="input-7-1"
                         label="사업개요"
-                        value="- 에너지 비용 및 온실가스 절감을 동시에 실현하기 위한 건물형 에너지 복지 인프라 구축
-- 성남시와 함께하는 온실가스 감축을 통한 성남시 탄소중립 참여"
+                        v-model="editedItem.businessSummary"
                         hide-details="auto"
                       ></v-textarea>
                     </v-col>
@@ -232,13 +231,13 @@
                       <v-textarea
                         name="input-7-1"
                         label="패키지구성"
-                        value="- 에너지 비용 및 온실가스 절감을 동시에 실현하기 위한 건물형 에너지 복지 인프라 구축
-- 성남시와 함께하는 온실가스 감축을 통한 성남시 탄소중립 참여"
+                        v-model="editedItem.packageCompose"
                         hide-details="auto"
                       ></v-textarea>
                     </v-col>
                     <v-col cols="12">
                       <v-file-input
+                        v-model="editedItem.image"
                         label="대표이미지"
                         hide-details="auto"
                       ></v-file-input>
@@ -270,12 +269,15 @@
 <script>
 // @ is an alias to /src
 import Tables from "@/components/Tables.vue";
+import axios from "axios";
 
 export default {
   name: "ConstructionCase",
   components: { Tables },
   data: () => ({
     filters: [{ title: "전체" }, { title: "노출" }, { title: "미노출" }],
+    types: ["건물형 인프라구축 사업", "점포형 에너지비용절감 사업", "공동주택형 에너지서비스 사업", "단독주택형 에너지서비스 사업"],
+    marks: ["노출", "미노출"],
     toggle_exclusive: undefined,
     search: "",
     dialog1: false,
@@ -287,15 +289,8 @@ export default {
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
-    headers: [
-      { text: "순번", align: "center", value: "count", sortable: false },
-      { text: "노출여부", align: "center", value: "output", sortable: false },
-      { text: "등록일자", align: "center", value: "applydate" },
-      { text: "사업종류", align: "center", value: "category" },
-      { text: "시설명", align: "center", value: "name", sortable: false },
-      { text: "주소", value: "address", sortable: false },
-      { text: "태그", align: "center", value: "tag", sortable: false },
-    ],
+    selected: [],
+    deletekey: [],
     tabledata: [],
     editedIndex: -1,
     editedItem: {
@@ -316,9 +311,21 @@ export default {
       address: "",
       tag: "",
     },
+    filterText: "필터",
   }),
 
   computed: {
+    headers() {
+        return [
+          { text: "순번", align: "center", value: "id", sortable: false },
+          { text: "노출여부", align: "center", value: "mark", sortable: false, filter:this.markFilter },
+          { text: "등록일자", align: "center", value: "createdAt" },
+          { text: "사업종류", align: "center", value: "btypeName" },
+          { text: "시설명", align: "center", value: "groupName", sortable: false },
+          { text: "주소", value: "addr", sortable: false },
+          { text: "태그", align: "center", value: "tagName", sortable: false },
+        ]
+      },
     formTitle() {
       return this.editedIndex === -1 ? "글쓰기" : "수정하기";
     },
@@ -339,17 +346,48 @@ export default {
 
   methods: {
     initialize() {
-      this.tabledata = [
-        {
-          count: "1",
-          output: "노출",
-          applydate: "2024-03-01",
-          category: "건물형 인프라구축 사업",
-          name: "하얀마을 복지회관",
-          address: "경기도 성남시 분당구 대왕판교로 660",
-          tag: "PV, ESS, EV",
-        },
-      ];
+      try {
+        axios.get("/api/construction/getListAll").then((response) => {
+          this.tabledata = response.data;
+
+          for(const item in this.tabledata){
+            switch (this.tabledata[item].btype) {
+              case "1" :
+                this.tabledata[item].btypeName = "건물형 인프라구축 사업";
+                break;
+              case "2" :
+                this.tabledata[item].btypeName = "점포형 에너지비용절감 사업";
+                break;
+              case "3" :
+                this.tabledata[item].btypeName = "공동주택형 에너지서비스 사업";
+                break;
+              case "4" :
+                this.tabledata[item].btypeName = "단독주택형 에너지서비스 사업";
+                break;
+            }
+
+            this.tabledata[item].addr = this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
+
+            this.tabledata[item].mark = this.tabledata[item].markYn === "Y" ? "노출" : "미노출";
+
+            let tagName = [];
+            if(this.tabledata[item].tagYn1 === "Y")
+              tagName.push("PV")
+            if(this.tabledata[item].tagYn2 === "Y")
+              tagName.push("ESS")
+            if(this.tabledata[item].tagYn3 === "Y")
+              tagName.push("EV")
+
+            this.tabledata[item].tagName = tagName;
+
+            if(this.tabledata[item].tagYn1 === "Y") this.tabledata[item].tag1 = true; else this.tabledata[item].tag1 = false;
+            if(this.tabledata[item].tagYn2 === "Y") this.tabledata[item].tag2 = true; else this.tabledata[item].tag2 = false;
+            if(this.tabledata[item].tagYn3 === "Y") this.tabledata[item].tag3 = true; else this.tabledata[item].tag3 = false;
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     editItem(item) {
@@ -365,11 +403,37 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.tabledata.splice(this.editedIndex, 1);
-      this.closeDelete();
-      this.snack = true;
-      this.snackColor = "error";
-      this.snackText = "Deleted";
+      for(let idx in this.selected){
+        this.deletekey.push(this.selected[idx].id);
+      }
+
+      if(this.deletekey == null || this.deletekey.length == 0){
+        this.snack = true;
+        this.closeDelete();
+        this.snackColor = "error";
+        this.snackText = "삭제할 데이터가 없습니다.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("id", this.deletekey);
+
+      try {
+        axios.post("/api/construction/remove", formData).then((response) => {
+          if (response.data.code == "0") {
+            this.closeDelete();
+            this.snack = true;
+            this.snackColor = "error";
+            this.snackText = "Deleted";
+
+            this.initialize();
+          } else {
+            console.log(response.data.message);
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
 
     close() {
@@ -389,16 +453,112 @@ export default {
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.tabledata[this.editedIndex], this.editedItem);
-      } else {
-        this.tabledata.push(this.editedItem);
+
+      switch (this.editedItem.btypeName) {
+        case "건물형 인프라구축 사업" :
+          this.editedItem.btype = "1";
+          break;
+        case "점포형 에너지비용절감 사업" :
+          this.editedItem.btype = "2";
+          break;
+        case "공동주택형 에너지서비스 사업" :
+          this.editedItem.btype = "3";
+          break;
+        case "단독주택형 에너지서비스 사업" :
+          this.editedItem.btype = "4";
+          break;
       }
-      this.close();
-      this.snack = true;
-      this.snackColor = "success";
-      this.snackText = "Data saved";
+
+      switch (this.editedItem.mark) {
+        case "노출" :
+          this.editedItem.markYn = "Y";
+          break;
+        case "미노출" :
+          this.editedItem.markYn = "N";
+          break;
+      }
+
+      this.editedItem.tagYn1 = this.editedItem.tag1 ? "Y" : "N";
+      this.editedItem.tagYn2 = this.editedItem.tag2 ? "Y" : "N";
+      this.editedItem.tagYn3 = this.editedItem.tag3 ? "Y" : "N";
+
+      const formData = new FormData();
+      formData.append("bType", this.editedItem.btype);
+      formData.append("groupName", this.editedItem.groupName);
+      formData.append("addr1", this.editedItem.addr1);
+      formData.append("addr2", this.editedItem.addr2);
+      formData.append("businessSummary", this.editedItem.businessSummary);
+      formData.append("packageCompose", this.editedItem.packageCompose);
+      formData.append("markYn", this.editedItem.markYn);
+      formData.append("tagYn1", this.editedItem.tagYn1);
+      formData.append("tagYn2", this.editedItem.tagYn2);
+      formData.append("tagYn3", this.editedItem.tagYn3);
+      formData.append("tagYn4", "N");
+      formData.append("tagYn5", "N");
+      formData.append("tagYn6", "N");
+      formData.append("tagYn7", "N");
+      formData.append("tagYn8", "N");
+      formData.append("tagYn9", "N");
+      formData.append("image", this.editedItem.image);
+      formData.append("id", this.editedItem.id);
+
+      if (this.editedIndex > -1) {
+        try {
+          axios.post("/api/construction/modify", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } else { //new
+        try {
+          axios.post("/api/construction/write", formData).then((response) => {
+            if (response.data.code == "0") {
+              this.close();
+              this.snack = true;
+              this.snackColor = "success";
+              this.snackText = "Data saved";
+
+              this.initialize();
+            } else {
+              console.log(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      }
     },
+
+    menuActionClick(action) {
+      if(action === "전체")
+        this.filterText = "필터";
+      else
+        this.filterText = action;
+    },
+
+    markFilter(value) {
+      if(this.filterText === "필터" || value === this.filterText){
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    newform(){
+      this.editedItem.btypeName = "건물형 인프라구축 사업";
+      this.editedItem.mark = "노출";
+    },
+
   },
 };
 </script>

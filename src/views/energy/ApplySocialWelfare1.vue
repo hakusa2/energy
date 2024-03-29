@@ -134,7 +134,7 @@
                                 v-model="auth"
                                 :rules="authRules"
                                 oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                counter="10"
+                                counter="6"
                                 type="number"
                                 outlined
                                 solo

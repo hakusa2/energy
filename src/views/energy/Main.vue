@@ -88,9 +88,10 @@
                             </v-col>
                             <v-col>
                               <v-select
+                                v-model="type"
+                                :items="types"
                                 outlined
                                 solo
-                                placeholder="13평 이하"
                                 hide-details="auto"
                               ></v-select>
                             </v-col>
@@ -112,7 +113,8 @@
                               <v-select
                                 outlined
                                 solo
-                                placeholder="1명"
+                                v-model="people"
+                                :items="peoples"
                                 hide-details="auto"
                               ></v-select>
                             </v-col>
@@ -138,15 +140,19 @@
                                   <v-select
                                     outlined
                                     solo
-                                    placeholder="1월"
+                                    v-model="month"
+                                    :items="months"
                                     hide-details="auto"
                                   ></v-select>
                                 </v-col>
                                 <v-col>
                                   <v-text-field
+                                    v-model="monthuse"
+                                    placeholder="0,000 "
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                    @input="formatMonthUse"
                                     outlined
                                     solo
-                                    placeholder="0,000 "
                                     class="ml-2"
                                     hide-details="auto"
                                     suffix="kWh"
@@ -172,7 +178,8 @@
                             </v-col>
                             <v-col>
                               <v-radio-group
-                                v-model="row"
+                                v-model="sunLight"
+                                @change="sunLightChanged"
                                 row
                                 class="pt-0 mt-1"
                                 hide-details="auto"
@@ -180,12 +187,12 @@
                                 <v-radio
                                   label="유"
                                   color="black"
-                                  value="radio-1"
+                                  value="Y"
                                 ></v-radio>
                                 <v-radio
                                   label="무"
                                   color="black"
-                                  value="radio-2"
+                                  value="N"
                                 ></v-radio>
                               </v-radio-group>
                             </v-col>
@@ -207,9 +214,13 @@
                             </v-col>
                             <v-col>
                               <v-text-field
+                                :disabled = "sunLightDisabled"
+                                v-model="sunuse"
                                 outlined
                                 solo
                                 placeholder="0,000 "
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                @input="formatSunUse"
                                 hide-details="auto"
                                 suffix="kWh"
                               ></v-text-field>
@@ -223,7 +234,7 @@
                         <v-btn
                           depressed
                           color="primary"
-                          @click="active = !active"
+                          @click="cal"
                         >
                           계산하기
                         </v-btn>
@@ -248,13 +259,13 @@
                     <v-row class="w-100">
                       <v-col>
                         <div class="result-value">
-                          0,000<small>(000)</small>
+                          {{ monthValue }}<small>({{ sunValue }})</small>
                           <span class="unit">kWh</span>
                         </div>
                       </v-col>
                       <v-col>
                         <div class="result-value">
-                          0,000 <span class="unit">원</span>
+                          {{ calPriceValue }} <span class="unit">원</span>
                         </div>
                       </v-col>
                     </v-row>
@@ -265,12 +276,12 @@
                     <v-row class="w-100">
                       <v-col>
                         <div class="result-value">
-                          0,000 <span class="unit">kWh</span>
+                          {{ sampleUseVaue }} <span class="unit">kWh</span>
                         </div>
                       </v-col>
                       <v-col>
                         <div class="result-value">
-                          0,000 <span class="unit">원</span>
+                          {{ samplePriceValue }} <span class="unit">원</span>
                         </div>
                       </v-col>
                     </v-row>
@@ -306,8 +317,8 @@
                   <v-carousel-item
                     v-for="(item, i) in banners"
                     :key="i"
-                    src="@/assets/sample_banner.png"
-                    :to="item.url"
+                    :src="item.imageUrl"
+                    @click="goUrl(item.linkUrl)"
                   >
                   </v-carousel-item>
                 </v-carousel>
@@ -338,30 +349,34 @@ export default {
     selectitems2: ["070", "010"],
     dialog: false,
     valid: true,
-    name: "",
-    nameRules: [
-      (v) => !!v || "이름을 입력해주세요",
-      (v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
-    ],
-    mobile: "",
-    mobileRules: [
-      (v) => !!v || "휴대폰 번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
-    ],
-    mobile1: "",
-    mobileRules1: [
-      (v) => !!v || "인증번호를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "인증번호를 다시 확인해주세요.",
-    ],
-    address: "",
-    addressRules: [
-      (v) => !!v || "주소를 입력해주세요",
-      (v) => /.+@.+\..+/.test(v) || "주소를 다시 확인해주세요.",
-    ],
+
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
+    types: ["13평이하", "18평", "25평", "34평", "34평이상"],
+    type: "",
+    peoples: ["1인", "2인", "3인", "4인", "5인", "6인이상"],
+    people: "",
+    months: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+    month: "",
+    sunLight: "Y",
+    monthValue: 0,
+    sunValue: 0,
+    monthuse: "",
+    sunuse: "",
+    samplePrice: 0,
+    sampleUse: 0,
+    calPrice: 0,
+    calUse: 0,
+    samplePriceValue: "",
+    sampleUseVaue: "",
+    calPriceValue: "",
+    calUseValue: "",
+    sunLightDisabled: false,
   }),
+  computed: {
+
+  },
   created() {
     this.init();
   },
@@ -382,6 +397,9 @@ export default {
       slider.showEdit = false;
     },
     init() {
+      this.type = "13평이하";
+      this.people = "1인";
+      this.month = "1월";
       try {
         axios.get("/api/banner/getList").then((response) => {
           this.banners = response.data;
@@ -390,6 +408,84 @@ export default {
         console.log(err);
       }
     },
+
+    goUrl(url){
+      window.open(url, "_blank");
+    },
+
+    cal(){
+      //alert(this.monthValue);
+      this.active = !this.active
+
+      //구간별 전기요금
+      let sectionPrice = 0;
+      //월간 기준
+      let monthStd = 1;
+
+      if(this.month === "7월" || this.month === "8월")
+        monthStd = 0.7;
+
+      if(this.monthValue < 100)
+        sectionPrice = 60.7;
+      else if (this.monthValue < 200)
+        sectionPrice = 125.9;
+      else if (this.monthValue < 300)
+        sectionPrice = 187.9;
+      else if (this.monthValue < 400)
+        sectionPrice = 280.6;
+      else if (this.monthValue < 500)
+        sectionPrice = 417.7;
+      else // 500보다 크면
+        sectionPrice = 709.5;
+
+      //요금 = ( 월간 사용량 – (태양광용량) ) * 구간별전기요금 * 월간기준
+      this.calPrice = Math.round((this.monthValue - this.sunValue) * sectionPrice * monthStd);
+      this.calUse = this.monthValue - this.sunValue;
+
+      if(this.type === "13평이하"){
+        this.sampleUse = "216"
+        this.samplePrice = "29808"
+      } else if (this.type === "18평"){
+        this.sampleUse = "275"
+        this.samplePrice = "37950"
+      } else if (this.type === "25평"){
+        this.sampleUse = "348"
+        this.samplePrice = "48024"
+      } else if (this.type === "34평"){
+        this.sampleUse = "452"
+        this.samplePrice = "62376"
+      } else if (this.type === "34평이상"){
+        this.sampleUse = "560"
+        this.samplePrice = "94080"
+      }
+
+      this.samplePriceValue = (parseFloat(this.samplePrice.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.sampleUseVaue = (parseFloat(this.sampleUse.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.calPriceValue = (parseFloat(this.calPrice.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.calUseValue = this.monthValue + "(" + this.sunValue + ")";
+    },
+
+    formatMonthUse() {
+      const parsedAmount = parseFloat(this.monthuse.replace(/,/g, "")) || 0;
+      this.monthValue = parsedAmount;
+      this.monthuse = parsedAmount.toLocaleString();
+    },
+
+    formatSunUse() {
+      const parsedAmount = parseFloat(this.sunuse.replace(/,/g, "")) || 0;
+      this.sunValue = parsedAmount;
+      this.sunuse = parsedAmount.toLocaleString();
+    },
+
+    sunLightChanged(){
+      if(this.sunLight === "Y")
+        this.sunLightDisabled = false;
+      else {
+        this.sunLightDisabled = true;
+        this.sunValue = 0;
+        this.sunuse = "";
+      }
+    }
   },
 };
 </script>
