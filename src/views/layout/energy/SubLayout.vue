@@ -24,7 +24,7 @@
       temporary
       class="right-navigation-drawer"
     >
-      <MobileMenu />
+      <MobileMenu @closeMobile="closeMobileMenu" />
     </v-navigation-drawer>
 
     <v-main>
@@ -52,8 +52,13 @@ export default {
   },
   created() {},
   data: () => ({
-    drawer: null,
+    drawer: false,
   }),
+  methods: {
+    closeMobileMenu(){
+      this.drawer = false;
+    },
+  },
 };
 </script>
 

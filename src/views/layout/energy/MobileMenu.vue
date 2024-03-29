@@ -5,7 +5,8 @@
         ><v-img src="@/assets/logo.png" max-width="200" contain></v-img
       ></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn @click="closeMenu"
+      icon>
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-app-bar>
@@ -63,7 +64,7 @@
       </v-list-item-group>
     </v-list>
 
-    <v-card-actions class="pb-5">
+    <!-- <v-card-actions class="pb-5">
       <v-btn
         class="btn-confirm rounded-xl"
         color="#A6D086"
@@ -73,7 +74,7 @@
         block
         >신청이력조회</v-btn
       >
-    </v-card-actions>
+    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -82,7 +83,13 @@
 export default {
   name: "MobileMenu",
   components: {},
-  data: () => ({}),
+  data: () => ({
+  }),
+  methods: {
+    closeMenu(){
+      this.$emit("closeMobile");
+    },
+  },
 };
 </script>
 
