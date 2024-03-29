@@ -291,10 +291,22 @@ export default {
   methods: {
     initialize() {
       try {
-        axios.get("/api/banner/getList").then((response) => {
-          this.tabledata = response.data;
-        });
+        let self = this;
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        };
 
+        axios.get("/api/banner/getListAdmin", axiosConfig).then((response) => {
+          this.tabledata = response.data;
+        }).catch(function (error) {
+          if(error.response.status == "403"){
+            alert("권한이 없습니다.");
+            self.$router.push("/signin");
+          }
+        });
 
       } catch (err) {
         console.log(err);
@@ -340,7 +352,7 @@ export default {
 
       try {
         axios.post("/api/banner/remove", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.closeDelete();
             this.snack = true;
             this.snackColor = "error";
@@ -394,7 +406,7 @@ export default {
       if (this.editedIndex > -1) {
         try {
           axios.post("/api/banner/modify", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -411,7 +423,7 @@ export default {
       } else { //new
         try {
           axios.post("/api/banner/write", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";

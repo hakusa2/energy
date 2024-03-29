@@ -381,8 +381,21 @@ export default {
   methods: {
     initialize() {
       try {
-        axios.get("/api/faq/getList").then((response) => {
+        let self = this;
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        };
+
+        axios.get("/api/faq/getListAdmin", axiosConfig).then((response) => {
           this.tabledata = response.data;
+        }).catch(function (error) {
+          if(error.response.status == "403"){
+            alert("권한이 없습니다.");
+            self.$router.push("/signin");
+          }
         });
 
         axios.get("/api/etc/getAdvice").then((response) => {
@@ -424,7 +437,7 @@ export default {
 
       try {
         axios.post("/api/faq/remove", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.closeDelete();
             this.snack = true;
             this.snackColor = "error";
@@ -475,7 +488,7 @@ export default {
       if (this.editedIndex > -1) {
         try {
           axios.post("/api/faq/modify", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -492,7 +505,7 @@ export default {
       } else { //new
         try {
           axios.post("/api/faq/write", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -516,7 +529,7 @@ export default {
 
       try {
         axios.post("/api/etc/modify", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.phoneValue = this.newPhoneValue;
             this.newPhoneValue = "";
             this.closePhone();
@@ -538,7 +551,7 @@ export default {
       formData.append("data", this.newEmailValue);
       try {
         axios.post("/api/etc/modify", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.emailValue = this.newEmailValue;
             this.newEmailValue = "";
             this.closeEmail();

@@ -433,7 +433,15 @@ export default {
   methods: {
     initialize() {
       try {
-        axios.get("/api/business/getList").then((response) => {
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        };
+
+        let self = this;
+        axios.get("/api/business/getList", axiosConfig).then((response) => {
           this.tabledata = response.data;
 
           for(const item in this.tabledata){
@@ -468,6 +476,11 @@ export default {
             }
 
             this.tabledata[item].sunLight = this.tabledata[item].sunLightYn === "Y" ? "유" : "무";
+          }
+        }).catch(function (error) {
+          if(error.response.status == "403"){
+            alert("권한이 없습니다.");
+            self.$router.push("/signin");
           }
         });
 
@@ -513,7 +526,7 @@ export default {
 
       try {
         axios.post("/api/business/remove", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.closeDelete();
             this.snack = true;
             this.snackColor = "error";
@@ -606,7 +619,7 @@ export default {
       if (this.editedIndex > -1) {
         try {
           axios.post("/api/business/modify", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -623,7 +636,7 @@ export default {
       } else { //new
         try {
           axios.post("/api/business/write", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -680,7 +693,7 @@ export default {
 
       try {
         axios.post("/api/etc/modifyApproval", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.closeApproval();
             this.snack = true;
             this.snackColor = "success";

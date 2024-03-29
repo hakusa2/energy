@@ -347,7 +347,15 @@ export default {
   methods: {
     initialize() {
       try {
-        axios.get("/api/construction/getListAll").then((response) => {
+        let self = this;
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        };
+
+        axios.get("/api/construction/getListAll", axiosConfig).then((response) => {
           this.tabledata = response.data;
 
           for(const item in this.tabledata){
@@ -383,6 +391,11 @@ export default {
             if(this.tabledata[item].tagYn1 === "Y") this.tabledata[item].tag1 = true; else this.tabledata[item].tag1 = false;
             if(this.tabledata[item].tagYn2 === "Y") this.tabledata[item].tag2 = true; else this.tabledata[item].tag2 = false;
             if(this.tabledata[item].tagYn3 === "Y") this.tabledata[item].tag3 = true; else this.tabledata[item].tag3 = false;
+          }
+        }).catch(function (error) {
+          if(error.response.status == "403"){
+            alert("권한이 없습니다.");
+            self.$router.push("/signin");
           }
         });
       } catch (err) {
@@ -420,7 +433,7 @@ export default {
 
       try {
         axios.post("/api/construction/remove", formData).then((response) => {
-          if (response.data.code == "0") {
+          if (response.data.code == 0) {
             this.closeDelete();
             this.snack = true;
             this.snackColor = "error";
@@ -505,7 +518,7 @@ export default {
       if (this.editedIndex > -1) {
         try {
           axios.post("/api/construction/modify", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";
@@ -522,7 +535,7 @@ export default {
       } else { //new
         try {
           axios.post("/api/construction/write", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.close();
               this.snack = true;
               this.snackColor = "success";

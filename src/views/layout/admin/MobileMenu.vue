@@ -50,10 +50,10 @@
                 <v-card-actions class="pa-0">
                   <v-row no-gutters>
                     <v-col>
-                      <v-btn depressed block tile>취소</v-btn>
+                      <v-btn depressed block tile @click="closeLogout">취소</v-btn>
                     </v-col>
                     <v-col>
-                      <v-btn depressed block tile color="primary" to="/signin"
+                      <v-btn depressed block tile color="primary" @click="logout"
                         >로그아웃</v-btn
                       >
                     </v-col>
@@ -76,6 +76,15 @@ export default {
   data: () => ({
     dialog: false,
   }),
+  methods: {
+    closeLogout(){
+      this.dialog = false;
+    },
+    logout(){
+      this.$cookies.set("token", "");
+      this.$router.push("/signin");
+    },
+  },
 };
 </script>
 

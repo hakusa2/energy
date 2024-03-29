@@ -45,7 +45,7 @@
                         depressed
                         small
                         color="primary"
-                        to="/adminbusinessapplication"
+                        @click="login"
                         class="mt-2"
                         >로그인</v-btn
                       >
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "SignIn",
   components: {},
@@ -69,13 +71,13 @@ export default {
     valid: true,
     id: "",
     idRules: [
-      (v) => !!v || "잘못된 아이디를 입력하셨습니다. 다시 확인해주세요",
-      (v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
+      //(v) => !!v || "잘못된 아이디를 입력하셨습니다. 다시 확인해주세요",
+      //(v) => (v && v.length <= 10) || "숫자 및 특수문자는 입력할 수 없어요.",
     ],
     password: "",
     passwordRules: [
-      (v) => !!v || "잘못된 비밀번호를 입력하셨습니다. 다시 확인해주세요",
-      (v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
+      //(v) => !!v || "잘못된 비밀번호를 입력하셨습니다. 다시 확인해주세요",
+      //(v) => /.+@.+\..+/.test(v) || "잘못된 휴대폰 번호 양식이에요.",
     ],
   }),
   methods: {
@@ -88,6 +90,25 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
+    login(){
+      const formData = new FormData();
+        formData.append("user", this.id);
+        formData.append("password", this.password);
+
+        try {
+          axios.post("/api/user/login", formData).then((response) => {
+            if (response.data.code === 0) {
+              console.log(response.data);
+              this.$cookies.set("token", response.data.token);
+              this.$router.push("/adminbusinessapplication");
+            } else {
+              alert(response.data.message);
+            }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+    }
   },
 };
 </script>

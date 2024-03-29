@@ -114,7 +114,7 @@
                                 :disabled="isDisableMobileBtn"
                                 @click="mobileSend"
                               >
-                                인증요청
+                                {{ authbtnname }}
                               </v-btn>
                             </div>
                           </v-col>
@@ -413,6 +413,9 @@ export default {
     timerStr: "03:00",
     timer: null,
     timeCounter: 180,
+    authbtnname: "인증요청",
+    authcount: 1,
+    authcheck: false,
   }),
   watch: {
     mobile: {
@@ -448,17 +451,57 @@ export default {
       this.$refs.form.resetValidation();
     },
     mobileSend() {
+      this.authbtnname = "재발송";
       this.isDisableMobile = true;
-      this.isDisableMobileBtn = true;
       this.isDisableAuth = false;
 
-      this.timerStart();
+      if(this.authcount === 1){
+        this.timerStart();
+        this.smsSend();
+      } else {
+        if(this.timeCounter < 170){
+          this.timeCounter = 180;
+          this.smsSend();
+        } else {
+          alert("10초이내 재발송할 수 없습니다.")
+        }
+      }
+      this.authcount++;
+    },
+    smsSend(){
+      try {
+        axios.get("/api/etc/getAuth?mobile=" + this.mobile).then((response) => {
+          if (response.data.code === 0) {
+            alert("인증코드가 발송되었습니다.");
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     authSend() {
-      this.isDisableAuth = true;
-      this.isDisableAuthBtn = true;
+      if(this.timeCounter === 0){
+        alert("인증시간이 종료되었습니다.");
+        return;
+      }
 
-      this.timerStop();
+      try {
+        axios.get("/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth).then((response) => {
+          if (response.data.code === 0) {
+            this.authcheck = true;
+            this.isDisableAuth = true;
+            this.isDisableAuthBtn = true;
+            this.isDisableMobileBtn = true;
+
+            this.timerStop();
+          } else {
+            alert("인증번호가 잘못되었습니다.");
+            return;
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     timerStart() {
       this.timeCounter = 180;
@@ -493,6 +536,11 @@ export default {
     },
     save() {
       if (this.$refs.form.validate()) {
+        if(!this.authcheck){
+          alert("휴대폰 인증이 되지 않았습니다.");
+          return;
+        }
+
         const formData = new FormData();
         formData.append("bType", "2"); //점포형 에너지비용절감 사업
         formData.append("status", "1"); //신청완료
@@ -518,7 +566,7 @@ export default {
 
         try {
           axios.post("/api/business/write", formData).then((response) => {
-            if (response.data.code == "0") {
+            if (response.data.code == 0) {
               this.$router.push("/applysocialwelfare5");
             } else {
               console.log(response.data.message);

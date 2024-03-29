@@ -268,14 +268,39 @@ export default {
       this.authcount++;
     },
     smsSend(){
-
+      try {
+        axios.get("/api/etc/getAuth?mobile=" + this.mobile).then((response) => {
+          if (response.data.code === 0) {
+            alert("인증코드가 발송되었습니다.");
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     authSend() {
-      this.isDisableAuth = true;
-      this.isDisableAuthBtn = true;
-      this.isDisableMobileBtn = true;
+      if(this.timeCounter === 0){
+        alert("인증시간이 종료되었습니다.");
+        return;
+      }
 
-      this.timerStop();
+      try {
+        axios.get("/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth).then((response) => {
+          if (response.data.code === 0) {
+            this.authcheck = true;
+            this.isDisableAuth = true;
+            this.isDisableAuthBtn = true;
+            this.isDisableMobileBtn = true;
+
+            this.timerStop();
+          } else {
+            alert("인증번호가 잘못되었습니다.");
+            return;
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
     timerStart() {
       this.timeCounter = 180;
