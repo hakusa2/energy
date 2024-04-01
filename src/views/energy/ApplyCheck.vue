@@ -345,7 +345,7 @@ export default {
           axios.post("/api/business/getCheck", formData).then((response) => {
             console.log(response);
             if (response.data != "") {
-              this.$router.push("/applycheckform?id=" + response.data);
+              this.$router.push({name: "ApplyCheckForm", params: { id: response.data }});
             } else {
               alert("신청내역이 없습니다.");
             }

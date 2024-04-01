@@ -170,7 +170,7 @@
             </v-card>
           </v-dialog>
 
-          <v-btn depressed color="primary" class="ml-2"> 엑셀다운로드 </v-btn>
+          <v-btn depressed color="primary" class="ml-2" @click="excelimport"> 엑셀다운로드 </v-btn>
         </template>
         <template v-slot:TableFooterCenter>
           <v-pagination v-model="page" :length="pageCount" total-visible="9"></v-pagination>
@@ -333,6 +333,7 @@
 // @ is an alias to /src
 import Tables from "@/components/Tables.vue";
 import axios from "axios";
+import * as xlsx from 'xlsx';
 
 export default {
   name: "BusinessApplication",
@@ -393,6 +394,7 @@ export default {
     apartmentValue: 0,
     detachedValue: 0,
     sunLightVisible: false,
+    exceldata:[],
   }),
 
   computed: {
@@ -475,6 +477,7 @@ export default {
                 break;
             }
 
+            this.tabledata[item].addr = "(" + this.tabledata[item].zipcode + ") " + this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
             this.tabledata[item].sunLight = this.tabledata[item].sunLightYn === "Y" ? "유" : "무";
           }
         }).catch(function (error) {
@@ -706,6 +709,46 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+
+    excelimport(){
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = ('0' + (today.getMonth() + 1)).slice(-2);
+      const day = ('0' + today.getDate()).slice(-2);
+      const hours = ('0' + today.getHours()).slice(-2);
+      const minutes = ('0' + today.getMinutes()).slice(-2);
+      const seconds = ('0' + today.getSeconds()).slice(-2);
+      const timeString = year + "" + month + "" + day + "" + hours + "" + minutes + "" + seconds;
+
+      this.exceldata.header = [['순번', '신청일자', '사업종류', '이름', '생년월일', '연락처', '이메일', '신청주소', '상태']];
+      this.exceldata.cols = [{wch: 6}, {wch: 12}, {wch: 20}, {wch: 10}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 50}, {wch: 10}];
+      this.exceldata.body = [];
+
+      for(const item in this.tabledata){
+
+        this.exceldata.body.push([
+          this.tabledata[item].id
+        , this.tabledata[item].createdAt
+        , this.tabledata[item].btypeName
+        , this.tabledata[item].name
+        , this.tabledata[item].birth
+        , this.tabledata[item].mobile
+        , this.tabledata[item].email
+        , this.tabledata[item].addr
+        , this.tabledata[item].statusName
+        ]);
+      }
+
+      const workBook = xlsx.utils.book_new();
+      const workSheet = xlsx.utils.json_to_sheet(this.exceldata.body);
+      xlsx.utils.sheet_add_aoa(workSheet, this.exceldata.header);
+      xlsx.utils.book_append_sheet(workBook, workSheet, "사업신청관리");
+      workSheet['!cols'] = this.exceldata.cols;
+      xlsx.writeFile(workBook, "excel_" + timeString + ".xlsx");
+
+
+
     },
   },
 };

@@ -207,7 +207,7 @@ export default {
     init() {
       try {
         axios
-          .get("/api/business/getConfirm?id=" + this.$route.query.id)
+          .get("/api/business/getConfirm?id=" + this.$route.params.id)
           .then((response) => {
             this.businessdata = response.data;
           });
