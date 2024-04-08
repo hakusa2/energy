@@ -255,7 +255,7 @@
               </v-card>
             </v-col>
             <v-col cols="12" sm="12" md="12" class="col-support">
-              <v-card class="card-transparent card-banner" flat>
+              <v-card class="card-transparent card-banner card-support" flat>
                 <v-card-title class="pt-0 px-0">복지배너</v-card-title>
                 <!-- <div class="carousel-control">
                   <div class="carousel-count"><span>1</span>/5</div>
