@@ -4,7 +4,7 @@
       <v-carousel v-model="model" hide-delimiters show-arrows-on-hover>
         <v-carousel-item src="@/assets/main_img1.png">
           <div class="carousel-sheet">
-            <div class="carousel-text-group">
+            <div class="container carousel-text-group">
               <div class="title">
                 에너지비용은 낮추고 <br />
                 시민복지는 올립니다.
@@ -22,7 +22,7 @@
         </v-carousel-item>
         <v-carousel-item src="@/assets/main_img2.png">
           <div class="carousel-sheet">
-            <div class="carousel-text-group">
+            <div class="container carousel-text-group">
               <div class="title">
                 성남시와 성남시민이 <br />
                 함께하는 탄소중립 실현
@@ -40,7 +40,7 @@
         </v-carousel-item>
         <v-carousel-item src="@/assets/main_img3.png">
           <div class="carousel-sheet">
-            <div class="carousel-text-group">
+            <div class="container carousel-text-group">
               <div class="title">
                 성남시 <br />
                 에너지복지를 한눈에
@@ -75,30 +75,19 @@
                     v-if="!active"
                   >
                     <v-row class="mb-5">
-                      <v-col cols="12" sm="12" md="6">
+                      <v-col cols="12" sm="12" md="12">
                         <div class="form-group">
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="4"
-                              class="col-label pb-0"
-                            >
-                              <v-label class="pt-1"> 평형 </v-label>
-                            </v-col>
-                            <v-col>
-                              <v-select
-                                v-model="type"
-                                :items="types"
-                                outlined
-                                solo
-                                hide-details="auto"
-                              ></v-select>
-                            </v-col>
-                          </v-row>
+                          <v-label class="pt-1"> 평형 </v-label>
+                          <v-select
+                            v-model="type"
+                            :items="types"
+                            outlined
+                            solo
+                            hide-details="auto"
+                          ></v-select>
                         </div>
                       </v-col>
-                      <v-col cols="12" sm="12" md="6">
+                      <!-- <v-col cols="12" sm="12" md="6">
                         <div class="form-group">
                           <v-row>
                             <v-col
@@ -120,45 +109,34 @@
                             </v-col>
                           </v-row>
                         </div>
-                      </v-col>
+                      </v-col> -->
                     </v-row>
                     <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="12" class="pt-sm-0 pt-md-3">
                         <div class="form-group">
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="4"
-                              class="col-label pb-0"
-                            >
-                              <v-label class="pt-1">월간 사용량</v-label>
+                          <v-label class="pt-1">월간 사용량</v-label>
+                          <v-row no-gutters>
+                            <v-col cols="3">
+                              <v-select
+                                outlined
+                                solo
+                                v-model="month"
+                                :items="months"
+                                hide-details="auto"
+                              ></v-select>
                             </v-col>
-                            <v-col class="pb-0">
-                              <v-row no-gutters>
-                                <v-col cols="3">
-                                  <v-select
-                                    outlined
-                                    solo
-                                    v-model="month"
-                                    :items="months"
-                                    hide-details="auto"
-                                  ></v-select>
-                                </v-col>
-                                <v-col>
-                                  <v-text-field
-                                    v-model="monthuse"
-                                    placeholder="0,000 "
-                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                    @input="formatMonthUse"
-                                    outlined
-                                    solo
-                                    class="ml-2"
-                                    hide-details="auto"
-                                    suffix="kWh"
-                                  ></v-text-field>
-                                </v-col>
-                              </v-row>
+                            <v-col>
+                              <v-text-field
+                                v-model="monthuse"
+                                placeholder="0,000 "
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                @input="formatMonthUse"
+                                outlined
+                                solo
+                                class="ml-2"
+                                hide-details="auto"
+                                suffix="kW"
+                              ></v-text-field>
                             </v-col>
                           </v-row>
                         </div>
@@ -167,75 +145,50 @@
                     <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="6">
                         <div class="form-group">
-                          <v-row class="align-center">
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="4"
-                              class="col-label pb-0"
-                            >
-                              <v-label> 태양광 </v-label>
-                            </v-col>
-                            <v-col>
-                              <v-radio-group
-                                v-model="sunLight"
-                                @change="sunLightChanged"
-                                row
-                                class="pt-0 mt-1"
-                                hide-details="auto"
-                              >
-                                <v-radio
-                                  label="유"
-                                  color="black"
-                                  value="Y"
-                                ></v-radio>
-                                <v-radio
-                                  label="무"
-                                  color="black"
-                                  value="N"
-                                ></v-radio>
-                              </v-radio-group>
-                            </v-col>
-                          </v-row>
+                          <v-label> 태양광 </v-label>
+                          <v-radio-group
+                            v-model="sunLight"
+                            @change="sunLightChanged"
+                            row
+                            class="pt-0 mt-1"
+                            hide-details="auto"
+                          >
+                            <v-radio
+                              label="유"
+                              color="black"
+                              value="Y"
+                            ></v-radio>
+                            <v-radio
+                              label="무"
+                              color="black"
+                              value="N"
+                            ></v-radio>
+                          </v-radio-group>
                         </div>
                       </v-col>
                     </v-row>
                     <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="12">
                         <div class="form-group">
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="4"
-                              class="col-label pb-0"
-                            >
-                              <v-label class="pt-1"> 용량 </v-label>
-                            </v-col>
-                            <v-col>
-                              <v-text-field
-                                :disabled = "sunLightDisabled"
-                                v-model="sunuse"
-                                outlined
-                                solo
-                                placeholder="0,000 "
-                                oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                @input="formatSunUse"
-                                hide-details="auto"
-                                suffix="kWh"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
+                          <!-- 태양광 '무' 선택 시 비활성화 처리 <div class="form-group form-disabled"> -->
+                          <v-label class="pt-1"> 용량 </v-label>
+                          <v-text-field
+                            :disabled="sunLightDisabled"
+                            v-model="sunuse"
+                            outlined
+                            solo
+                            placeholder="0,000 "
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                            @input="formatSunUse"
+                            hide-details="auto"
+                            suffix="kW"
+                          ></v-text-field>
                         </div>
                       </v-col>
                     </v-row>
                     <v-row class="mt-10">
                       <v-col class="text-right">
-                        <v-btn
-                          depressed
-                          color="primary"
-                          @click="cal"
-                        >
+                        <v-btn depressed color="primary" @click="cal">
                           계산하기
                         </v-btn>
                       </v-col>
@@ -302,7 +255,7 @@
               </v-card>
             </v-col>
             <v-col cols="12" sm="12" md="12" class="col-support">
-              <v-card class="card-transparent" flat>
+              <v-card class="card-transparent card-banner" flat>
                 <v-card-title class="pt-0 px-0">복지배너</v-card-title>
                 <!-- <div class="carousel-control">
                   <div class="carousel-count"><span>1</span>/5</div>
@@ -313,7 +266,7 @@
                     <v-icon>mdi-chevron-right</v-icon>
                   </v-btn>
                 </div> -->
-                <v-carousel v-model="banner" hide-delimiters cycle height="478">
+                <v-carousel v-model="banner" hide-delimiters cycle height="616">
                   <v-carousel-item
                     v-for="(item, i) in banners"
                     :key="i"
@@ -357,7 +310,20 @@ export default {
     type: "",
     peoples: ["1인", "2인", "3인", "4인", "5인", "6인이상"],
     people: "",
-    months: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+    months: [
+      "1월",
+      "2월",
+      "3월",
+      "4월",
+      "5월",
+      "6월",
+      "7월",
+      "8월",
+      "9월",
+      "10월",
+      "11월",
+      "12월",
+    ],
     month: "",
     sunLight: "Y",
     monthValue: 0,
@@ -374,9 +340,7 @@ export default {
     calUseValue: "",
     sunLightDisabled: false,
   }),
-  computed: {
-
-  },
+  computed: {},
   created() {
     this.init();
   },
@@ -409,59 +373,61 @@ export default {
       }
     },
 
-    goUrl(url){
+    goUrl(url) {
       window.open(url, "_blank");
     },
 
-    cal(){
+    cal() {
       //alert(this.monthValue);
-      this.active = !this.active
+      this.active = !this.active;
 
       //구간별 전기요금
       let sectionPrice = 0;
       //월간 기준
       let monthStd = 1;
 
-      if(this.month === "7월" || this.month === "8월")
-        monthStd = 0.7;
+      if (this.month === "7월" || this.month === "8월") monthStd = 0.7;
 
-      if(this.monthValue < 100)
-        sectionPrice = 60.7;
-      else if (this.monthValue < 200)
-        sectionPrice = 125.9;
-      else if (this.monthValue < 300)
-        sectionPrice = 187.9;
-      else if (this.monthValue < 400)
-        sectionPrice = 280.6;
-      else if (this.monthValue < 500)
-        sectionPrice = 417.7;
-      else // 500보다 크면
-        sectionPrice = 709.5;
+      if (this.monthValue < 100) sectionPrice = 60.7;
+      else if (this.monthValue < 200) sectionPrice = 125.9;
+      else if (this.monthValue < 300) sectionPrice = 187.9;
+      else if (this.monthValue < 400) sectionPrice = 280.6;
+      else if (this.monthValue < 500) sectionPrice = 417.7;
+      // 500보다 크면
+      else sectionPrice = 709.5;
 
       //요금 = ( 월간 사용량 – (태양광용량) ) * 구간별전기요금 * 월간기준
-      this.calPrice = Math.round((this.monthValue - this.sunValue) * sectionPrice * monthStd);
+      this.calPrice = Math.round(
+        (this.monthValue - this.sunValue) * sectionPrice * monthStd
+      );
       this.calUse = this.monthValue - this.sunValue;
 
-      if(this.type === "13평이하"){
-        this.sampleUse = "216"
-        this.samplePrice = "29808"
-      } else if (this.type === "18평"){
-        this.sampleUse = "275"
-        this.samplePrice = "37950"
-      } else if (this.type === "25평"){
-        this.sampleUse = "348"
-        this.samplePrice = "48024"
-      } else if (this.type === "34평"){
-        this.sampleUse = "452"
-        this.samplePrice = "62376"
-      } else if (this.type === "34평이상"){
-        this.sampleUse = "560"
-        this.samplePrice = "94080"
+      if (this.type === "13평이하") {
+        this.sampleUse = "216";
+        this.samplePrice = "29808";
+      } else if (this.type === "18평") {
+        this.sampleUse = "275";
+        this.samplePrice = "37950";
+      } else if (this.type === "25평") {
+        this.sampleUse = "348";
+        this.samplePrice = "48024";
+      } else if (this.type === "34평") {
+        this.sampleUse = "452";
+        this.samplePrice = "62376";
+      } else if (this.type === "34평이상") {
+        this.sampleUse = "560";
+        this.samplePrice = "94080";
       }
 
-      this.samplePriceValue = (parseFloat(this.samplePrice.toString().replace(/,/g, "")) || 0).toLocaleString();
-      this.sampleUseVaue = (parseFloat(this.sampleUse.toString().replace(/,/g, "")) || 0).toLocaleString();
-      this.calPriceValue = (parseFloat(this.calPrice.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.samplePriceValue = (
+        parseFloat(this.samplePrice.toString().replace(/,/g, "")) || 0
+      ).toLocaleString();
+      this.sampleUseVaue = (
+        parseFloat(this.sampleUse.toString().replace(/,/g, "")) || 0
+      ).toLocaleString();
+      this.calPriceValue = (
+        parseFloat(this.calPrice.toString().replace(/,/g, "")) || 0
+      ).toLocaleString();
       this.calUseValue = this.monthValue + "(" + this.sunValue + ")";
     },
 
@@ -477,15 +443,14 @@ export default {
       this.sunuse = parsedAmount.toLocaleString();
     },
 
-    sunLightChanged(){
-      if(this.sunLight === "Y")
-        this.sunLightDisabled = false;
+    sunLightChanged() {
+      if (this.sunLight === "Y") this.sunLightDisabled = false;
       else {
         this.sunLightDisabled = true;
         this.sunValue = 0;
         this.sunuse = "";
       }
-    }
+    },
   },
 };
 </script>

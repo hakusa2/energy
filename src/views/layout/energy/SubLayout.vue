@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app flat color="white" height="66px" class="sub-appbar">
       <div class="page-header">
-        <v-container class="d-flex align-center">
+        <v-container class="d-flex align-center pa-0">
           <router-link class="d-inline-block" to="/main">
             <v-img src="@/assets/logo.png" max-width="193" contain></v-img>
           </router-link>
@@ -55,7 +55,7 @@ export default {
     drawer: false,
   }),
   methods: {
-    closeMobileMenu(){
+    closeMobileMenu() {
       this.drawer = false;
     },
   },

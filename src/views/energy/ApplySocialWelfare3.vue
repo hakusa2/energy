@@ -53,289 +53,203 @@
                     >
                   </div>
                   <v-row>
-                    <v-col cols="12" sm="12" md="6">
+                    <v-col cols="12" sm="12" md="12" class="mb-10">
                       <div class="form-group">
-                        <v-row class="align-center mb-5">
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label>
-                              신청유형 <span class="icon-required"></span>
-                            </v-label>
-                          </v-col>
-                          <v-col cols="12" sm="12" md="10">
-                            <v-radio-group
-                              v-model="request"
-                              row
-                              class="pt-0 mt-1"
-                              hide-details="auto"
-                            >
-                              <v-radio
-                                label="세대"
-                                color="black"
-                                value="single"
-                                @click="singleVisible = true"
-                              ></v-radio>
-                              <v-radio
-                                label="단지"
-                                color="black"
-                                value="group"
-                                @click="singleVisible = false"
-                              ></v-radio>
-                            </v-radio-group>
-                          </v-col>
-                        </v-row>
+                        <v-label>
+                          신청유형 <span class="icon-required"></span>
+                        </v-label>
+                        <v-radio-group
+                          v-model="request"
+                          row
+                          class="pt-0 mt-1"
+                          hide-details="auto"
+                        >
+                          <v-radio
+                            label="세대"
+                            color="black"
+                            value="single"
+                            @click="singleVisible = true"
+                          ></v-radio>
+                          <v-radio
+                            label="단지"
+                            color="black"
+                            value="group"
+                            @click="singleVisible = false"
+                          ></v-radio>
+                        </v-radio-group>
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="12" md="6">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1">
-                              이름 <span class="icon-required"></span>
-                            </v-label>
-                          </v-col>
-                          <v-col>
-                            <v-text-field
-                              v-model="name"
-                              :rules="nameRules"
-                              outlined
-                              solo
-                              placeholder="홍길동"
-                              required
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
+                        <v-label class="pt-1">
+                          이름 <span class="icon-required"></span>
+                        </v-label>
+                        <v-text-field
+                          v-model="name"
+                          :rules="nameRules"
+                          outlined
+                          solo
+                          placeholder="홍길동"
+                          required
+                        ></v-text-field>
                       </div>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" class="pt-sm-0 pt-md-3">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
+                        <v-label class="pt-1"
+                          >휴대폰 <span class="icon-required"></span
+                        ></v-label>
+                        <div class="d-flex">
+                          <v-text-field
+                            ref="mobile"
+                            v-model="mobile"
+                            :rules="mobileRules"
+                            oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                            type="number"
+                            outlined
+                            solo
+                            placeholder="'-' 없이 숫자만 입력해주세요"
+                            required
+                            :disabled="isDisableMobile"
+                          ></v-text-field>
+                          <v-btn
+                            class="ml-2"
+                            outlined
+                            color="black"
+                            width="80"
+                            :disabled="isDisableMobileBtn"
+                            @click="mobileSend"
                           >
-                            <v-label class="pt-1"
-                              >휴대폰 <span class="icon-required"></span
-                            ></v-label>
-                          </v-col>
-                          <v-col class="pb-0">
-                            <div class="d-flex">
-                              <v-text-field
-                                ref="mobile"
-                                v-model="mobile"
-                                :rules="mobileRules"
-                                oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                type="number"
-                                outlined
-                                solo
-                                placeholder="'-' 없이 숫자만 입력해주세요"
-                                required
-                                :disabled="isDisableMobile"
-                              ></v-text-field>
-                              <v-btn
-                                class="ml-2"
-                                outlined
-                                color="black"
-                                width="80"
-                                :disabled="isDisableMobileBtn"
-                                @click="mobileSend"
-                              >
-                                {{ authbtnname }}
-                              </v-btn>
-                            </div>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label py-0"
+                            {{ authbtnname }}
+                          </v-btn>
+                        </div>
+                        <div class="d-flex">
+                          <v-text-field
+                            ref="auth"
+                            v-model="auth"
+                            :rules="authRules"
+                            oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                            counter="6"
+                            type="number"
+                            outlined
+                            solo
+                            placeholder="인증 번호 입력"
+                            :suffix="timerStr"
+                            class="input-certification"
+                            required
+                            :disabled="isDisableAuth"
+                          ></v-text-field>
+                          <v-btn
+                            class="ml-2"
+                            outlined
+                            color="black"
+                            width="80"
+                            :disabled="isDisableAuthBtn"
+                            @click="authSend"
                           >
-                          </v-col>
-                          <v-col class="pt-0">
-                            <div class="d-flex">
-                              <v-text-field
-                                ref="auth"
-                                v-model="auth"
-                                :rules="authRules"
-                                oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                counter="6"
-                                type="number"
-                                outlined
-                                solo
-                                placeholder="인증 번호 입력"
-                                :suffix="timerStr"
-                                class="input-certification"
-                                required
-                                :disabled="isDisableAuth"
-                              ></v-text-field>
-                              <v-btn
-                                class="ml-2"
-                                outlined
-                                color="black"
-                                width="80"
-                                :disabled="isDisableAuthBtn"
-                                @click="authSend"
-                              >
-                                확인
-                              </v-btn>
-                            </div>
-                          </v-col>
-                        </v-row>
+                            확인
+                          </v-btn>
+                        </div>
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="12" md="6" class="pt-sm-0 pt-md-3">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1">이메일</v-label>
-                          </v-col>
-                          <v-col class="pb-0">
-                            <div class="d-flex">
-                              <v-text-field
-                                v-model="email1"
-                                outlined
-                                solo
-                                placeholder="email"
-                              ></v-text-field>
-                              <div class="pt-3 px-3">@</div>
-                              <v-select
-                                v-model="email2"
-                                outlined
-                                solo
-                                placeholder="선택해주세요"
-                                :items="selectitems1"
-                              ></v-select>
-                            </div>
-                          </v-col>
-                        </v-row>
+                        <v-label class="pt-1">이메일</v-label>
+                        <div class="d-flex">
+                          <v-text-field
+                            v-model="email1"
+                            outlined
+                            solo
+                            placeholder="email"
+                          ></v-text-field>
+                          <div class="pt-3 px-3">@</div>
+                          <v-select
+                            v-model="email2"
+                            outlined
+                            solo
+                            placeholder="선택해주세요"
+                            :items="selectitems1"
+                          ></v-select>
+                        </div>
                       </div>
                     </v-col>
                     <v-col cols="12" sm="12" md="6" class="pt-sm-0 pt-md-3">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="auto"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1">전화번호</v-label>
-                          </v-col>
-                          <v-col class="pb-0">
-                            <div class="d-flex">
-                              <v-select
-                                v-model="tel1"
-                                outlined
-                                solo
-                                placeholder="선택해주세요"
-                                :items="selectitems2"
-                              ></v-select>
-                              <div class="pt-3 px-3">-</div>
-                              <v-text-field
-                                v-model="tel2"
-                                outlined
-                                solo
-                                placeholder="0000"
-                              ></v-text-field>
-                              <div class="pt-3 px-3">-</div>
-                              <v-text-field
-                                v-model="tel3"
-                                outlined
-                                solo
-                                placeholder="0000"
-                              ></v-text-field>
-                            </div>
-                          </v-col>
-                        </v-row>
+                        <v-label class="pt-1">전화번호</v-label>
+                        <div class="d-flex">
+                          <v-select
+                            v-model="tel1"
+                            outlined
+                            solo
+                            placeholder="선택해주세요"
+                            :items="selectitems2"
+                          ></v-select>
+                          <div class="pt-3 px-3">-</div>
+                          <v-text-field
+                            v-model="tel2"
+                            outlined
+                            solo
+                            placeholder="0000"
+                          ></v-text-field>
+                          <div class="pt-3 px-3">-</div>
+                          <v-text-field
+                            v-model="tel3"
+                            outlined
+                            solo
+                            placeholder="0000"
+                          ></v-text-field>
+                        </div>
                       </div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12" sm="12" md="12" class="pt-sm-0 pt-md-3">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1"
-                              >신청단지 <span class="icon-required"></span
-                            ></v-label>
+                        <v-label class="pt-1"
+                          >신청단지 <span class="icon-required"></span
+                        ></v-label>
+                        <v-row no-gutters>
+                          <v-col cols="auto">
+                            <DialogZipcode @move="inputAddr" />
                           </v-col>
-                          <v-col class="pb-0">
-                            <v-row no-gutters>
-                              <v-col cols="auto">
-                                <DialogZipcode @move="inputAddr" />
-                              </v-col>
-                              <v-col cols="1" class="col-zipcode">
-                                <v-text-field
-                                  v-model="zipcode"
-                                  :rules="addressRules"
-                                  outlined
-                                  solo
-                                  placeholder="16866"
-                                  required
-                                  class="ml-2"
-                                ></v-text-field>
-                              </v-col>
-                              <v-col>
-                                <v-text-field
-                                  v-model="addr1"
-                                  :rules="addressRules"
-                                  outlined
-                                  solo
-                                  placeholder="산성역포레스티아아파트"
-                                  required
-                                  class="ml-2"
-                                ></v-text-field>
-                              </v-col>
-                            </v-row>
-                          </v-col>
-                        </v-row>
-                        <!-- 신청 단지 일때 감춰줍니다. -->
-                        <v-row v-if="singleVisible">
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                          </v-col>
-                          <v-col class="py-0">
+                          <v-col cols="1" class="col-zipcode">
                             <v-text-field
-                              v-model="addr2"
+                              v-model="zipcode"
                               :rules="addressRules"
                               outlined
                               solo
-                              placeholder="000동 0000호"
+                              placeholder="16866"
                               required
+                              class="ml-2"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col>
+                            <v-text-field
+                              v-model="addr1"
+                              :rules="addressRules"
+                              outlined
+                              solo
+                              placeholder="산성역포레스티아아파트"
+                              required
+                              class="ml-2"
                             ></v-text-field>
                           </v-col>
                         </v-row>
+                        <!-- 신청 단지 일때 감춰줍니다. -->
+                        <div v-if="singleVisible">
+                          <v-text-field
+                            v-model="addr2"
+                            :rules="addressRules"
+                            outlined
+                            solo
+                            placeholder="000동 0000호"
+                            required
+                          ></v-text-field>
+                        </div>
                         <!-- /.신청 단지 일때 감춰줍니다. -->
                       </div>
                     </v-col>
@@ -343,62 +257,40 @@
                   <v-row v-if="!singleVisible">
                     <v-col cols="12" sm="12" md="6">
                       <div class="form-group">
-                        <v-row class="align-center mb-5">
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label> 원격검침 </v-label>
-                          </v-col>
-                          <v-col>
-                            <v-radio-group
-                              v-model="remote"
-                              row
-                              class="pt-0 mt-1"
-                              hide-details="auto"
-                            >
-                              <v-radio
-                                label="유"
-                                color="black"
-                                value="Y"
-                                @click="remoteVisible = true"
-                              ></v-radio>
-                              <v-radio
-                                label="무"
-                                color="black"
-                                value="N"
-                                @click="remoteVisible = false"
-                              ></v-radio>
-                            </v-radio-group>
-                          </v-col>
-                        </v-row>
+                        <v-label> 원격검침 </v-label>
+                        <v-radio-group
+                          v-model="remote"
+                          row
+                          class="pt-0 mt-1"
+                          hide-details="auto"
+                        >
+                          <v-radio
+                            label="유"
+                            color="black"
+                            value="Y"
+                            @click="remoteVisible = true"
+                          ></v-radio>
+                          <v-radio
+                            label="무"
+                            color="black"
+                            value="N"
+                            @click="remoteVisible = false"
+                          ></v-radio>
+                        </v-radio-group>
                       </div>
                     </v-col>
                   </v-row>
                   <v-row v-if="!singleVisible && remoteVisible">
                     <v-col cols="12" sm="12" md="6">
                       <div class="form-group">
-                        <v-row>
-                          <v-col
-                            cols="12"
-                            sm="12"
-                            md="2"
-                            class="col-label pb-0"
-                          >
-                            <v-label class="pt-1"> 제조사 </v-label>
-                          </v-col>
-                          <v-col>
-                            <v-select
-                              v-model="model"
-                              outlined
-                              solo
-                              placeholder="선택해주세요"
-                              :items="modelitems"
-                            ></v-select>
-                          </v-col>
-                        </v-row>
+                        <v-label class="pt-1"> 제조사 </v-label>
+                        <v-select
+                          v-model="model"
+                          outlined
+                          solo
+                          placeholder="선택해주세요"
+                          :items="modelitems"
+                        ></v-select>
                       </div>
                     </v-col>
                   </v-row>
@@ -559,20 +451,20 @@ export default {
       this.isDisableMobile = true;
       this.isDisableAuth = false;
 
-      if(this.authcount === 1){
+      if (this.authcount === 1) {
         this.timerStart();
         this.smsSend();
       } else {
-        if(this.timeCounter < 170){
+        if (this.timeCounter < 170) {
           this.timeCounter = 180;
           this.smsSend();
         } else {
-          alert("10초이내 재발송할 수 없습니다.")
+          alert("10초이내 재발송할 수 없습니다.");
         }
       }
       this.authcount++;
     },
-    smsSend(){
+    smsSend() {
       try {
         axios.get("/api/etc/getAuth?mobile=" + this.mobile).then((response) => {
           if (response.data.code === 0) {
@@ -584,25 +476,29 @@ export default {
       }
     },
     authSend() {
-      if(this.timeCounter === 0){
+      if (this.timeCounter === 0) {
         alert("인증시간이 종료되었습니다.");
         return;
       }
 
       try {
-        axios.get("/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth).then((response) => {
-          if (response.data.code === 0) {
-            this.authcheck = true;
-            this.isDisableAuth = true;
-            this.isDisableAuthBtn = true;
-            this.isDisableMobileBtn = true;
+        axios
+          .get(
+            "/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth
+          )
+          .then((response) => {
+            if (response.data.code === 0) {
+              this.authcheck = true;
+              this.isDisableAuth = true;
+              this.isDisableAuthBtn = true;
+              this.isDisableMobileBtn = true;
 
-            this.timerStop();
-          } else {
-            alert("인증번호가 잘못되었습니다.");
-            return;
-          }
-        });
+              this.timerStop();
+            } else {
+              alert("인증번호가 잘못되었습니다.");
+              return;
+            }
+          });
       } catch (err) {
         console.log(err);
       }
@@ -644,7 +540,7 @@ export default {
     },
     save() {
       if (this.$refs.form.validate()) {
-        if(!this.authcheck){
+        if (!this.authcheck) {
           alert("휴대폰 인증이 되지 않았습니다.");
           return;
         }

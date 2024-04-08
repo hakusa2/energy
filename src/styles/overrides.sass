@@ -29,8 +29,8 @@ body
   width: 100%
   margin-left: auto
   margin-right: auto
-  padding-right: 12px
-  padding-left: 12px
+  //padding-right: 12px
+  //padding-left: 12px
 
 .page-header, .page-container
   max-width: 1520px
@@ -128,6 +128,9 @@ body
 .text-break
   word-break: break-all
 
+.color-sunlight
+  color: #FF7E12 !important
+
 //width
 .w-100
   width: 100%
@@ -181,6 +184,11 @@ body
   height: 36px
   background-size: 80%
   background-image: url("@/assets/icon_email.png")
+.mdi-custom.mdi-trash-can-outline 
+  width: 18px
+  height: 18px
+  background-size: 18px
+  background-image: url("@/assets/icon_trash.png")
 
 //text
 @media screen and (min-width: 600px)
@@ -482,6 +490,9 @@ body
 .v-radio
   .v-label
     margin-bottom: 0
+
+.form-disabled
+  opacity: .3
 
 .col-zipcode
   min-width: 100px !important
@@ -940,11 +951,12 @@ body
     .carousel-text-group
       display: flex
       flex-direction: column
-      width: 70%
-      padding-left: 20px
+      padding: 0 12px
+      //max-width: 1520px
       .title
+        font-family: "Pretendard", "Roboto", sans-serif !important
         color: rgba(255, 255, 255, 1)
-        letter-spacing: -2px
+        letter-spacing: -1px !important
       .stext
         color: rgba(255, 255, 255, 0.8)
         letter-spacing: -1px
@@ -961,6 +973,11 @@ body
         font-size: 20px !important
         font-weight: 400
         margin-bottom: 40px
+
+@media (min-width: 1904px)
+  .carousel-sheet
+    .carousel-text-group
+      max-width: 1520px
 
 @media (min-width: 1264px) and (max-width: 1904px)
   .main-banner
@@ -1003,6 +1020,7 @@ body
       .stext
         font-size: 16px !important
         font-weight: 400
+        margin-bottom: 40px
 
 //card-myhome-energy
 @media screen and (max-width: 1200px)
@@ -1011,17 +1029,17 @@ body
     max-width: 100% !important
 
 @media screen and (min-width: 600px)
-  .card-myhome-energy
+  .card-myhome-energy, .card-banner
     .v-card__title
       font-size: 36px !important
       font-weight: 700 !important
 @media screen and (max-width: 600px)   
-  .card-myhome-energy
+  .card-myhome-energy, .card-banner
     .v-card__title
       font-size: 28px !important
       font-weight: 700 !important   
 
-.card-myhome-energy
+.card-myhome-energy, .card-banner
   .v-card__title
     letter-spacing: -1px
     margin-bottom: 20px
@@ -1030,6 +1048,9 @@ body
     text-decoration: none !important
   .form-main
     min-height: 478px
+.card-banner
+  .v-card__title
+    color: rgba(0, 0, 0, 0.75)
 
 .main-myenergy-result
   display: flex
@@ -1094,6 +1115,11 @@ body
       color: rgba(0, 0, 0, 0.4)
       font-weight: 600
       margin-left: 4px
+  .result-save
+    font-size: 18px
+    font-weight: 400
+    color: #7C828B
+    margin-top: 12px
 
 .house-item-list
   display: flex
@@ -1103,15 +1129,32 @@ body
     display: flex
     align-items: stretch
     .item-title
+      display: flex
+      flex-direction: column
+      align-items: baseline
       width: 120px
       border-right: 1px solid #F2F3F3
       margin-right: 24px
       font-weight: 600
-      color: rgba(0, 0, 0, 0.65)
+      color: rgba(0, 0, 0, 0.65)      
+      .v-btn
+        font-weight: 400 !important
+        min-width: auto !important
+        padding: 0 4px !important
+        height: auto !important
+        margin-top: 8px
+        .v-icon--left
+          margin-right: 4px
+        .v-ripple__container
+          display: none
+      .theme--light.v-btn::before
+        opacity: 0 !important
     .item-form
       width: 100%
+      .row
+        margin: -12px -12px 0
       .form-group
-        flex-direction: row
+        //flex-direction: row
         label
           font-size: 16px
           min-width: 130px
@@ -1124,16 +1167,17 @@ body
       .col-xl, .col-xl-auto, .col-xl-12, .col-xl-11, .col-xl-10, .col-xl-9, .col-xl-8, .col-xl-7, .col-xl-6, .col-xl-5, .col-xl-4, .col-xl-3, .col-xl-2, .col-xl-1, .col-lg, .col-lg-auto, .col-lg-12, .col-lg-11, .col-lg-10, .col-lg-9, .col-lg-8, .col-lg-7, .col-lg-6, .col-lg-5, .col-lg-4, .col-lg-3, .col-lg-2, .col-lg-1, .col-md, .col-md-auto, .col-md-12, .col-md-11, .col-md-10, .col-md-9, .col-md-8, .col-md-7, .col-md-6, .col-md-5, .col-md-4, .col-md-3, .col-md-2, .col-md-1, .col-sm, .col-sm-auto, .col-sm-12, .col-sm-11, .col-sm-10, .col-sm-9, .col-sm-8, .col-sm-7, .col-sm-6, .col-sm-5, .col-sm-4, .col-sm-3, .col-sm-2, .col-sm-1, .col, .col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1
         padding: 4px 12px
   .house-item-add
-    margin-left: 120px
+    padding-left: 120px
     text-align: center
-    margin-top: 16px
+    margin-top: 4px
     margin-bottom: 40px
     .v-btn
       font-weight: 400
+  .house-item-add.border-bottom
+    padding-bottom: 8px
+    border-bottom: 1px solid #CBCDD1
 
 //card-support
-.col-support
-  max-width: 478px !important
 .card-support
   .v-card__title
     letter-spacing: -1px
@@ -1157,6 +1201,10 @@ body
     display: none
   //.v-image__image--cover
     //background-size: contain
+
+@media screen and (min-width: 1264px)
+  .col-support
+    max-width: 678px !important
 
 @media screen and (min-width: 600px)
   .card-support

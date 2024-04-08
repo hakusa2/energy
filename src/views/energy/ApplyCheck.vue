@@ -28,104 +28,71 @@
                     <v-row>
                       <v-col cols="12" sm="12" md="6">
                         <div class="form-group">
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="2"
-                              class="col-label pb-0"
-                            >
-                              <v-label class="pt-1">이름</v-label>
-                            </v-col>
-                            <v-col>
-                              <v-text-field
-                                v-model="name"
-                                :rules="nameRules"
-                                outlined
-                                solo
-                                placeholder="홍길동"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
+                          <v-label class="pt-1">이름</v-label>
+                          <v-text-field
+                            v-model="name"
+                            :rules="nameRules"
+                            outlined
+                            solo
+                            placeholder="홍길동"
+                            required
+                          ></v-text-field>
                         </div>
                       </v-col>
                       <v-col cols="12" sm="12" md="6" class="pt-sm-0 pt-md-3">
                         <div class="form-group">
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="2"
-                              class="col-label pb-0"
+                          <v-label class="pt-1">휴대폰</v-label>
+                          <div class="d-flex">
+                            <v-text-field
+                              ref="mobile"
+                              v-model="mobile"
+                              :rules="mobileRules"
+                              oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                              type="number"
+                              outlined
+                              solo
+                              placeholder="'-' 없이 숫자만 입력해주세요"
+                              :disabled="isDisableMobile"
+                              required
+                            ></v-text-field>
+                            <v-btn
+                              class="ml-2"
+                              outlined
+                              color="black"
+                              width="80"
+                              :disabled="isDisableMobileBtn"
+                              @click="mobileSend"
                             >
-                              <v-label class="pt-1">휴대폰</v-label>
-                            </v-col>
-                            <v-col class="pb-0">
-                              <div class="d-flex">
-                                <v-text-field
-                                  ref="mobile"
-                                  v-model="mobile"
-                                  :rules="mobileRules"
-                                  oninput="javascript: this.value = this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                  type="number"
-                                  outlined
-                                  solo
-                                  placeholder="'-' 없이 숫자만 입력해주세요"
-                                  :disabled="isDisableMobile"
-                                  required
-                                ></v-text-field>
-                                <v-btn
-                                  class="ml-2"
-                                  outlined
-                                  color="black"
-                                  width="80"
-                                  :disabled="isDisableMobileBtn"
-                                  @click="mobileSend"
-                                >
-                                  {{ authbtnname }}
-                                </v-btn>
-                              </div>
-                            </v-col>
-                          </v-row>
-                          <v-row>
-                            <v-col
-                              cols="12"
-                              sm="12"
-                              md="2"
-                              class="col-label py-0"
+                              {{ authbtnname }}
+                            </v-btn>
+                          </div>
+                          <div class="d-flex">
+                            <v-text-field
+                              ref="auth"
+                              v-model="auth"
+                              :rules="authRules"
+                              oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
+                              counter="6"
+                              type="number"
+                              outlined
+                              solo
+                              placeholder="인증 번호 입력"
+                              :suffix="timerStr"
+                              class="input-certification"
+                              required
+                              :disabled="isDisableAuth"
+                            ></v-text-field>
+                            <v-btn
+                              class="ml-2"
+                              outlined
+                              color="black"
+                              width="80"
+                              :disabled="isDisableAuthBtn"
+                              @click="authSend"
                             >
-                            </v-col>
-                            <v-col class="pt-0">
-                              <div class="d-flex">
-                                <v-text-field
-                                  ref="auth"
-                                  v-model="auth"
-                                  :rules="authRules"
-                                  oninput="javascript: this.value = this.value.replace(/.[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '' );"
-                                  counter="6"
-                                  type="number"
-                                  outlined
-                                  solo
-                                  placeholder="인증 번호 입력"
-                                  :suffix="timerStr"
-                                  class="input-certification"
-                                  required
-                                  :disabled="isDisableAuth"
-                                ></v-text-field>
-                                <v-btn
-                                  class="ml-2"
-                                  outlined
-                                  color="black"
-                                  width="80"
-                                  :disabled="isDisableAuthBtn"
-                                  @click="authSend"
-                                >
-                                  확인
-                                </v-btn>
-                              </div>
-                            </v-col>
-                          </v-row>
+                              확인
+                            </v-btn>
+                          </div>
                         </div>
                       </v-col>
                     </v-row>
@@ -254,20 +221,20 @@ export default {
       this.isDisableMobile = true;
       this.isDisableAuth = false;
 
-      if(this.authcount === 1){
+      if (this.authcount === 1) {
         this.timerStart();
         this.smsSend();
       } else {
-        if(this.timeCounter < 170){
+        if (this.timeCounter < 170) {
           this.timeCounter = 180;
           this.smsSend();
         } else {
-          alert("10초이내 재발송할 수 없습니다.")
+          alert("10초이내 재발송할 수 없습니다.");
         }
       }
       this.authcount++;
     },
-    smsSend(){
+    smsSend() {
       try {
         axios.get("/api/etc/getAuth?mobile=" + this.mobile).then((response) => {
           if (response.data.code === 0) {
@@ -279,25 +246,29 @@ export default {
       }
     },
     authSend() {
-      if(this.timeCounter === 0){
+      if (this.timeCounter === 0) {
         alert("인증시간이 종료되었습니다.");
         return;
       }
 
       try {
-        axios.get("/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth).then((response) => {
-          if (response.data.code === 0) {
-            this.authcheck = true;
-            this.isDisableAuth = true;
-            this.isDisableAuthBtn = true;
-            this.isDisableMobileBtn = true;
+        axios
+          .get(
+            "/api/etc/getAuthCheck?mobile=" + this.mobile + "&auth=" + this.auth
+          )
+          .then((response) => {
+            if (response.data.code === 0) {
+              this.authcheck = true;
+              this.isDisableAuth = true;
+              this.isDisableAuthBtn = true;
+              this.isDisableMobileBtn = true;
 
-            this.timerStop();
-          } else {
-            alert("인증번호가 잘못되었습니다.");
-            return;
-          }
-        });
+              this.timerStop();
+            } else {
+              alert("인증번호가 잘못되었습니다.");
+              return;
+            }
+          });
       } catch (err) {
         console.log(err);
       }
@@ -336,7 +307,7 @@ export default {
         formData.append("name", this.name);
         formData.append("mobile", this.mobile);
 
-        if(!this.authcheck){
+        if (!this.authcheck) {
           alert("휴대폰 인증이 되지 않았습니다.");
           return;
         }
@@ -345,7 +316,10 @@ export default {
           axios.post("/api/business/getCheck", formData).then((response) => {
             console.log(response);
             if (response.data != "") {
-              this.$router.push({name: "ApplyCheckForm", params: { id: response.data }});
+              this.$router.push({
+                name: "ApplyCheckForm",
+                params: { id: response.data },
+              });
             } else {
               alert("신청내역이 없습니다.");
             }

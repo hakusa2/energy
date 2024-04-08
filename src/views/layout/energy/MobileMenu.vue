@@ -5,8 +5,7 @@
         ><v-img src="@/assets/logo.png" max-width="200" contain></v-img
       ></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="closeMenu"
-      icon>
+      <v-btn @click="closeMenu" icon>
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-app-bar>
@@ -64,17 +63,17 @@
       </v-list-item-group>
     </v-list>
 
-    <!-- <v-card-actions class="pb-5">
+    <v-card-actions class="pa-5">
       <v-btn
         class="btn-confirm rounded-xl"
         color="#A6D086"
         dark
+        block
         elevation="0"
         to="/myenergy"
-        block
-        >신청이력조회</v-btn
+        >마이에너지</v-btn
       >
-    </v-card-actions> -->
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -83,10 +82,9 @@
 export default {
   name: "MobileMenu",
   components: {},
-  data: () => ({
-  }),
+  data: () => ({}),
   methods: {
-    closeMenu(){
+    closeMenu() {
       this.$emit("closeMobile");
     },
   },

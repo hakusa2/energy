@@ -8,7 +8,7 @@
       class="admin-appbar"
     >
       <div class="page-header">
-        <v-container class="d-flex align-center">
+        <v-container class="d-flex align-center pa-0">
           <router-link class="d-inline-block" to="/adminbusinessapplication">
             <v-img src="@/assets/logo.png" max-width="193" contain></v-img>
           </router-link>

@@ -1,8 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar absolute flat color="white" height="66px" class="main-appbar">
+    <v-app-bar app flat color="white" height="66px" class="main-appbar">
+      <!-- <v-app-bar app flat color="white" height="66px" class="main-appbar v-app-bar--is-scrolled"> -->
+      <!-- 스크롤 시 GNB  class="main-appbar v-app-bar--is-scrolled" -->
       <div class="page-header">
-        <v-container class="d-flex align-center">
+        <v-container class="d-flex align-center pa-0">
           <router-link class="d-inline-block" to="/main">
             <v-img src="@/assets/logo_w.png" max-width="193" contain></v-img>
           </router-link>
@@ -78,6 +80,16 @@ export default {
 }
 .main-appbar .topmenu-item .v-btn:not(.btn-confirm) {
   color: #ffffff;
+}
+.main-appbar.v-app-bar--is-scrolled .v-image__image {
+  background-image: url("@/assets/logo.png") !important;
+}
+.main-appbar.v-app-bar--is-scrolled.theme--light.v-app-bar.v-toolbar.v-sheet {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #f2f3f3;
+}
+.main-appbar.v-app-bar--is-scrolled .topmenu-item .v-btn:not(.btn-confirm) {
+  color: rgba(0, 0, 0, 0.87);
 }
 .v-main.main-view {
   padding: 0 !important;
