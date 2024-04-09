@@ -169,7 +169,7 @@
                     </v-row>
                     <v-row class="mb-5">
                       <v-col cols="12" sm="12" md="12">
-                        <div class="form-group">
+                        <div class="form-group" :class="{'form-disabled': sunLightDisabled }">
                           <!-- 태양광 '무' 선택 시 비활성화 처리 <div class="form-group form-disabled"> -->
                           <v-label class="pt-1"> 용량 </v-label>
                           <v-text-field

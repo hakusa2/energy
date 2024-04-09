@@ -219,7 +219,6 @@
                           <v-col cols="1" class="col-zipcode">
                             <v-text-field
                               v-model="zipcode"
-                              :rules="addressRules"
                               outlined
                               solo
                               placeholder="16866"

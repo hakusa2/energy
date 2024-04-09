@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app flat color="white" height="66px" class="main-appbar">
+    <v-app-bar app flat color="white" height="66px" class="main-appbar" :class="{'v-app-bar--is-scrolled': whiteNav }">
       <!-- <v-app-bar app flat color="white" height="66px" class="main-appbar v-app-bar--is-scrolled"> -->
       <!-- 스크롤 시 GNB  class="main-appbar v-app-bar--is-scrolled" -->
       <div class="page-header">
@@ -16,8 +16,10 @@
             dark
           >
           </v-app-bar-nav-icon>
+
         </v-container>
       </div>
+
     </v-app-bar>
 
     <v-navigation-drawer
@@ -56,7 +58,22 @@ export default {
   created() {},
   data: () => ({
     drawer: null,
+    scrollPosition: null,
+    whiteNav: false,
   }),
+  mounted() {
+    document.body.addEventListener('scroll', this.updateScroll);
+  },
+  methods: {
+    updateScroll() {
+      this.scrollPosition = document.body.scrollTop;
+      if(this.scrollPosition > 700){
+        this.whiteNav = true;
+      } else {
+        this.whiteNav = false;
+      }
+    }
+  },
 };
 </script>
 

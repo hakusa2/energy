@@ -115,7 +115,7 @@
                           </div>
                         </v-col>
                         <v-col cols="12" md="12">
-                          <div class="form-group">
+                          <div class="form-group" :class="{'form-disabled': sunLightDisabled }">
                             <!-- 태양광 '무' 선택 시 비활성화 처리 <div class="form-group form-disabled"> -->
                             <v-label>용량</v-label>
                             <v-text-field
@@ -306,37 +306,47 @@
                   <div class="card-body pb-0">
                     <v-form ref="form" v-model="valid" lazy-validation>
                       <div class="house-item-list">
-                        <div class="house-item">
-                          <div class="item-title color-sunlight">태양광</div>
-                          <div class="item-form">
-                            <v-row>
-                              <v-col cols="12" sm="12" md="12">
-                                <div class="form-group">
-                                  <v-label>용량</v-label>
-                                  <v-text-field
-                                    outlined
-                                    solo
-                                    placeholder="240"
-                                    hide-details="auto"
-                                    suffix="kWh"
-                                  ></v-text-field>
-                                </div>
-                              </v-col>
-                            </v-row>
+                        <div v-for="(sun, index) in suns" :key="index">
+                          <div v-if="sun.visible">
+                            <div class="house-item">
+                              <div class="item-title color-sunlight">{{ sun.name }}</div>
+                              <div class="item-form">
+                                <v-row
+                                  v-for="(item, idx) in sun.items"
+                                  :key="idx"
+                                >
+                                  <v-col cols="12" sm="12" md="12">
+                                    <div class="form-group">
+                                      <v-label>용량</v-label>
+                                      <v-text-field
+                                        v-model="item.dayhourval"
+                                        outlined
+                                        solo
+                                        placeholder="240"
+                                        hide-details="auto"
+                                        suffix="kWh"
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                        @input="formatDayHour(item)"
+                                      ></v-text-field>
+                                    </div>
+                                  </v-col>
+                                </v-row>
+                              </div>
+                            </div>
+                            <!--/.house-item-->
+                            <div class="house-item-add border-bottom">
+                              <v-btn text small color="#7C828B" @click="addSunItem(sun)">
+                                태양광 추가 +
+                              </v-btn>
+                            </div>
                           </div>
-                        </div>
-                        <!--/.house-item-->
-                        <div class="house-item-add border-bottom">
-                          <v-btn text small color="#7C828B">
-                            태양광 추가 +
-                          </v-btn>
                         </div>
                         <div v-for="(row, index) in rows" :key="index">
                           <div v-if="row.visible">
                             <div class="house-item" v-if="row.visible">
                               <div class="item-title">
                                 {{ row.name }}
-                                <v-btn text small color="#7C828B">
+                                <v-btn text small color="#7C828B" @click="removeElec(index)">
                                   <v-icon left>
                                     mdi-custom mdi-trash-can-outline
                                   </v-icon>
@@ -585,6 +595,7 @@ export default {
     sunLightDisabled: false,
     elecs: [],
     rows: [],
+    suns: [],
     dialogElec: false,
     addelecText: "",
     targetPriceValue: "0,000",
@@ -601,146 +612,31 @@ export default {
       this.people = "1인";
       this.month = "1월";
 
-      this.rows.push({
-        name: "태양광",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "TV",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "세탁기",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "냉장고",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "컴퓨터",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "청소기",
-        visible: true,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "전자레인지",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "인터넷전화기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "프린터",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "에어컨",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "전기밥솥",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "셋톱박스",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "선풍기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "전기장판",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "보일러",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "공기청정기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "가습기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "로봇청소기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "식기세척기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
-      this.rows.push({
-        name: "건조기",
-        visible: false,
-        items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
-        ],
-      });
+      this.rows.push({ name: "태양광", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "TV", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "냉장고", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "세탁기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "건조기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "에어컨(벽걸이)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "청소기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "컴퓨터", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "오디오", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "LED 전등(큰방/거실)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "LED 전등(작은방/화장실)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "에어컨(시스템)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "에어컨(스탠드형)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "형광등(큰방/거실)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "식기세척기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "난방기(온풍/온열)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "전자레인지", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "오븐", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "의류관리기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "공기청정기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "안마의자", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "가습기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({ name: "전기장판", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+
+      this.suns.push({ name: "태양광", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
 
       this.elecs.push({
         name: "태양광",
@@ -749,24 +645,29 @@ export default {
         line: false,
       });
       this.elecs.push({ name: "TV", color: "primary", line: false });
-      this.elecs.push({ name: "세탁기", color: "primary", line: false });
       this.elecs.push({ name: "냉장고", color: "primary", line: false });
-      this.elecs.push({ name: "컴퓨터", color: "primary", line: false });
+      this.elecs.push({ name: "세탁기", color: "primary", line: false });
+      this.elecs.push({ name: "건조기", color: "primary", line: false });
+      this.elecs.push({ name: "에어컨(벽걸이)", color: "primary", line: false });
       this.elecs.push({ name: "청소기", color: "primary", line: false });
-      this.elecs.push({ name: "전자레인지", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "인터넷전화기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "프린터", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "에어컨", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "전기밥솥", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "셋톱박스", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "선풍기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "전기장판", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "보일러", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "공기청정기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "가습기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "로봇청소기", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "컴퓨터", color: "primary", line: false });
+      this.elecs.push({ name: "오디오", color: "primary", line: false });
+      this.elecs.push({ name: "LED 전등(큰방/거실)", color: "primary", line: false });
+      this.elecs.push({ name: "LED 전등(작은방/화장실)", color: "primary", line: false });
+
+      this.elecs.push({ name: "에어컨(시스템)", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "에어컨(스탠드형)", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "형광등(큰방/거실)", color: "#bfbfbf", line: true });
       this.elecs.push({ name: "식기세척기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "건조기", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "난방기(온풍/온열)", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "전자레인지", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "오븐", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "의류관리기", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "공기청정기", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "안마의자", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "가습기", color: "#bfbfbf", line: true });
+      this.elecs.push({ name: "전기장판", color: "#bfbfbf", line: true });
+
     },
     validate() {
       this.$refs.form.validate();
@@ -869,7 +770,7 @@ export default {
         item.line = false;
 
         for (const idx in this.rows) {
-          if (this.rows[idx].name === item.name) {
+          if (this.rows[idx].name === item.name && item.name != "태양광") {
             this.rows[idx].visible = true;
           }
         }
@@ -921,6 +822,12 @@ export default {
       this.closeDialogElec();
     },
 
+
+    removeElec(index){
+      this.elecs.splice(index, 1);
+      this.rows.splice(index, 1);
+    },
+
     addRowItem(row) {
       if (row.items.length == 5) {
         alert("더이상 추가할 수 없습니다.");
@@ -928,6 +835,20 @@ export default {
       }
 
       row.items.push({
+        dayhourval: "",
+        elecval: "",
+        targethourval: "",
+        targetuseval: "",
+      });
+    },
+
+    addSunItem(sun) {
+      if (sun.items.length == 5) {
+        alert("더이상 추가할 수 없습니다.");
+        return;
+      }
+
+      sun.items.push({
         dayhourval: "",
         elecval: "",
         targethourval: "",
@@ -1013,7 +934,18 @@ export default {
         }
       }
 
-      elecsunuse = elecsunuse * 30;
+      //elecsunuse = elecsunuse * 30;
+
+      for (let index in this.suns) {
+        if (this.suns[index].visible) {
+          for (let idx in this.suns[index].items) {
+            if (this.suns[index].items[idx].dayhour > 0) {
+              elecsunuse += this.suns[index].items[idx].dayhour;
+            }
+          }
+        }
+      }
+
       elecmonthuse = elecmonthuse * 30;
       targetmonthuse = targetmonthuse * 30;
 
