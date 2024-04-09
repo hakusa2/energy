@@ -253,6 +253,22 @@
                       </div>
                     </v-col>
                   </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="12" md="6">
+                      <div class="form-group">
+                        <v-label> 태양광 </v-label>
+                        <v-radio-group
+                          v-model="sunlight"
+                          row
+                          class="pt-0 mt-1"
+                          hide-details="auto"
+                        >
+                          <v-radio label="유" color="black" value="Y"></v-radio>
+                          <v-radio label="무" color="black" value="N"></v-radio>
+                        </v-radio-group>
+                      </div>
+                    </v-col>
+                  </v-row>
                   <v-row v-if="!singleVisible">
                     <v-col cols="12" sm="12" md="6">
                       <div class="form-group">
@@ -410,6 +426,7 @@ export default {
     authbtnname: "인증요청",
     authcount: 1,
     authcheck: false,
+    sunlight: "Y",
   }),
   watch: {
     mobile: {
@@ -563,7 +580,7 @@ export default {
         formData.append("zipcode", this.zipcode);
         formData.append("addr1", this.addr1);
         formData.append("addr2", this.singleVisible ? this.addr2 : "");
-        formData.append("sunLightYn", "N");
+        formData.append("sunLightYn", this.sunlight);
         formData.append("modelName", this.remoteVisible ? this.model : "");
         formData.append("remoteYn", this.remote);
 

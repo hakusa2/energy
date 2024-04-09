@@ -218,7 +218,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             v-model="editedItem.createdAt"
-                            label="신청일자"
+                            label="등록일"
                             persistent-hint
                             v-bind="attrs"
                             @blur="date = parseDate(dateFormatted)"
@@ -254,13 +254,6 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="이름"
-                        hide-details="auto"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.birth"
-                        label="생년월일"
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
@@ -371,7 +364,6 @@ export default {
       applydate: "",
       category: "",
       name: "",
-      birth: "",
       contact: "",
       email: "",
       address: "",
@@ -382,7 +374,6 @@ export default {
       applydate: "",
       category: "",
       name: "",
-      birth: "",
       contact: "",
       email: "",
       address: "",
@@ -401,10 +392,9 @@ export default {
     headers() {
       return [
         { text: "순번", align: "center", value: "id", sortable: false },
-        { text: "신청일자", align: "center", value: "createdAt" },
+        { text: "등록일", align: "center", value: "createdAt" },
         { text: "사업종류", align: "center", value: "btypeName" },
         { text: "이름", align: "center", value: "name", sortable: false },
-        { text: "생년월일", align: "center", value: "birth", sortable: false },
         { text: "연락처", align: "center", value: "mobile", sortable: false },
         { text: "이메일", align: "center", value: "email", sortable: false },
         { text: "신청주소", value: "addr", sortable: false },
@@ -607,7 +597,7 @@ export default {
       formData.append("bType", this.editedItem.btype);
       formData.append("status", this.editedItem.status);
       formData.append("name", this.editedItem.name);
-      formData.append("birth", this.editedItem.birth);
+      formData.append("birth", "");
       formData.append("mobile", this.editedItem.mobile);
       formData.append("phone", "");
       formData.append("zipcode", "");
@@ -721,8 +711,8 @@ export default {
       const seconds = ('0' + today.getSeconds()).slice(-2);
       const timeString = year + "" + month + "" + day + "" + hours + "" + minutes + "" + seconds;
 
-      this.exceldata.header = [['순번', '신청일자', '사업종류', '이름', '생년월일', '연락처', '이메일', '신청주소', '상태']];
-      this.exceldata.cols = [{wch: 6}, {wch: 12}, {wch: 20}, {wch: 10}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 50}, {wch: 10}];
+      this.exceldata.header = [['순번', '등록일', '사업종류', '이름', '연락처', '이메일', '신청주소', '상태']];
+      this.exceldata.cols = [{wch: 6}, {wch: 12}, {wch: 20}, {wch: 10}, {wch: 20}, {wch: 20}, {wch: 50}, {wch: 10}];
       this.exceldata.body = [];
 
       for(const item in this.tabledata){
@@ -732,7 +722,6 @@ export default {
         , this.tabledata[item].createdAt
         , this.tabledata[item].btypeName
         , this.tabledata[item].name
-        , this.tabledata[item].birth
         , this.tabledata[item].mobile
         , this.tabledata[item].email
         , this.tabledata[item].addr

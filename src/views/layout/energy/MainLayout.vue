@@ -29,7 +29,7 @@
       temporary
       class="right-navigation-drawer"
     >
-      <MobileMenu />
+      <MobileMenu @closeMobile="closeMobileMenu" />
     </v-navigation-drawer>
 
     <v-main class="main-view">
@@ -57,7 +57,7 @@ export default {
   },
   created() {},
   data: () => ({
-    drawer: null,
+    drawer: false,
     scrollPosition: null,
     whiteNav: false,
   }),
@@ -72,7 +72,10 @@ export default {
       } else {
         this.whiteNav = false;
       }
-    }
+    },
+    closeMobileMenu() {
+      this.drawer = false;
+    },
   },
 };
 </script>
