@@ -599,8 +599,8 @@ export default {
       formData.append("name", this.editedItem.name);
       formData.append("birth", "");
       formData.append("mobile", this.editedItem.mobile);
-      formData.append("phone", "");
-      formData.append("zipcode", "");
+      formData.append("phone", this.editedItem.phone);
+      formData.append("zipcode", this.editedItem.zipcode);
       formData.append("email", this.editedItem.email);
       formData.append("addr1", this.editedItem.addr1);
       formData.append("addr2", this.editedItem.addr2);
