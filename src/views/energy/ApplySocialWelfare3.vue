@@ -377,7 +377,7 @@ export default {
     remote: "N",
     selectitems1: ["naver.com", "gmail.com"],
     selectitems2: ["070", "010"],
-    modelitems: ["model1", "model2"],
+    modelitems: ["피에스텍", "옴니", "LS", "기타"],
     valid: true,
     name: "",
     nameRules: [
@@ -595,6 +595,8 @@ export default {
         } catch (err) {
           console.log(err);
         }
+      } else {
+        alert("필수 입력항목이 입력되지 않아 신청을 진행할 수 없습니다");
       }
     },
   },

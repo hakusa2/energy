@@ -519,6 +519,8 @@ export default {
         } catch (err) {
           console.log(err);
         }
+      } else {
+        alert("필수 입력항목이 입력되지 않아 신청을 진행할 수 없습니다");
       }
     },
 

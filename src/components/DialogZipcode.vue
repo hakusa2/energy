@@ -68,7 +68,7 @@ export default {
             extraRoadAddr += data.bname;
           }
           // 건물명이 있고, 공동주택일 경우 추가한다.
-          if (data.buildingName !== "" && data.apartment === "Y") {
+          if (data.buildingName) {
             extraRoadAddr +=
               extraRoadAddr !== ""
                 ? ", " + data.buildingName
