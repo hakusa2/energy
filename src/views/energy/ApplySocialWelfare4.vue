@@ -521,11 +521,6 @@ export default {
           console.log(err);
         }
       } else {
-        if(!this.$refs.agree1.validate() || !this.$refs.agree2.validate()){
-          alert("필수 동의 사항이에요.");
-          return;
-        }
-
         alert("필수 동의 및 입력 사항을 다시 확인해주세요.");
       }
     },
