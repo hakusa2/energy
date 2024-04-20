@@ -342,7 +342,7 @@ export default {
     statuses: ["신청완료", "심사중", "선정", "미선정"],
     types: ["건물형 인프라구축 사업", "점포형 에너지비용절감 사업", "공동주택형 에너지서비스 사업", "단독주택형 에너지서비스 사업"],
     sunLights: ["유", "무"],
-    models: ["model1", "model2"],
+    models: ["피에스텍", "옴니", "LS", "기타"],
     toggle_exclusive: undefined,
     search: "",
     dialog1: false,
