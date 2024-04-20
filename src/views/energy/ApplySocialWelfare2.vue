@@ -30,7 +30,7 @@
                     <v-checkbox
                       v-model="checkagree1"
                       ref="agree1"
-                      :rules="[(v) => !!v || 'You must agree to continue!']"
+                      :rules="[(v) => !!v || '필수 동의 사항이에요.']"
                       label="(필수) 신청 시 유의사항을 확인하였습니다."
                       class="label-padding mt-6"
                     ></v-checkbox>
@@ -41,7 +41,7 @@
                     <v-checkbox
                       v-model="checkagree2"
                       ref="agree2"
-                      :rules="[(v) => !!v || 'You must agree to continue!']"
+                      :rules="[(v) => !!v || '필수 동의 사항이에요.']"
                       label="(필수) 개인정보 수집 및 이용에 동의합니다."
                       class="label-padding mt-6"
                     ></v-checkbox>
