@@ -29,6 +29,7 @@
                     <Terms />
                     <v-checkbox
                       v-model="checkagree1"
+                      ref="agree1"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 신청 시 유의사항을 확인하였습니다."
                       class="label-padding mt-6"
@@ -39,6 +40,7 @@
                     <Privacy />
                     <v-checkbox
                       v-model="checkagree2"
+                      ref="agree2"
                       :rules="[(v) => !!v || 'You must agree to continue!']"
                       label="(필수) 개인정보 수집 및 이용에 동의합니다."
                       class="label-padding mt-6"
@@ -595,7 +597,12 @@ export default {
           console.log(err);
         }
       } else {
-        alert("필수 입력항목이 입력되지 않아 신청을 진행할 수 없습니다");
+        if(!this.$refs.agree1.validate() || !this.$refs.agree2.validate()){
+          alert("필수 동의 사항이에요.");
+          return;
+        }
+
+        alert("필수 동의 및 입력 사항을 다시 확인해주세요.");
       }
     },
   },
