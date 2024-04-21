@@ -38,7 +38,7 @@
                             v-model="businessdata.stype"
                             row
                             class="pt-0 mt-1"
-                            readonly
+                            disabled
                             hide-details="auto"
                           >
                             <v-radio
@@ -61,7 +61,7 @@
                             outlined
                             solo
                             :value="businessdata.name"
-                            readonly
+                            disabled
                             hide-details="auto"
                           ></v-text-field>
                         </div>
@@ -73,7 +73,7 @@
                             outlined
                             solo
                             :value="businessdata.mobile"
-                            readonly
+                            disabled
                             hide-details="auto"
                           ></v-text-field>
                         </div>
@@ -82,21 +82,25 @@
                         <div class="form-group">
                           <v-label>이메일</v-label>
                           <div class="d-flex">
-                            <v-text-field
-                              outlined
-                              solo
-                              :value="businessdata.email1"
-                              readonly
-                              hide-details="auto"
-                            ></v-text-field>
+                            <div style="width: calc(100% - 6px)">
+                              <v-text-field
+                                outlined
+                                solo
+                                :value="businessdata.email1"
+                                disabled
+                                hide-details="auto"
+                              ></v-text-field>
+                            </div>
                             <div class="pt-3 px-3">@</div>
-                            <v-text-field
-                              outlined
-                              solo
-                              :value="businessdata.email2"
-                              readonly
-                              hide-details="auto"
-                            ></v-text-field>
+                            <div style="width: calc(100% - 6px)">
+                              <v-text-field
+                                outlined
+                                solo
+                                :value="businessdata.email2"
+                                disabled
+                                hide-details="auto"
+                              ></v-text-field>
+                            </div>
                           </div>
                         </div>
                       </v-col>
@@ -109,7 +113,7 @@
                                 outlined
                                 solo
                                 :value="businessdata.addr1"
-                                readonly
+                                disabled
                                 hide-details="auto"
                               ></v-text-field>
                             </v-col>
@@ -118,7 +122,7 @@
                                 outlined
                                 solo
                                 :value="businessdata.addr2"
-                                readonly
+                                disabled
                                 hide-details="auto"
                               ></v-text-field>
                             </v-col>

@@ -133,20 +133,24 @@
                       <div class="form-group">
                         <v-label class="pt-1">이메일</v-label>
                         <div class="d-flex">
-                          <v-text-field
-                            v-model="email1"
-                            outlined
-                            solo
-                            placeholder="email"
-                          ></v-text-field>
+                          <div style="width: calc(100% - 6px)">
+                            <v-text-field
+                              v-model="email1"
+                              outlined
+                              solo
+                              placeholder="email"
+                            ></v-text-field>
+                          </div>
                           <div class="pt-3 px-3">@</div>
-                          <v-select
-                            v-model="email2"
-                            outlined
-                            solo
-                            placeholder="선택해주세요"
-                            :items="selectitems1"
-                          ></v-select>
+                          <div style="width: calc(100% - 6px)">
+                            <v-select
+                              v-model="email2"
+                              outlined
+                              solo
+                              placeholder="선택해주세요"
+                              :items="selectitems1"
+                            ></v-select>
+                          </div>
                         </div>
                       </div>
                     </v-col>
@@ -154,27 +158,33 @@
                       <div class="form-group">
                         <v-label class="pt-1">전화번호</v-label>
                         <div class="d-flex">
-                          <v-select
-                            v-model="tel1"
-                            outlined
-                            solo
-                            placeholder="선택해주세요"
-                            :items="selectitems2"
-                          ></v-select>
+                          <div style="width: calc(100% - 12px)">
+                            <v-select
+                              v-model="tel1"
+                              outlined
+                              solo
+                              placeholder="선택해주세요"
+                              :items="selectitems2"
+                            ></v-select>
+                          </div>
                           <div class="pt-3 px-3">-</div>
-                          <v-text-field
-                            v-model="tel2"
-                            outlined
-                            solo
-                            placeholder="0000"
-                          ></v-text-field>
+                          <div style="width: calc(100% - 12px)">
+                            <v-text-field
+                              v-model="tel2"
+                              outlined
+                              solo
+                              placeholder="0000"
+                            ></v-text-field>
+                          </div>
                           <div class="pt-3 px-3">-</div>
-                          <v-text-field
-                            v-model="tel3"
-                            outlined
-                            solo
-                            placeholder="0000"
-                          ></v-text-field>
+                          <div style="width: calc(100% - 12px)">
+                            <v-text-field
+                              v-model="tel3"
+                              outlined
+                              solo
+                              placeholder="0000"
+                            ></v-text-field>
+                          </div>
                         </div>
                       </div>
                     </v-col>
