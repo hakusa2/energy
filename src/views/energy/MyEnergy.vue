@@ -26,14 +26,14 @@
             <v-tabs-items v-model="tab">
               <v-tab-item>
                 <v-card class="card-form card-tab-detail" flat>
-                  <div class="card-header">
+                  <!-- <div class="card-header">
                     <div class="card-left">
                       <div class="card-title">우리집 정보 입력</div>
                       <div class="card-stext">
                         우리집 전기요금 고지서를 확인하여 정보를 입력해보세요.
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="card-body">
                     <v-form ref="form" v-model="valid" lazy-validation>
                       <v-row>
@@ -67,7 +67,65 @@
                         </v-col> -->
                         <v-col cols="12" md="12">
                           <div class="form-group">
-                            <v-label>월간 사용량</v-label>
+                            <v-label>
+                              월간 사용량
+                              <!-- <v-btn @click="show = !show"> toggle </v-btn> -->
+                              <v-tooltip bottom v-model="show">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn x-small icon v-bind="attrs" v-on="on">
+                                    <v-icon color="grey lighten-1">
+                                      mdi-custom mdi-information-outline
+                                    </v-icon>
+                                  </v-btn>
+                                </template>
+                                <div class="tooltip-text">
+                                  <div class="mb-7">
+                                    선택한 월에 따라 누진단계 구간 및 전기요금
+                                    계산식이 달라져요.
+                                  </div>
+                                  <ol class="ol-list fs-12">
+                                    <li>
+                                      기타계절 (1~6월, 9~12월)
+                                      <ul
+                                        class="ul-list list-dot list-dot-white"
+                                      >
+                                        <li>
+                                          누진1단계: 200kWh 이하 (기본요금
+                                          910원, 단가 120.0원/kWh)
+                                        </li>
+                                        <li>
+                                          누진2단계: 201~400kWh (기본요금
+                                          1,600원, 단가 214.6원/kWh)
+                                        </li>
+                                        <li>
+                                          누진3단계: 400kWh 초과 (기본요금
+                                          7,300원, 단가 307.3원/kWh)
+                                        </li>
+                                      </ul>
+                                    </li>
+                                    <li>
+                                      하계 (7월, 8월)
+                                      <ul
+                                        class="ul-list list-dot list-dot-white"
+                                      >
+                                        <li>
+                                          누진1단계: 300kWh 이하 (기본요금
+                                          910원, 단가 120.0원/kWh)
+                                        </li>
+                                        <li>
+                                          누진2단계: 301~450kWh (기본요금
+                                          1,600원, 단가 214.6원/kWh)
+                                        </li>
+                                        <li>
+                                          누진3단계: 450kWh 초과 (기본요금
+                                          7,300원, 단가 307.3원/kWh)
+                                        </li>
+                                      </ul>
+                                    </li>
+                                  </ol>
+                                </div>
+                              </v-tooltip>
+                            </v-label>
                             <div class="d-flex">
                               <v-select
                                 outlined
@@ -75,7 +133,7 @@
                                 v-model="month"
                                 :items="months"
                                 hide-details="auto"
-                                style="max-width: 190px"
+                                style="max-width: 120px"
                               ></v-select>
                               <v-text-field
                                 outlined
@@ -86,14 +144,33 @@
                                 @input="formatMonthUse"
                                 class="ml-2"
                                 hide-details="auto"
-                                suffix="kW"
+                                suffix="kWh"
+                                :rules="rules"
+                                required
                               ></v-text-field>
                             </div>
                           </div>
                         </v-col>
                         <v-col cols="12">
-                          <div class="form-group">
-                            <v-label class="mb-3">태양광</v-label>
+                          <div class="form-group border-top-CBCDD1 mt-4 pt-10">
+                            <v-label class="mb-3">
+                              태양광
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn x-small icon v-bind="attrs" v-on="on">
+                                    <v-icon color="grey lighten-1">
+                                      mdi-custom mdi-information-outline
+                                    </v-icon>
+                                  </v-btn>
+                                </template>
+                                <div class="tooltip-text">
+                                  <div class="mb-5">
+                                    월간태양광발전량 계산식
+                                  </div>
+                                  월간태양광발전량 = 태양광용량 x 3.5h x 30일
+                                </div>
+                              </v-tooltip>
+                            </v-label>
                             <v-radio-group
                               v-model="sunLight"
                               @change="sunLightChanged"
@@ -115,20 +192,35 @@
                           </div>
                         </v-col>
                         <v-col cols="12" md="12">
-                          <div class="form-group" :class="{'form-disabled': sunLightDisabled }">
+                          <div
+                            class="form-group"
+                            :class="{ 'form-disabled': sunLightDisabled }"
+                          >
                             <!-- 태양광 '무' 선택 시 비활성화 처리 <div class="form-group form-disabled"> -->
                             <v-label>용량</v-label>
-                            <v-text-field
-                              :disabled="sunLightDisabled"
-                              v-model="sunuse"
-                              outlined
-                              solo
-                              placeholder="0,000"
-                              oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                              @input="formatSunUse"
-                              hide-details="auto"
-                              suffix="kW"
-                            ></v-text-field>
+                            <div class="d-flex">
+                              <v-select
+                                outlined
+                                solo
+                                v-model="unit"
+                                :items="units"
+                                hide-details="auto"
+                                style="max-width: 120px"
+                              ></v-select>
+                              <v-text-field
+                                :disabled="sunLightDisabled"
+                                v-model="sunuse"
+                                outlined
+                                solo
+                                placeholder="0,000"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                @input="formatSunUse"
+                                hide-details="auto"
+                                class="ml-2"
+                                :rules="rules"
+                                required
+                              ></v-text-field>
+                            </div>
                           </div>
                         </v-col>
                       </v-row>
@@ -136,7 +228,7 @@
                   </div>
                   <v-card-actions class="pa-5">
                     <v-spacer></v-spacer>
-                    <v-btn depressed large color="primary" @click="cal"
+                    <v-btn depressed color="primary" @click="cal"
                       >계산하기</v-btn
                     >
                   </v-card-actions>
@@ -147,8 +239,7 @@
                     <div class="card-left">
                       <div class="card-title">계산 결과</div>
                       <div class="card-stext">
-                        이번 달 우리집과 동일 평형 세대의 사용량 및 요금을
-                        비교해보세요.
+                        우리집과 동일 평형 이웃의 평균 사용량을 비교해보세요.
                       </div>
                     </div>
                   </div>
@@ -164,27 +255,52 @@
                       <v-row class="w-100">
                         <v-col cols="12" sm="12" md="6">
                           <div class="result-stitle primary--text">
-                            <span classs="mr-2">우리집</span> 이번달
-                            사용량(발전량)/요금
+                            <span classs="mr-2">우리집 현황</span>
                           </div>
                           <v-row class="w-100">
                             <v-col>
                               <div class="result-value">
-                                {{ monthValue }}<small>({{ sunValue }})</small>
+                                {{ monthValue
+                                }}<!-- <small>({{ sunValue }})</small> -->
                                 <span class="unit">kWh</span>
+                              </div>
+                              <div class="result-save">
+                                태양광으로 00 kWh 절약
                               </div>
                             </v-col>
                             <v-col>
                               <div class="result-value">
                                 {{ calPriceValue }} <span class="unit">원</span>
                               </div>
+                              <div class="result-save">
+                                태양광으로 0,000 원 절약
+                              </div>
                             </v-col>
                           </v-row>
                         </v-col>
                         <v-col cols="12" sm="12" md="6">
                           <div class="result-stitle">
-                            <span classs="mr-2">동일 평형</span>
-                            이번달 평균 사용량/요금
+                            <span>동일 평형 이웃 비교</span>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  x-small
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  class="ml-1"
+                                >
+                                  <v-icon color="grey lighten-1">
+                                    mdi-custom mdi-information-outline
+                                  </v-icon>
+                                </v-btn>
+                              </template>
+                              <div class="tooltip-text">
+                                (주)헤리트의 세대형 수요관리서비스, 에챌의
+                                운영데이터를 기반으로 <br />약 0000세대의
+                                평형대별/월별 평균사용량 분석
+                              </div>
+                            </v-tooltip>
                           </div>
                           <v-row class="w-100">
                             <v-col>
@@ -309,25 +425,100 @@
                         <div v-for="(sun, index) in suns" :key="index">
                           <div v-if="sun.visible">
                             <div class="house-item">
-                              <div class="item-title color-sunlight">{{ sun.name }}</div>
+                              <div class="item-title color-sunlight">
+                                <div class="d-flex align-center">
+                                  {{ sun.name }}
+                                  <v-tooltip bottom>
+                                    <template v-slot:activator="{ on, attrs }">
+                                      <v-btn
+                                        x-small
+                                        icon
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        class="mt-0 ml-1"
+                                      >
+                                        <v-icon color="grey lighten-1">
+                                          mdi-custom mdi-information-outline
+                                        </v-icon>
+                                      </v-btn>
+                                    </template>
+                                    <div class="tooltip-text">
+                                      <div class="mb-5">
+                                        월간태양광발전량 계산식
+                                      </div>
+                                      월간태양광발전량 = 태양광용량 x 3.5h x
+                                      30일
+                                    </div>
+                                  </v-tooltip>
+                                </div>
+                              </div>
                               <div class="item-form">
                                 <v-row
                                   v-for="(item, idx) in sun.items"
                                   :key="idx"
                                 >
-                                  <v-col cols="12" sm="12" md="12">
+                                  <v-col cols="12" sm="12" md="6">
                                     <div class="form-group">
-                                      <v-label>용량</v-label>
-                                      <v-text-field
-                                        v-model="item.dayhourval"
-                                        outlined
-                                        solo
-                                        placeholder="240"
-                                        hide-details="auto"
-                                        suffix="kWh"
-                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                        @input="formatDayHour(item)"
-                                      ></v-text-field>
+                                      <v-label>현재 설치 용량</v-label>
+                                      <v-row class="gutters-1">
+                                        <v-col cols="12" sm="12" md="3">
+                                          <v-select
+                                            outlined
+                                            solo
+                                            v-model="unit"
+                                            :items="units"
+                                            hide-details="auto"
+                                          ></v-select>
+                                        </v-col>
+                                        <v-col cols="12" sm="12" md="9">
+                                          <v-text-field
+                                            v-model="item.dayhourval"
+                                            outlined
+                                            solo
+                                            placeholder="240"
+                                            hide-details="auto"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                            @input="formatDayHour(item)"
+                                          ></v-text-field>
+                                          <div class="house-item-value">
+                                            <div class="label">월간발전량</div>
+                                            <div class="value">00</div>
+                                            <div class="unit">kWh</div>
+                                          </div>
+                                        </v-col>
+                                      </v-row>
+                                    </div>
+                                  </v-col>
+                                  <v-col cols="12" sm="12" md="6">
+                                    <div class="form-group">
+                                      <v-label>목표 설치 용량</v-label>
+                                      <v-row class="gutters-1">
+                                        <v-col cols="12" sm="12" md="3">
+                                          <v-select
+                                            outlined
+                                            solo
+                                            v-model="unit"
+                                            :items="units"
+                                            hide-details="auto"
+                                          ></v-select>
+                                        </v-col>
+                                        <v-col cols="12" sm="12" md="9">
+                                          <v-text-field
+                                            v-model="item.dayhourval"
+                                            outlined
+                                            solo
+                                            placeholder="240"
+                                            hide-details="auto"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                            @input="formatDayHour(item)"
+                                          ></v-text-field>
+                                          <div class="house-item-value">
+                                            <div class="label">월간발전량</div>
+                                            <div class="value">00</div>
+                                            <div class="unit">kWh</div>
+                                          </div>
+                                        </v-col>
+                                      </v-row>
                                     </div>
                                   </v-col>
                                 </v-row>
@@ -335,7 +526,12 @@
                             </div>
                             <!--/.house-item-->
                             <div class="house-item-add border-bottom">
-                              <v-btn text small color="#7C828B" @click="addSunItem(sun)">
+                              <v-btn
+                                text
+                                small
+                                color="#7C828B"
+                                @click="addSunItem(sun)"
+                              >
                                 태양광 추가 +
                               </v-btn>
                             </div>
@@ -346,7 +542,12 @@
                             <div class="house-item" v-if="row.visible">
                               <div class="item-title">
                                 {{ row.name }}
-                                <v-btn text small color="#7C828B" @click="removeElec(index)">
+                                <v-btn
+                                  text
+                                  small
+                                  color="#7C828B"
+                                  @click="removeElec(index)"
+                                >
                                   <v-icon left>
                                     mdi-custom mdi-trash-can-outline
                                   </v-icon>
@@ -358,24 +559,9 @@
                                   v-for="(item, idx) in row.items"
                                   :key="idx"
                                 >
-                                  <v-col cols="12" sm="12" md="6">
+                                  <v-col cols="12" sm="12" md="4">
                                     <div class="form-group">
-                                      <v-label>일 평균 사용 시간</v-label>
-                                      <v-text-field
-                                        v-model="item.dayhourval"
-                                        outlined
-                                        solo
-                                        placeholder="0"
-                                        hide-details="auto"
-                                        suffix="시간"
-                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                        @input="formatDayHour(item)"
-                                      ></v-text-field>
-                                    </div>
-                                  </v-col>
-                                  <v-col cols="12" sm="12" md="6">
-                                    <div class="form-group">
-                                      <v-label>정격 용량</v-label>
+                                      <v-label>정격용량</v-label>
                                       <v-text-field
                                         v-model="item.elecval"
                                         outlined
@@ -385,12 +571,36 @@
                                         suffix="kWh"
                                         oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
                                         @input="formatElec(item)"
+                                        :rules="rules"
+                                        required
                                       ></v-text-field>
                                     </div>
                                   </v-col>
-                                  <v-col cols="12" sm="12" md="6">
+                                  <v-col cols="12" sm="12" md="4">
                                     <div class="form-group">
-                                      <v-label>목표 절감 사용 시간</v-label>
+                                      <v-label>일 평균 사용 시간(현재)</v-label>
+                                      <v-text-field
+                                        v-model="item.dayhourval"
+                                        outlined
+                                        solo
+                                        placeholder="0"
+                                        hide-details="auto"
+                                        suffix="시간"
+                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                        @input="formatDayHour(item)"
+                                        :rules="rules"
+                                        required
+                                      ></v-text-field>
+                                      <div class="house-item-value">
+                                        <div class="label">월간사용량</div>
+                                        <div class="value">00</div>
+                                        <div class="unit">kWh</div>
+                                      </div>
+                                    </div>
+                                  </v-col>
+                                  <v-col cols="12" sm="12" md="4">
+                                    <div class="form-group">
+                                      <v-label>일 평균 사용 시간(목표)</v-label>
                                       <v-text-field
                                         v-model="item.targethourval"
                                         outlined
@@ -401,9 +611,14 @@
                                         oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
                                         @input="formatTargetHour(item)"
                                       ></v-text-field>
+                                      <div class="house-item-value">
+                                        <div class="label">월간사용량</div>
+                                        <div class="value">00</div>
+                                        <div class="unit">kWh</div>
+                                      </div>
                                     </div>
                                   </v-col>
-                                  <v-col cols="12" sm="12" md="6">
+                                  <!-- <v-col cols="12" sm="12" md="6">
                                     <div class="form-group">
                                       <v-label>목표 소비 전력량</v-label>
                                       <v-text-field
@@ -416,7 +631,7 @@
                                         disabled="true"
                                       ></v-text-field>
                                     </div>
-                                  </v-col>
+                                  </v-col> -->
                                 </v-row>
                               </div>
                             </div>
@@ -438,7 +653,7 @@
                   </div>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn depressed large color="primary" @click="calculate"
+                    <v-btn depressed color="primary" @click="calculate"
                       >계산하기</v-btn
                     >
                   </v-card-actions>
@@ -449,8 +664,8 @@
                     <div class="card-left">
                       <div class="card-title">계산 결과</div>
                       <div class="card-stext">
-                        목표 절감 사용 시간을 적용한 한달 간 전기 사용량과 전기
-                        요금을 확인해보세요.
+                        입력한 정보에 따른 월간 예상 사용량과 요금을
+                        확인해보세요.
                       </div>
                     </div>
                   </div>
@@ -466,7 +681,7 @@
                       <v-row class="w-100">
                         <v-col cols="12" sm="12" md="6">
                           <div class="result-stitle primary--text">
-                            <span>예상 소비 전력량</span>
+                            <span>월간 예상 사용량</span>
                           </div>
                           <v-row class="w-100">
                             <v-col>
@@ -475,14 +690,36 @@
                                 <span class="unit">kWh</span>
                               </div>
                               <div class="result-save">
-                                기존 사용량 대비 {{ targetUseVaue }} kWh 절약
+                                <!-- 기존 사용량 대비 {{ targetUseVaue }} kWh 절약 -->
+                                목표시간 사용 시 000kWh 증가(+00.00%)
                               </div>
                             </v-col>
                           </v-row>
                         </v-col>
                         <v-col cols="12" sm="12" md="6">
                           <div class="result-stitle">
-                            <span>(예샹) 전력량 요금</span>
+                            <span>월간 예상 전력량요금</span>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                  x-small
+                                  icon
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  class="ml-1"
+                                >
+                                  <v-icon color="grey lighten-1">
+                                    mdi-custom mdi-information-outline
+                                  </v-icon>
+                                </v-btn>
+                              </template>
+                              <div class="tooltip-text">
+                                <div class="mb-5">월간태양광발전량 계산식</div>
+                                <div>
+                                  월간태양광발전량 = 태양광용량 x 3.5h x 30일
+                                </div>
+                              </div>
+                            </v-tooltip>
                           </div>
                           <v-row class="w-100">
                             <v-col>
@@ -491,7 +728,8 @@
                                 <span class="unit">원</span>
                               </div>
                               <div class="result-save">
-                                기존 요금 대비 {{ targetPriceValue }} 원 절약
+                                <!-- 기존 요금 대비 {{ targetPriceValue }} 원 절약 -->
+                                목표시간 사용 시 0,000원 감소(-00.00%)
                               </div>
                             </v-col>
                           </v-row>
@@ -519,6 +757,7 @@ export default {
     Title,
   },
   data: () => ({
+    rules: [(value) => !!value || "필수 입력 항목이에요"],
     breadcrumbs: [
       {
         text: "home",
@@ -536,6 +775,7 @@ export default {
     selectitems1: ["naver.com", "gmail.com"],
     selectitems2: ["070", "010"],
     dialog: false,
+    show: false,
     valid: true,
     name: "",
     nameRules: [
@@ -579,6 +819,8 @@ export default {
       "12월",
     ],
     month: "",
+    units: ["kW"],
+    unit: "",
     sunLight: "Y",
     monthValue: 0,
     sunValue: 0,
@@ -612,31 +854,175 @@ export default {
       this.people = "1인";
       this.month = "1월";
 
-      this.rows.push({ name: "태양광", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "TV", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "냉장고", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "세탁기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "건조기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "에어컨(벽걸이)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "청소기", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "컴퓨터", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "오디오", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "LED 전등(큰방/거실)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "LED 전등(작은방/화장실)", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "에어컨(시스템)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "에어컨(스탠드형)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "형광등(큰방/거실)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "식기세척기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "난방기(온풍/온열)", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "전자레인지", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "오븐", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "의류관리기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "공기청정기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "안마의자", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "가습기", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
-      this.rows.push({ name: "전기장판", visible: false, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.rows.push({
+        name: "태양광",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "TV",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "냉장고",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "세탁기",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "건조기",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "에어컨(벽걸이)",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "청소기",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "컴퓨터",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "오디오",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "LED 전등(큰방/거실)",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "LED 전등(작은방/화장실)",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "에어컨(시스템)",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "에어컨(스탠드형)",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "형광등(큰방/거실)",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "식기세척기",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "난방기(온풍/온열)",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "전자레인지",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "오븐",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "의류관리기",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "공기청정기",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "안마의자",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "가습기",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
+      this.rows.push({
+        name: "전기장판",
+        visible: false,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
 
-      this.suns.push({ name: "태양광", visible: true, items: [ { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" }, ], });
+      this.suns.push({
+        name: "태양광",
+        visible: true,
+        items: [
+          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+        ],
+      });
 
       this.elecs.push({
         name: "태양광",
@@ -648,18 +1034,42 @@ export default {
       this.elecs.push({ name: "냉장고", color: "primary", line: false });
       this.elecs.push({ name: "세탁기", color: "primary", line: false });
       this.elecs.push({ name: "건조기", color: "primary", line: false });
-      this.elecs.push({ name: "에어컨(벽걸이)", color: "primary", line: false });
+      this.elecs.push({
+        name: "에어컨(벽걸이)",
+        color: "primary",
+        line: false,
+      });
       this.elecs.push({ name: "청소기", color: "primary", line: false });
       this.elecs.push({ name: "컴퓨터", color: "primary", line: false });
       this.elecs.push({ name: "오디오", color: "primary", line: false });
-      this.elecs.push({ name: "LED 전등(큰방/거실)", color: "primary", line: false });
-      this.elecs.push({ name: "LED 전등(작은방/화장실)", color: "primary", line: false });
+      this.elecs.push({
+        name: "LED 전등(큰방/거실)",
+        color: "primary",
+        line: false,
+      });
+      this.elecs.push({
+        name: "LED 전등(작은방/화장실)",
+        color: "primary",
+        line: false,
+      });
 
       this.elecs.push({ name: "에어컨(시스템)", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "에어컨(스탠드형)", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "형광등(큰방/거실)", color: "#bfbfbf", line: true });
+      this.elecs.push({
+        name: "에어컨(스탠드형)",
+        color: "#bfbfbf",
+        line: true,
+      });
+      this.elecs.push({
+        name: "형광등(큰방/거실)",
+        color: "#bfbfbf",
+        line: true,
+      });
       this.elecs.push({ name: "식기세척기", color: "#bfbfbf", line: true });
-      this.elecs.push({ name: "난방기(온풍/온열)", color: "#bfbfbf", line: true });
+      this.elecs.push({
+        name: "난방기(온풍/온열)",
+        color: "#bfbfbf",
+        line: true,
+      });
       this.elecs.push({ name: "전자레인지", color: "#bfbfbf", line: true });
       this.elecs.push({ name: "오븐", color: "#bfbfbf", line: true });
       this.elecs.push({ name: "의류관리기", color: "#bfbfbf", line: true });
@@ -667,7 +1077,6 @@ export default {
       this.elecs.push({ name: "안마의자", color: "#bfbfbf", line: true });
       this.elecs.push({ name: "가습기", color: "#bfbfbf", line: true });
       this.elecs.push({ name: "전기장판", color: "#bfbfbf", line: true });
-
     },
     validate() {
       this.$refs.form.validate();
@@ -822,8 +1231,7 @@ export default {
       this.closeDialogElec();
     },
 
-
-    removeElec(index){
+    removeElec(index) {
       this.elecs.splice(index, 1);
       this.rows.splice(index, 1);
     },
