@@ -526,20 +526,28 @@
                             </div>
                             <!--/.house-item-->
                             <div class="house-item-add border-bottom">
-                              <v-btn
+                              <!-- <v-btn
                                 text
                                 small
                                 color="#7C828B"
                                 @click="addSunItem(sun)"
                               >
                                 태양광 추가 +
-                              </v-btn>
+                              </v-btn> -->
                             </div>
                           </div>
                         </div>
-                        <div v-for="(row, index) in rows" :key="index">
+                        <div
+                          class="house-item-group"
+                          v-for="(row, index) in rows"
+                          :key="index"
+                        >
                           <div v-if="row.visible">
-                            <div class="house-item" v-if="row.visible">
+                            <div
+                              class="house-item"
+                              v-for="(item, idx) in row.items"
+                              :key="idx"
+                            >
                               <div class="item-title">
                                 {{ row.name }}
                                 <v-btn
@@ -555,10 +563,7 @@
                                 </v-btn>
                               </div>
                               <div class="item-form">
-                                <v-row
-                                  v-for="(item, idx) in row.items"
-                                  :key="idx"
-                                >
+                                <v-row>
                                   <v-col cols="12" sm="12" md="4">
                                     <div class="form-group">
                                       <v-label>정격용량</v-label>
