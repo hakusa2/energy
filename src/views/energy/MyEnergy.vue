@@ -573,7 +573,7 @@
                                         solo
                                         placeholder="0"
                                         hide-details="auto"
-                                        suffix="kWh"
+                                        suffix="W"
                                         oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
                                         @input="formatElec(item)"
                                         :rules="rules"
