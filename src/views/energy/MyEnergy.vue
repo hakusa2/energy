@@ -265,7 +265,7 @@
                                 <span class="unit">kWh</span>
                               </div>
                               <div class="result-save">
-                                태양광으로 00 kWh 절약
+                                태양광으로 {{ saveUseValue }} kWh 절약
                               </div>
                             </v-col>
                             <v-col>
@@ -273,7 +273,7 @@
                                 {{ calPriceValue }} <span class="unit">원</span>
                               </div>
                               <div class="result-save">
-                                태양광으로 0,000 원 절약
+                                태양광으로 {{ savePriceValue }} 원 절약
                               </div>
                             </v-col>
                           </v-row>
@@ -424,7 +424,7 @@
                       <div class="house-item-list">
                         <div v-for="(sun, index) in suns" :key="index">
                           <div v-if="sun.visible">
-                            <div class="house-item">
+                            <div class="house-item" :class="{ 'form-disabled': sunLightDisabled2 }">
                               <div class="item-title color-sunlight">
                                 <div class="d-flex align-center">
                                   {{ sun.name }}
@@ -465,24 +465,25 @@
                                           <v-select
                                             outlined
                                             solo
-                                            v-model="unit"
+                                            v-model="unitNow"
                                             :items="units"
                                             hide-details="auto"
+                                            @change="formatSunDayHour(item)"
                                           ></v-select>
                                         </v-col>
                                         <v-col cols="12" sm="12" md="9">
                                           <v-text-field
-                                            v-model="item.dayhourval"
+                                            v-model="item.sunhourval"
                                             outlined
                                             solo
-                                            placeholder="240"
+                                            placeholder="0"
                                             hide-details="auto"
                                             oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                            @input="formatDayHour(item)"
+                                            @input="formatSunDayHour(item)"
                                           ></v-text-field>
                                           <div class="house-item-value">
                                             <div class="label">월간발전량</div>
-                                            <div class="value">00</div>
+                                            <div class="value">{{ item.sunmonthval }}</div>
                                             <div class="unit">kWh</div>
                                           </div>
                                         </v-col>
@@ -497,24 +498,25 @@
                                           <v-select
                                             outlined
                                             solo
-                                            v-model="unit"
+                                            v-model="unitTarget"
                                             :items="units"
                                             hide-details="auto"
+                                            @change="formatSunTargetHour(item)"
                                           ></v-select>
                                         </v-col>
                                         <v-col cols="12" sm="12" md="9">
                                           <v-text-field
-                                            v-model="item.dayhourval"
+                                            v-model="item.targetsunhourval"
                                             outlined
                                             solo
-                                            placeholder="240"
+                                            placeholder="0"
                                             hide-details="auto"
                                             oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                                            @input="formatDayHour(item)"
+                                            @input="formatSunTargetHour(item)"
                                           ></v-text-field>
                                           <div class="house-item-value">
                                             <div class="label">월간발전량</div>
-                                            <div class="value">00</div>
+                                            <div class="value">{{ item.targetsunmonthval }}</div>
                                             <div class="unit">kWh</div>
                                           </div>
                                         </v-col>
@@ -542,7 +544,7 @@
                           v-for="(row, index) in rows"
                           :key="index"
                         >
-                          <div v-if="row.visible">
+                          <div v-if="row.visible" :class="{'form-disabled': row.visible2 }">
                             <div
                               class="house-item"
                               v-for="(item, idx) in row.items"
@@ -554,7 +556,7 @@
                                   text
                                   small
                                   color="#7C828B"
-                                  @click="removeElec(index)"
+                                  @click="removeElec(index, idx)"
                                 >
                                   <v-icon left>
                                     mdi-custom mdi-trash-can-outline
@@ -562,7 +564,7 @@
                                   삭제
                                 </v-btn>
                               </div>
-                              <div class="item-form">
+                              <div class="item-form" >
                                 <v-row>
                                   <v-col cols="12" sm="12" md="4">
                                     <div class="form-group">
@@ -598,7 +600,7 @@
                                       ></v-text-field>
                                       <div class="house-item-value">
                                         <div class="label">월간사용량</div>
-                                        <div class="value">00</div>
+                                        <div class="value">{{ item.monthuseval }}</div>
                                         <div class="unit">kWh</div>
                                       </div>
                                     </div>
@@ -618,7 +620,7 @@
                                       ></v-text-field>
                                       <div class="house-item-value">
                                         <div class="label">월간사용량</div>
-                                        <div class="value">00</div>
+                                        <div class="value">{{ item.monthtargetval }}</div>
                                         <div class="unit">kWh</div>
                                       </div>
                                     </div>
@@ -691,12 +693,12 @@
                           <v-row class="w-100">
                             <v-col>
                               <div class="result-value">
-                                {{ elecUseValue }}
+                                {{ resultvalue1 }}
                                 <span class="unit">kWh</span>
                               </div>
                               <div class="result-save">
                                 <!-- 기존 사용량 대비 {{ targetUseVaue }} kWh 절약 -->
-                                목표시간 사용 시 000kWh 증가(+00.00%)
+                                목표시간 사용 시 {{ resultvalue2 }}kWh 증가({{resultvalue3}}%)
                               </div>
                             </v-col>
                           </v-row>
@@ -729,12 +731,12 @@
                           <v-row class="w-100">
                             <v-col>
                               <div class="result-value">
-                                {{ elecPriceValue }}
+                                {{ resultvalue4 }}
                                 <span class="unit">원</span>
                               </div>
                               <div class="result-save">
                                 <!-- 기존 요금 대비 {{ targetPriceValue }} 원 절약 -->
-                                목표시간 사용 시 0,000원 감소(-00.00%)
+                                목표시간 사용 시 {{ resultvalue5 }}원 감소({{ resultvalue6 }}%)
                               </div>
                             </v-col>
                           </v-row>
@@ -755,8 +757,10 @@
 <script>
 // @ is an alias to /src
 import Title from "@/components/Title.vue";
+import Energy from "@/assets/js/energy";
 
 export default {
+  mixins:[Energy],
   name: "MyEnergy",
   components: {
     Title,
@@ -805,7 +809,7 @@ export default {
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
-    types: ["13평이하", "18평", "25평", "34평", "34평이상"],
+    types: ["13평이하", "13~24평", "24~32평", "32~38평", "38~42평", "42평이상"],
     type: "",
     peoples: ["1인", "2인", "3인", "4인", "5인", "6인이상"],
     people: "",
@@ -824,22 +828,26 @@ export default {
       "12월",
     ],
     month: "",
-    units: ["kW"],
+    units: ["kW", "W"],
     unit: "",
     sunLight: "Y",
     monthValue: 0,
     sunValue: 0,
+    sunCalValue: 0,
     monthuse: "",
     sunuse: "",
     samplePrice: 0,
     sampleUse: 0,
     calPrice: 0,
     calUse: 0,
+    realPrice: 0,
+    savePrice: 0,
     samplePriceValue: "0",
     sampleUseVaue: "0",
     calPriceValue: "0",
     calUseValue: "0",
     sunLightDisabled: false,
+    sunLightDisabled2: false,
     elecs: [],
     rows: [],
     suns: [],
@@ -849,6 +857,14 @@ export default {
     targetUseVaue: "0,000",
     elecPriceValue: "0,000",
     elecUseValue: "0,000",
+    saveUseValue: "",
+    savePriceValue: "",
+    resultvalue1:"0",
+    resultvalue2:"0",
+    resultvalue3:"0",
+    resultvalue4:"0",
+    resultvalue5:"0",
+    resultvalue6:"0",
   }),
   created() {
     this.init();
@@ -858,12 +874,15 @@ export default {
       this.type = "13평이하";
       this.people = "1인";
       this.month = "1월";
+      this.unit = "kW";
+      this.unitNow = "kW";
+      this.unitTarget = "kW";
 
       this.rows.push({
         name: "태양광",
         visible: false,
         items: [
-          { dayhourval: "", elecval: "", targethourval: "", targetuseval: "" },
+          { dayhourval: "", elecval: "", targethourval: "", monthuseval: "0", monthtargetval:"0" },
         ],
       });
       this.rows.push({
@@ -1094,43 +1113,54 @@ export default {
     },
 
     cal() {
-      //구간별 전기요금
-      let sectionPrice = 0;
-      //월간 기준
-      let monthStd = 1;
+      //하계요금 적용기준
+      let calType = "1";
 
-      if (this.month === "7월" || this.month === "8월") monthStd = 0.7;
-
-      if (this.monthValue < 100) sectionPrice = 60.7;
-      else if (this.monthValue < 200) sectionPrice = 125.9;
-      else if (this.monthValue < 300) sectionPrice = 187.9;
-      else if (this.monthValue < 400) sectionPrice = 280.6;
-      else if (this.monthValue < 500) sectionPrice = 417.7;
-      // 500보다 크면
-      else sectionPrice = 709.5;
-
-      //요금 = ( 월간 사용량 – (태양광용량) ) * 구간별전기요금 * 월간기준
-      this.calPrice = Math.round(
-        (this.monthValue - this.sunValue) * sectionPrice * monthStd
-      );
-      this.calUse = this.monthValue - this.sunValue;
-
-      if (this.type === "13평이하") {
-        this.sampleUse = "216";
-        this.samplePrice = "29808";
-      } else if (this.type === "18평") {
-        this.sampleUse = "275";
-        this.samplePrice = "37950";
-      } else if (this.type === "25평") {
-        this.sampleUse = "348";
-        this.samplePrice = "48024";
-      } else if (this.type === "34평") {
-        this.sampleUse = "452";
-        this.samplePrice = "62376";
-      } else if (this.type === "34평이상") {
-        this.sampleUse = "560";
-        this.samplePrice = "94080";
+      if (this.month === "7월" || this.month === "8월"){
+        calType = "2";
       }
+
+      let calSunType = "1";
+      if(this.unit === "W"){
+        calSunType = "2";
+      }
+
+      //태양광 용량 계산
+      this.sunCalValue = this.calSunEnergy(this.sunValue, calSunType);
+
+      //실제 요금계산
+      this.realPrice = this.calEnergyPay(this.monthValue, calType);
+
+      //태양광 사용량 제외한 실제 사용량
+      this.calUseValue = this.monthValue - this.sunCalValue;
+
+      //실제사용량 요금계산
+      this.calPrice = this.calEnergyPay(this.calUseValue, calType);
+
+      //절약된 요금계산
+      this.savePrice = this.realPrice - this.calPrice;
+
+      //선택한 평형별 사용량 가져오기
+      for (const idx in this.elecStdData) {
+        if(this.elecStdData[idx].type === this.type){
+          for(const id in this.elecStdData[idx].data){
+            if(this.elecStdData[idx].data[id].month === this.month){
+              this.sampleUse = this.elecStdData[idx].data[id].val;
+            }
+          }
+        }
+      }
+
+      //선택한 평형별 요금 계산하기
+      this.samplePrice = this.calEnergyPay(this.sampleUse, calType);
+
+      this.saveUseValue = (
+        parseFloat(this.sunCalValue.toString().replace(/,/g, "")) || 0
+      ).toLocaleString();
+
+      this.savePriceValue = (
+        parseFloat(this.savePrice.toString().replace(/,/g, "")) || 0
+      ).toLocaleString();
 
       this.samplePriceValue = (
         parseFloat(this.samplePrice.toString().replace(/,/g, "")) || 0
@@ -1178,8 +1208,13 @@ export default {
     elecSelect(item) {
       if (item.color === "#bfbfbf") {
         //on action
-        if (item.name === "태양광") item.color = "#FF7E12";
-        else item.color = "primary";
+        if (item.name === "태양광") {
+          item.color = "#FF7E12";
+          this.sunLightDisabled2 = false;
+        }
+        else
+          item.color = "primary";
+
 
         item.line = false;
 
@@ -1189,6 +1224,10 @@ export default {
           }
         }
       } else {
+        if (item.name === "태양광") {
+          this.sunLightDisabled2 = true;
+        }
+
         //off action
         item.color = "#bfbfbf";
         item.line = true;
@@ -1236,12 +1275,40 @@ export default {
       this.closeDialogElec();
     },
 
-    removeElec(index) {
-      this.elecs.splice(index, 1);
-      this.rows.splice(index, 1);
+    removeElec(index, idx) {
+
+
+      if(this.rows[index].items.length == 1){
+
+        if(this.rows[index].name === "TV"
+        ||this.rows[index].name === "냉장고"
+        ||this.rows[index].name === "세탁기"
+        ||this.rows[index].name === "건조기"
+        ||this.rows[index].name === "청소기"
+        ||this.rows[index].name === "컴퓨터"
+        ||this.rows[index].name === "오디오"
+        ||this.rows[index].name === "LED 전등(큰방/거실)"
+        ||this.rows[index].name === "LED 전등(작은방/화장실)"
+        ||this.rows[index].name === "에어컨(벽걸이)"
+        ||this.rows[index].name === "냉장고"
+        ||this.rows[index].name === "냉장고")
+        {
+          this.rows[index].visible2 = true;
+          this.$forceUpdate();
+        } else {
+          this.elecs.splice(index, 1);
+          this.rows.splice(index, 1);
+        }
+        return;
+      }
+
+      this.rows[index].items.splice(idx, 1);
     },
 
     addRowItem(row) {
+      if (row.visible2)
+        return;
+
       if (row.items.length == 5) {
         alert("더이상 추가할 수 없습니다.");
         return;
@@ -1273,6 +1340,13 @@ export default {
       const parsedAmount = parseFloat(item.dayhourval.replace(/,/g, "")) || 0;
       item.dayhour = parsedAmount;
       item.dayhourval = parsedAmount.toLocaleString();
+
+      if (item.elec > 0 && item.dayhour > 0) {
+        item.monthuse = item.elec * item.dayhour * 30 / 1000;
+        item.monthuseval = (
+          parseFloat(item.monthuse.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+      }
     },
 
     formatElec(item) {
@@ -1280,10 +1354,17 @@ export default {
       item.elec = parsedAmount;
       item.elecval = parsedAmount.toLocaleString();
 
+      if (item.elec > 0 && item.dayhour > 0) {
+        item.monthuse = item.elec * item.dayhour * 30 / 1000;
+        item.monthuseval = (
+          parseFloat(item.monthuse.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+      }
+
       if (item.elec > 0 && item.targethour > 0) {
-        item.targetuse = item.elec * item.targethour;
-        item.targetuseval = (
-          parseFloat(item.targetuse.toString().replace(/,/g, "")) || 0
+        item.monthtarget = item.elec * item.targethour * 30 / 1000;
+        item.monthtargetval = (
+          parseFloat(item.monthtarget.toString().replace(/,/g, "")) || 0
         ).toLocaleString();
       }
     },
@@ -1295,10 +1376,52 @@ export default {
       item.targethourval = parsedAmount.toLocaleString();
 
       if (item.elec > 0 && item.targethour > 0) {
-        item.targetuse = item.elec * item.targethour;
-        item.targetuseval = (
-          parseFloat(item.targetuse.toString().replace(/,/g, "")) || 0
+        item.monthtarget = item.elec * item.targethour * 30 / 1000;
+        item.monthtargetval = (
+          parseFloat(item.monthtarget.toString().replace(/,/g, "")) || 0
         ).toLocaleString();
+      }
+    },
+
+    formatSunDayHour(item) {
+      const parsedAmount =
+        parseFloat(item.sunhourval.replace(/,/g, "")) || 0;
+      item.sunhour = parsedAmount;
+      item.sunhourval = parsedAmount.toLocaleString();
+
+      let calSunType = "1";
+      if(this.unitNow === "W"){
+        calSunType = "2";
+      }
+
+      if (item.sunhour > 0) {
+        item.sunmonth = this.calSunEnergy(item.sunhour, calSunType);
+
+        item.sunmonthval = (
+          parseFloat(item.sunmonth.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+        this.$forceUpdate();
+      }
+    },
+
+    formatSunTargetHour(item) {
+      const parsedAmount =
+        parseFloat(item.targetsunhourval.replace(/,/g, "")) || 0;
+      item.targetsunhour = parsedAmount;
+      item.targetsunhourval = parsedAmount.toLocaleString();
+
+      let calSunType = "1";
+      if(this.unitTarget === "W"){
+        calSunType = "2";
+      }
+
+      if (item.targetsunhour > 0) {
+        item.targetsunmonth = this.calSunEnergy(item.targetsunhour, calSunType);
+
+        item.targetsunmonthval = (
+          parseFloat(item.targetsunmonth.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+        this.$forceUpdate();
       }
     },
 
@@ -1309,110 +1432,49 @@ export default {
       let elecsunuse = 0;
       //월간목표사용량
       let targetmonthuse = 0;
-      //구간별 전기요금
-      let sectionPrice = 0;
-      //구간별 전기요금 (목표)
-      let sectionTargetPrice = 0;
-      //월간 기준
-      let monthStd = 1;
+      //월간태양광목표사용량
+      let electargetsunuse = 0;
+
 
       for (let index in this.rows) {
-        if (this.rows[index].name === "태양광" && this.rows[index].visible) {
-          for (let idx in this.rows[index].items) {
-            if (
-              this.rows[index].items[idx].dayhour > 0 &&
-              this.rows[index].items[idx].elec > 0 &&
-              this.rows[index].items[idx].targethour > 0 &&
-              this.rows[index].items[idx].targetuse > 0
-            ) {
-              elecsunuse +=
-                this.rows[index].items[idx].dayhour *
-                this.rows[index].items[idx].elec;
-            }
-          }
-        } else if (this.rows[index].visible) {
-          for (let idx in this.rows[index].items) {
-            if (
-              this.rows[index].items[idx].dayhour > 0 &&
-              this.rows[index].items[idx].elec > 0 &&
-              this.rows[index].items[idx].targethour > 0 &&
-              this.rows[index].items[idx].targetuse > 0
-            ) {
-              elecmonthuse +=
-                this.rows[index].items[idx].dayhour *
-                this.rows[index].items[idx].elec;
-              targetmonthuse += this.rows[index].items[idx].targetuse;
-            }
+        for (let idx in this.rows[index].items) {
+          if (
+            this.rows[index].items[idx].monthuse > 0 &&
+            this.rows[index].items[idx].monthtarget > 0
+          ) {
+            elecmonthuse += this.rows[index].items[idx].monthuse;
+            targetmonthuse += this.rows[index].items[idx].monthtarget;
           }
         }
       }
 
-      //elecsunuse = elecsunuse * 30;
+      for (let index in this.suns){
+        for (let idx in this.suns[index].items) {
+          if (this.suns[index].items[idx].sunmonth > 0) {
+            elecsunuse += this.suns[index].items[idx].sunmonth
+          }
 
-      for (let index in this.suns) {
-        if (this.suns[index].visible) {
-          for (let idx in this.suns[index].items) {
-            if (this.suns[index].items[idx].dayhour > 0) {
-              elecsunuse += this.suns[index].items[idx].dayhour;
-            }
+          if (this.suns[index].items[idx].targetsunmonth > 0) {
+            electargetsunuse += this.suns[index].items[idx].targetsunmonth
           }
         }
       }
 
-      elecmonthuse = elecmonthuse * 30;
-      targetmonthuse = targetmonthuse * 30;
+      let result1 = Math.floor(elecmonthuse - elecsunuse);
+      let result2 = Math.floor(targetmonthuse - electargetsunuse) - Math.floor(elecmonthuse - elecsunuse);
+      let result3 = Math.round(result2 / result1 * 100, 2);
 
-      if (this.month === "7월" || this.month === "8월") monthStd = 0.7;
+      this.resultvalue1 = (parseFloat(result1.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.resultvalue2 = (parseFloat(result2.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.resultvalue3 = (parseFloat(result3.toString().replace(/,/g, "")) || 0).toLocaleString();
 
-      if (elecmonthuse < 100) sectionPrice = 60.7;
-      else if (elecmonthuse < 200) sectionPrice = 125.9;
-      else if (elecmonthuse < 300) sectionPrice = 187.9;
-      else if (elecmonthuse < 400) sectionPrice = 280.6;
-      else if (elecmonthuse < 500) sectionPrice = 417.7;
-      // 500보다 크면
-      else sectionPrice = 709.5;
+      let result4 = this.calEnergyPay(Math.floor(elecmonthuse - elecsunuse), "1");
+      let result5 = result4 - this.calEnergyPay(Math.floor(targetmonthuse - electargetsunuse), "1");
+      let result6 = Math.round(result5 / result4 * 100, 2);
 
-      if (targetmonthuse < 100) sectionTargetPrice = 60.7;
-      else if (targetmonthuse < 200) sectionTargetPrice = 125.9;
-      else if (targetmonthuse < 300) sectionTargetPrice = 187.9;
-      else if (targetmonthuse < 400) sectionTargetPrice = 280.6;
-      else if (targetmonthuse < 500) sectionTargetPrice = 417.7;
-      // 500보다 크면
-      else sectionTargetPrice = 709.5;
-
-      let tmpelecUseVal = 0;
-      let tmpelecPriceVal = 0;
-      let tmptargetUseVal = 0;
-      let tmptargetPriceVal = 0;
-
-      //요금 = ( 월간 사용량 – (태양광용량) ) * 구간별전기요금 * 월간기준
-      tmpelecPriceVal = Math.round(
-        (elecmonthuse - elecsunuse) * sectionPrice * monthStd
-      );
-      tmptargetPriceVal = Math.round(
-        (targetmonthuse - elecsunuse) * sectionTargetPrice * monthStd
-      );
-      tmpelecUseVal = elecmonthuse - elecsunuse;
-      tmptargetUseVal = targetmonthuse - elecsunuse;
-
-      let saveuse = 0;
-      let saveprice = 0;
-
-      saveuse = tmpelecUseVal - tmptargetUseVal;
-      saveprice = tmpelecPriceVal - tmptargetPriceVal;
-
-      this.elecUseValue = (
-        parseFloat(tmpelecUseVal.toString().replace(/,/g, "")) || 0
-      ).toLocaleString();
-      this.elecPriceValue = (
-        parseFloat(tmpelecPriceVal.toString().replace(/,/g, "")) || 0
-      ).toLocaleString();
-      this.targetUseVaue = (
-        parseFloat(saveuse.toString().replace(/,/g, "")) || 0
-      ).toLocaleString();
-      this.targetPriceValue = (
-        parseFloat(saveprice.toString().replace(/,/g, "")) || 0
-      ).toLocaleString();
+      this.resultvalue4 = (parseFloat(result4.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.resultvalue5 = (parseFloat(result5.toString().replace(/,/g, "")) || 0).toLocaleString();
+      this.resultvalue6 = (parseFloat(result6.toString().replace(/,/g, "")) || 0).toLocaleString();
     },
   },
 };

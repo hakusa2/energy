@@ -135,7 +135,7 @@
                                 solo
                                 class="ml-2"
                                 hide-details="auto"
-                                suffix="kW"
+                                suffix="kWh"
                               ></v-text-field>
                             </v-col>
                           </v-row>
@@ -172,17 +172,27 @@
                         <div class="form-group" :class="{'form-disabled': sunLightDisabled }">
                           <!-- 태양광 '무' 선택 시 비활성화 처리 <div class="form-group form-disabled"> -->
                           <v-label class="pt-1"> 용량 </v-label>
-                          <v-text-field
-                            :disabled="sunLightDisabled"
-                            v-model="sunuse"
-                            outlined
-                            solo
-                            placeholder="0,000 "
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
-                            @input="formatSunUse"
-                            hide-details="auto"
-                            suffix="kW"
-                          ></v-text-field>
+                            <div class="d-flex">
+                              <v-select
+                                outlined
+                                solo
+                                v-model="unit"
+                                :items="units"
+                                hide-details="auto"
+                                style="max-width: 120px"
+                              ></v-select>
+                              <v-text-field
+                                :disabled="sunLightDisabled"
+                                v-model="sunuse"
+                                outlined
+                                solo
+                                placeholder="0,000 "
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '')"
+                                @input="formatSunUse"
+                                hide-details="auto"
+
+                              ></v-text-field>
+                            </div>
                         </div>
                       </v-col>
                     </v-row>
@@ -212,7 +222,7 @@
                     <v-row class="w-100">
                       <v-col>
                         <div class="result-value">
-                          {{ monthValue }}<small>({{ sunValue }})</small>
+                          {{ monthValue }}<small>({{ sunCalValue }})</small>
                           <span class="unit">kWh</span>
                         </div>
                       </v-col>
@@ -288,8 +298,10 @@
 <script>
 // @ is an alias to /src
 import axios from "axios";
+import Energy from "@/assets/js/energy";
 
 export default {
+  mixins:[Energy],
   name: "Main",
   components: {},
   data: () => ({
@@ -302,11 +314,12 @@ export default {
     selectitems2: ["070", "010"],
     dialog: false,
     valid: true,
-
+    units: ["kW", "W"],
+    unit: "",
     select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
-    types: ["13평이하", "18평", "25평", "34평", "34평이상"],
+    types: ["13평이하", "13~24평", "24~32평", "32~38평", "38~42평", "42평이상"],
     type: "",
     peoples: ["1인", "2인", "3인", "4인", "5인", "6인이상"],
     people: "",
@@ -328,6 +341,7 @@ export default {
     sunLight: "Y",
     monthValue: 0,
     sunValue: 0,
+    sunCalValue: 0,
     monthuse: "",
     sunuse: "",
     samplePrice: 0,
@@ -364,6 +378,7 @@ export default {
       this.type = "13평이하";
       this.people = "1인";
       this.month = "1월";
+      this.unit = "kW";
       try {
         axios.get("/api/banner/getList").then((response) => {
           this.banners = response.data;
@@ -378,46 +393,42 @@ export default {
     },
 
     cal() {
-      //alert(this.monthValue);
       this.active = !this.active;
 
-      //구간별 전기요금
-      let sectionPrice = 0;
-      //월간 기준
-      let monthStd = 1;
+      //하계요금 적용기준
+      let calType = "1";
 
-      if (this.month === "7월" || this.month === "8월") monthStd = 0.7;
-
-      if (this.monthValue < 100) sectionPrice = 60.7;
-      else if (this.monthValue < 200) sectionPrice = 125.9;
-      else if (this.monthValue < 300) sectionPrice = 187.9;
-      else if (this.monthValue < 400) sectionPrice = 280.6;
-      else if (this.monthValue < 500) sectionPrice = 417.7;
-      // 500보다 크면
-      else sectionPrice = 709.5;
-
-      //요금 = ( 월간 사용량 – (태양광용량) ) * 구간별전기요금 * 월간기준
-      this.calPrice = Math.round(
-        (this.monthValue - this.sunValue) * sectionPrice * monthStd
-      );
-      this.calUse = this.monthValue - this.sunValue;
-
-      if (this.type === "13평이하") {
-        this.sampleUse = "216";
-        this.samplePrice = "29808";
-      } else if (this.type === "18평") {
-        this.sampleUse = "275";
-        this.samplePrice = "37950";
-      } else if (this.type === "25평") {
-        this.sampleUse = "348";
-        this.samplePrice = "48024";
-      } else if (this.type === "34평") {
-        this.sampleUse = "452";
-        this.samplePrice = "62376";
-      } else if (this.type === "34평이상") {
-        this.sampleUse = "560";
-        this.samplePrice = "94080";
+      if (this.month === "7월" || this.month === "8월"){
+        calType = "2";
       }
+
+      let calSunType = "1";
+      if(this.unit === "W"){
+        calSunType = "2";
+      }
+
+      //태양광 용량 계산
+      this.sunCalValue = this.calSunEnergy(this.sunValue, calSunType);
+
+      //태양광 사용량 제외한 실제 사용량
+      this.calUseValue = this.monthValue - this.sunCalValue;
+
+      //실제사용량 요금계산
+      this.calPrice = this.calEnergyPay(this.calUseValue, calType);
+
+      //선택한 평형별 사용량 가져오기
+      for (const idx in this.elecStdData) {
+        if(this.elecStdData[idx].type === this.type){
+          for(const id in this.elecStdData[idx].data){
+            if(this.elecStdData[idx].data[id].month === this.month){
+              this.sampleUse = this.elecStdData[idx].data[id].val;
+            }
+          }
+        }
+      }
+
+      //선택한 평형별 요금 계산하기
+      this.samplePrice = this.calEnergyPay(this.sampleUse, calType);
 
       this.samplePriceValue = (
         parseFloat(this.samplePrice.toString().replace(/,/g, "")) || 0
@@ -428,7 +439,7 @@ export default {
       this.calPriceValue = (
         parseFloat(this.calPrice.toString().replace(/,/g, "")) || 0
       ).toLocaleString();
-      this.calUseValue = this.monthValue + "(" + this.sunValue + ")";
+
     },
 
     formatMonthUse() {
