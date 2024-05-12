@@ -110,7 +110,8 @@ const Energy = {
 
   methods: {
       calSunEnergy(use, calSunType){
-        let calUse = parseInt(use);
+        //let calUse = parseInt(use);
+        let calUse = use;
         if(calSunType === "1")
           return calUse * 3.5 * 30;
         else
@@ -122,7 +123,8 @@ const Energy = {
         let depth1Use = 0, depth2Use = 0, depth3Use = 0;
         const depth1Pay = 120, depth2Pay = 214.6, depth3Pay = 307.3;
         let depth1Val = 0, depth2Val = 0;
-        let calUse = parseInt(use);
+        //let calUse = parseInt(use);
+        let calUse = use;
 
         if(type === "1") //일반 전기요금 기준
           depth1Val = 200, depth2Val = 400;
@@ -135,20 +137,26 @@ const Energy = {
           if(calUse > depth2Val){
             depth2Use = depth2Val - depth1Val;
             depth3Use = calUse - depth2Val;
-            basicPay = 7300;
+            //basicPay = 7300;  기본요금은 사용하지 않음.
+            basicPay = 0;
           } else {
             depth2Use = calUse - depth1Val;
             depth3Use = 0;
-            basicPay = 1600;
+            //basicPay = 1600;  기본요금은 사용하지 않음.
+            basicPay = 0;
           }
         } else {
           depth1Use = calUse;
           depth2Use = 0;
           depth3Use = 0;
-          basicPay = 910;
+          //basicPay = 910;  기본요금은 사용하지 않음.
+          basicPay = 0;
         }
 
-        return Math.floor((depth1Use * depth1Pay) + (depth2Use * depth2Pay) + (depth3Use * depth3Pay) + basicPay);
+        //console.log("use, type = " + use +"/" + type);
+        //console.log( "calEnergyPay =" + Math.round((depth1Use * depth1Pay) + (depth2Use * depth2Pay) + (depth3Use * depth3Pay) + basicPay, 3));
+
+        return Math.round((depth1Use * depth1Pay) + (depth2Use * depth2Pay) + (depth3Use * depth3Pay) + basicPay, 3);
       }
   },
 };

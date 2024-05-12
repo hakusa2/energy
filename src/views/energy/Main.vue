@@ -222,7 +222,7 @@
                     <v-row class="w-100">
                       <v-col>
                         <div class="result-value">
-                          {{ monthValue }}<small>({{ sunCalValue }})</small>
+                          {{ monthValue + sunCalValue }}<small>({{ sunCalValue }})</small>
                           <span class="unit">kWh</span>
                         </div>
                       </v-col>
@@ -411,10 +411,12 @@ export default {
       this.sunCalValue = this.calSunEnergy(this.sunValue, calSunType);
 
       //태양광 사용량 제외한 실제 사용량
-      this.calUseValue = this.monthValue - this.sunCalValue;
+      //this.calUseValue = this.monthValue - this.sunCalValue;
+
+      this.calUseValue = this.monthValue;
 
       //실제사용량 요금계산
-      this.calPrice = this.calEnergyPay(this.calUseValue, calType);
+      this.calPrice = this.calEnergyPay(this.calUseValue +  this.sunCalValue, calType);
 
       //선택한 평형별 사용량 가져오기
       for (const idx in this.elecStdData) {
