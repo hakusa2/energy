@@ -1400,10 +1400,27 @@ export default {
         item.monthuseval = "";
       }
 
-      if (item.elec >= 0 && item.dayhour >= 0) {
+      if( (item.dayhour >= 0 && item.dayhour <= 24)
+        && (item.targethour === undefined || item.targethour === null || item.targethour === '' )) {
+        item.targethour = 0;
+      }
+
+      // eslint-disable-next-line no-empty
+      if (item.elec >= 0 && item.dayhourval >= 0) {
+        // eslint-disable-next-line no-empty
         item.monthuse = item.elec * item.dayhour * 30 / 1000;
         item.monthuseval = (
           parseFloat(item.monthuse.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+      }
+
+      // eslint-disable-next-line no-empty
+      if (item.elec >= 0 && item.dayhourval >= 0 && item.targethour >= 0) {
+        // eslint-disable-next-line no-empty
+        //console.log("item.targethour >= 0");
+        item.monthtarget = item.elec * item.targethour * 30 / 1000;
+        item.monthtargetval = (
+          parseFloat(item.monthtarget.toString().replace(/,/g, "")) || 0
         ).toLocaleString();
       }
 
@@ -1433,7 +1450,6 @@ export default {
     },
 
     formatTargetHour(item) {
-
       const parsedAmount =
         parseFloat(item.targethourval.replace(/,/g, "")) || 0;
       item.targethour = parsedAmount;
@@ -1452,6 +1468,24 @@ export default {
           parseFloat(item.monthtarget.toString().replace(/,/g, "")) || 0
         ).toLocaleString();
       }
+
+      if( (item.targethour >= 0 && item.targethour <= 24)
+        && (item.dayhour === undefined || item.dayhour === null || item.dayhour === '' )) {
+        console.log("item.dayhour = 0");
+        item.dayhour = 0;
+      }
+
+      // eslint-disable-next-line no-empty
+      if (item.elec >= 0 && item.targethourval >= 0 && item.dayhour >= 0) {
+        // eslint-disable-next-line no-empty
+        console.log("item.dayhour >= 0");
+
+        item.monthuse = item.elec * item.dayhour * 30 / 1000;
+        item.monthuseval = (
+          parseFloat(item.monthuse.toString().replace(/,/g, "")) || 0
+        ).toLocaleString();
+      }
+
 
       this.$forceUpdate();
     },
@@ -1514,16 +1548,13 @@ export default {
         for (let idx in this.rows[index].items) {
           if (
             this.rows[index].items[idx].monthuse > 0 &&
-            this.rows[index].items[idx].monthtarget > 0
+            this.rows[index].items[idx].monthtarget >= 0
           ) {
             elecmonthuse += this.rows[index].items[idx].monthuse;
             targetmonthuse += this.rows[index].items[idx].monthtarget;
           }
         }
       }
-
-      //console.log("elecmonthuse = " + elecmonthuse);
-      //console.log("targetmonthuse = " + targetmonthuse);
 
       for (let index in this.suns){
         for (let idx in this.suns[index].items) {
@@ -1544,9 +1575,6 @@ export default {
       // 증감량 백분율(%)
       let result3 = Math.round(result2 / result1 * 100, 2);
 
-      console.log("################");
-      console.log("월간 예상 사용량 = " + result1+ "kWh");
-
       this.resultvalue1 = (parseFloat(result1.toString().replace(/,/g, "")) || 0).toLocaleString();
 
       // 월간 예상 전령량 요금(태양광 차감 포함)
@@ -1560,6 +1588,7 @@ export default {
       this.resultvalue5 = (parseFloat(result5.toString().replace(/,/g, "")) || 0).toLocaleString();
       this.resultvalue6 = (parseFloat(result6.toString().replace(/,/g, "")) || 0).toLocaleString();
 
+      console.log("################");
       console.log("태양광발전량  =" + elecsunuse + "kWh");
       console.log("월간 예상 사용량 = " + elecmonthuse + "kWh");
       console.log("월간 예상 사용량 - 태양광발전량 = " + (elecmonthuse - elecsunuse) + "kWh");
@@ -1570,7 +1599,6 @@ export default {
       console.log("월간 예상 전령량 요금(태양광 차감 포함) = " + result4 + "원");
       console.log("월간사용량(목표) - 태양광발전량(목표)  전령량 요금 = " + this.calEnergyPay(targetmonthuse - electargetsunuse, "1") + "원");
       console.log("월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광(목표) 차감 포함) = " + result5 + "원");
-
 
       // [목표시간 요금]이 [월간예상 사용요금] 보다 크면 요금 증가로 판단.
       if ( (this.calEnergyPay(targetmonthuse - electargetsunuse, "1") >= result4) > 0) {
