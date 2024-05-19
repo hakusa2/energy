@@ -478,6 +478,7 @@
                                           <v-text-field
                                             v-model="item.sunhourval"
                                             outlined
+                                            :rules="rules"
                                             solo
                                             :disabled="sunLightDisabled2"
                                             placeholder="0"
@@ -581,6 +582,7 @@
                                         outlined
                                         solo
                                         :disabled="row.visible2"
+                                        :rules="rules"
                                         placeholder="0"
                                         hide-details="auto"
                                         suffix="W"
@@ -599,6 +601,7 @@
                                         outlined
                                         solo
                                         :disabled="row.visible2"
+                                        :rules="rules"
                                         onkeyup="if(this.value.length > 3) this.value = Math.round(this.value * 100) / 100;"
                                         placeholder="0"
                                         hide-details="auto"
@@ -1132,6 +1135,7 @@ export default {
     },
 
     cal() {
+
       //하계요금 적용기준
       let calType = "1";
 
@@ -1233,6 +1237,7 @@ export default {
         if (item.name === "태양광") {
           item.color = "#FF7E12";
           this.sunLightDisabled2 = false;
+          this.suns[0].items[0].sunhourval = "";
         }
         else
           item.color = "primary";
@@ -1250,7 +1255,7 @@ export default {
       } else {
         if (item.name === "태양광") {
           this.sunLightDisabled2 = true;
-          this.suns[0].items[0].sunhourval = "";
+          this.suns[0].items[0].sunhourval = "0";
           this.suns[0].items[0].targetsunhourval = "";
           this.suns[0].items[0].sunmonthval = "";
           this.suns[0].items[0].targetsunmonthval = "";
@@ -1319,8 +1324,6 @@ export default {
     },
 
     removeElec(index, idx) {
-
-
       if(this.rows[index].items.length == 1){
 
         if(this.rows[index].name === "TV"
@@ -1336,17 +1339,22 @@ export default {
         ||this.rows[index].name === "냉장고"
         ||this.rows[index].name === "냉장고")
         {
-          this.rows[index].visible2 = true;
-          this.rows[index].items[0].targethourval = "";
-          this.rows[index].items[0].dayhourval = "";
-          this.rows[index].items[0].elecval = "";
-          this.rows[index].items[0].monthuseval = "";
-          this.rows[index].items[0].monthtargetval = "";
-          this.rows[index].items[0].monthtuse = 0;
-          this.rows[index].items[0].monthtarget = 0;
+          // this.rows[index].visible2 = true;
+          // this.rows[index].items[0].targethourval = "";
+          // this.rows[index].items[0].dayhourval = "";
+          // this.rows[index].items[0].elecval = "";
+          // this.rows[index].items[0].monthuseval = "";
+          // this.rows[index].items[0].monthtargetval = "";
+          // this.rows[index].items[0].monthtuse = 0;
+          // this.rows[index].items[0].monthtarget = 0;
 
-          //this.rows[index].visible = true;
-          this.$forceUpdate();
+          // //this.rows[index].visible = true;
+          // this.$forceUpdate();
+          //hakusa
+          this.rows[index].visible = false;
+          this.elecSelect(this.elecs[index]);
+
+          //this.rows.splice(index, 1);
         } else {
           this.elecs.splice(index, 1);
           this.rows.splice(index, 1);
@@ -1535,160 +1543,163 @@ export default {
     },
 
     calculate() {
-      //월간사용량
-      let elecmonthuse = 0;
-      //월간태양광사용량
-      let elecsunuse = 0;
-      //월간목표사용량
-      let targetmonthuse = 0;
-      //월간태양광목표사용량
-      let electargetsunuse = 0;
+      if (this.$refs.form.validate()) {
+        //월간사용량
+        let elecmonthuse = 0;
+        //월간태양광사용량
+        let elecsunuse = 0;
+        //월간목표사용량
+        let targetmonthuse = 0;
+        //월간태양광목표사용량
+        let electargetsunuse = 0;
 
-      for (let index in this.rows) {
-        for (let idx in this.rows[index].items) {
-          if (
-            this.rows[index].items[idx].monthuse > 0 &&
-            this.rows[index].items[idx].monthtarget >= 0
-          ) {
-            elecmonthuse += this.rows[index].items[idx].monthuse;
-            targetmonthuse += this.rows[index].items[idx].monthtarget;
+        for (let index in this.rows) {
+          for (let idx in this.rows[index].items) {
+            if (
+              this.rows[index].items[idx].monthuse > 0 &&
+              this.rows[index].items[idx].monthtarget >= 0
+            ) {
+              elecmonthuse += this.rows[index].items[idx].monthuse;
+              targetmonthuse += this.rows[index].items[idx].monthtarget;
+            }
           }
         }
-      }
 
-      for (let index in this.suns){
-        for (let idx in this.suns[index].items) {
-          if (this.suns[index].items[idx].sunmonth > 0) {
-            elecsunuse += this.suns[index].items[idx].sunmonth
-          }
+        for (let index in this.suns){
+          for (let idx in this.suns[index].items) {
+            if (this.suns[index].items[idx].sunmonth > 0) {
+              elecsunuse += this.suns[index].items[idx].sunmonth
+            }
 
-          if (this.suns[index].items[idx].targetsunmonth > 0) {
-            electargetsunuse += this.suns[index].items[idx].targetsunmonth
+            if (this.suns[index].items[idx].targetsunmonth > 0) {
+              electargetsunuse += this.suns[index].items[idx].targetsunmonth
+            }
           }
         }
-      }
 
-      // 월간 예상 사용량
-      let result1 = Math.round(elecmonthuse - elecsunuse, 3);
-      // 목표 사용시간 - 월간 예상 사용량
-      let result2 = Math.round(targetmonthuse - electargetsunuse, 3) - Math.round(elecmonthuse - elecsunuse, 3);
-      // 증감량 백분율(%)
-      let result3 = Math.round(result2 / result1 * 100, 2);
+        // 월간 예상 사용량
+        let result1 = Math.round(elecmonthuse - elecsunuse, 3);
+        // 목표 사용시간 - 월간 예상 사용량
+        let result2 = Math.round(targetmonthuse - electargetsunuse, 3) - Math.round(elecmonthuse - elecsunuse, 3);
+        // 증감량 백분율(%)
+        let result3 = Math.round(result2 / result1 * 100, 2);
 
-      this.resultvalue1 = (parseFloat(result1.toString().replace(/,/g, "")) || 0).toLocaleString();
+        this.resultvalue1 = (parseFloat(result1.toString().replace(/,/g, "")) || 0).toLocaleString();
 
-      // 월간 예상 전령량 요금(태양광 차감 포함)
-      let result4 = this.calEnergyPay(elecmonthuse - elecsunuse, "1");
-      //this.resultvalue3 = (parseFloat(result3.toString().replace(/,/g, "")) || 0).toLocaleString();
+        // 월간 예상 전령량 요금(태양광 차감 포함)
+        let result4 = this.calEnergyPay(elecmonthuse - elecsunuse, "1");
+        //this.resultvalue3 = (parseFloat(result3.toString().replace(/,/g, "")) || 0).toLocaleString();
 
-      // 사용 요금 -  목표요금(태양광 차감 포함)
-      let result5 = result4 - this.calEnergyPay(targetmonthuse - electargetsunuse, "1");
-      let result6 = Math.round(result5 / result4 * 100, 2);
-      this.resultvalue4 = (parseFloat(result4.toString().replace(/,/g, "")) || 0).toLocaleString();
-      this.resultvalue5 = (parseFloat(result5.toString().replace(/,/g, "")) || 0).toLocaleString();
-      this.resultvalue6 = (parseFloat(result6.toString().replace(/,/g, "")) || 0).toLocaleString();
+        // 사용 요금 -  목표요금(태양광 차감 포함)
+        let result5 = result4 - this.calEnergyPay(targetmonthuse - electargetsunuse, "1");
+        let result6 = Math.round(result5 / result4 * 100, 2);
+        this.resultvalue4 = (parseFloat(result4.toString().replace(/,/g, "")) || 0).toLocaleString();
+        this.resultvalue5 = (parseFloat(result5.toString().replace(/,/g, "")) || 0).toLocaleString();
+        this.resultvalue6 = (parseFloat(result6.toString().replace(/,/g, "")) || 0).toLocaleString();
 
-      console.log("################");
-      console.log("태양광발전량  =" + elecsunuse + "kWh");
-      console.log("월간 예상 사용량 = " + elecmonthuse + "kWh");
-      console.log("월간 예상 사용량 - 태양광발전량 = " + (elecmonthuse - elecsunuse) + "kWh");
-      console.log("태양광발전량(목표)  =" + electargetsunuse + "kWh");
-      console.log("월간사용량(목표) 전력량= " + targetmonthuse + "kWh");
-      console.log("월간사용량(목표) - 태양광발전량(목표) 전력량 = " + (targetmonthuse - electargetsunuse) + "kWh");
-      console.log("목표 사용시간 전력량 - 월간 예상 사용량 = " + result2 + "kWh");
-      console.log("월간 예상 전령량 요금(태양광 차감 포함) = " + result4 + "원");
-      console.log("월간사용량(목표) - 태양광발전량(목표)  전령량 요금 = " + this.calEnergyPay(targetmonthuse - electargetsunuse, "1") + "원");
-      console.log("월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광(목표) 차감 포함) = " + result5 + "원");
+        console.log("################");
+        console.log("태양광발전량  =" + elecsunuse + "kWh");
+        console.log("월간 예상 사용량 = " + elecmonthuse + "kWh");
+        console.log("월간 예상 사용량 - 태양광발전량 = " + (elecmonthuse - elecsunuse) + "kWh");
+        console.log("태양광발전량(목표)  =" + electargetsunuse + "kWh");
+        console.log("월간사용량(목표) 전력량= " + targetmonthuse + "kWh");
+        console.log("월간사용량(목표) - 태양광발전량(목표) 전력량 = " + (targetmonthuse - electargetsunuse) + "kWh");
+        console.log("목표 사용시간 전력량 - 월간 예상 사용량 = " + result2 + "kWh");
+        console.log("월간 예상 전령량 요금(태양광 차감 포함) = " + result4 + "원");
+        console.log("월간사용량(목표) - 태양광발전량(목표)  전령량 요금 = " + this.calEnergyPay(targetmonthuse - electargetsunuse, "1") + "원");
+        console.log("월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광(목표) 차감 포함) = " + result5 + "원");
 
-      // [목표시간 요금]이 [월간예상 사용요금] 보다 크면 요금 증가로 판단.
-      if ( (this.calEnergyPay(targetmonthuse - electargetsunuse, "1") >= result4) > 0) {
-        console.log("!!!! 증가 구간 진입1 !!!" );
-        this.resultvalue7 = "증가 ";
+        // [목표시간 요금]이 [월간예상 사용요금] 보다 크면 요금 증가로 판단.
+        if ( (this.calEnergyPay(targetmonthuse - electargetsunuse, "1") >= result4) > 0) {
+          console.log("!!!! 증가 구간 진입1 !!!" );
+          this.resultvalue7 = "증가 ";
 
-        // 월간 에상 사용량 : 목표시간 사용 시 {{ resultvalue2 }}kWh ({{resultvalue3}}%) {{ resultvalue7 }}
-        // 월간 예상 전력량 요금: 목표시간 사용 시 {{ resultvalue5 }}원  ({{ resultvalue6 }}%) {{ resultvalue7 }}
+          // 월간 에상 사용량 : 목표시간 사용 시 {{ resultvalue2 }}kWh ({{resultvalue3}}%) {{ resultvalue7 }}
+          // 월간 예상 전력량 요금: 목표시간 사용 시 {{ resultvalue5 }}원  ({{ resultvalue6 }}%) {{ resultvalue7 }}
 
-        // resultvalue2 : 절력량 차분,
-        // resultvalue3 : 월간사용량(목표)요금 - 태양광발전량 요금 / 월간 예상 전령량 요금 - 태양광 요금 *100
-        // resultvalue7 : 문자 "증가"
-        // resultvalue5 : 월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광 차감 포함),
-        // resultvalue6 : 월간 목표 전령량 요금(태양광 차감 포함) / 월간 예상 전령량 요금(태양광 차감 포함) *100
+          // resultvalue2 : 절력량 차분,
+          // resultvalue3 : 월간사용량(목표)요금 - 태양광발전량 요금 / 월간 예상 전령량 요금 - 태양광 요금 *100
+          // resultvalue7 : 문자 "증가"
+          // resultvalue5 : 월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광 차감 포함),
+          // resultvalue6 : 월간 목표 전령량 요금(태양광 차감 포함) / 월간 예상 전령량 요금(태양광 차감 포함) *100
 
-        this.resultvalue2 = (parseFloat((result2).toString().replace(/,/g, "")) || 0).toLocaleString();
-        result3 = Math.round((((targetmonthuse -electargetsunuse) / (elecmonthuse - elecsunuse)) * 100), 2);
-        this.resultvalue3 = "("+ (parseFloat((result3).toString().replace(/,/g, "")) || 0).toLocaleString()+")%";
-        this.resultvalue5 = (parseFloat((result5).toString().replace(/,/g, "")) || 0).toLocaleString();
-        //this.resultvalue6 = (parseFloat(Math.round(((result5 / result4) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString();
-        this.resultvalue6 =  "("+ (parseFloat(Math.round(((this.calEnergyPay(targetmonthuse - electargetsunuse, "1") / result4) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
+          this.resultvalue2 = (parseFloat((result2).toString().replace(/,/g, "")) || 0).toLocaleString();
+          result3 = Math.round((((targetmonthuse -electargetsunuse) / (elecmonthuse - elecsunuse)) * 100), 2);
+          this.resultvalue3 = "("+ (parseFloat((result3).toString().replace(/,/g, "")) || 0).toLocaleString()+")%";
+          this.resultvalue5 = (parseFloat((result5).toString().replace(/,/g, "")) || 0).toLocaleString();
+          //this.resultvalue6 = (parseFloat(Math.round(((result5 / result4) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString();
+          this.resultvalue6 =  "("+ (parseFloat(Math.round(((this.calEnergyPay(targetmonthuse - electargetsunuse, "1") / result4) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
+          // eslint-disable-next-line no-empty
+          if(result5 < 0){
+            this.resultvalue5 = (parseFloat((result5 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
+          }
+
+          if(this.calEnergyPay(targetmonthuse - electargetsunuse, "1") < 0){
+            this.resultvalue6 = "("+ (parseFloat(Math.round(((this.calEnergyPay(targetmonthuse - electargetsunuse, "1") / result4) * -100), 1).toString().replace(/,/g, "")) || 0).toLocaleString()+ ")%";
+          }
+
         // eslint-disable-next-line no-empty
-        if(result5 < 0){
-          this.resultvalue5 = (parseFloat((result5 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
+        } else {
+          console.log("!!!! 감소 구간 진입1 !!!" );
+          this.resultvalue7 = "감소 ";
+
+          // 월간 에상 사용량 : 목표시간 사용 시 {{ resultvalue2 }}kWh ({{resultvalue3}}%) {{ resultvalue7 }}
+          // 월간 예상 전력량 요금: 목표시간 사용 시 {{ resultvalue5 }}원  ({{ resultvalue6 }}%) {{ resultvalue7 }}
+
+          // resultvalue2 : 절력량 차분,
+          // resultvalue3: (월간 예상 전령량 요금- 태양광발전량 전령량 요금) / (월간사용량(목표) 요금 - 태양광발전량 전령량 요금) *100
+          // resultvalue7 : 문자 "감소"
+          // resultvalue5 : 월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광 차감 포함) 요금,
+          // resultvalue6 : 월간 예상 전령량 요금(태양광 차감 포함) / 목표 월간사용량(태양광 차감 포함) 요금 *100
+
+          this.resultvalue2 = (parseFloat((result2).toString().replace(/,/g, "")) || 0).toLocaleString();
+          result3 = Math.round((( (elecmonthuse - elecsunuse) / (targetmonthuse - electargetsunuse)) * 100), 2);
+          if(result2 < 0){
+            this.resultvalue2 = (parseFloat((result2 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
+          }
+
+          if(result3 < 0){
+            result3 = Math.round((( (elecmonthuse - elecsunuse) / (targetmonthuse - electargetsunuse)) * -100), 2);
+          }
+
+          this.resultvalue3 = "("+(parseFloat((result3).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
+          this.resultvalue5 = (parseFloat((result5).toString().replace(/,/g, "")) || 0).toLocaleString();
+          this.resultvalue6 = "("+(parseFloat(Math.round((((result4) / this.calEnergyPay(targetmonthuse - electargetsunuse, "1")) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
+
+          if(result5 < 0){
+            this.resultvalue5 = (parseFloat((result5 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
+            this.resultvalue6 = "("+(parseFloat(Math.round(((result4 / this.calEnergyPay(targetmonthuse - electargetsunuse, "1")) * -100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
+          }
+
+          // 목표 전력의 요금이 0원인 경우.
+          if(targetmonthuse - electargetsunuse <= 0){
+            console.log("!!!! 목표 전력의 요금이 0원 !!!");
+            this.resultvalue2 = this.resultvalue1;
+            this.resultvalue3 = "";
+            this.resultvalue7 = "감소";
+            this.resultvalue5 = this.resultvalue4;
+            this.resultvalue6 = "";
+          }
+
+          console.log(" kWh % 증감치 = " + this.resultvalue3);
+          console.log(" 요금 % 증감치 = " + this.resultvalue6);
+
         }
 
-        if(this.calEnergyPay(targetmonthuse - electargetsunuse, "1") < 0){
-          this.resultvalue6 = "("+ (parseFloat(Math.round(((this.calEnergyPay(targetmonthuse - electargetsunuse, "1") / result4) * -100), 1).toString().replace(/,/g, "")) || 0).toLocaleString()+ ")%";
+        if(result4 < 0 ) {
+          // 사용금액이 마이너스이면, 모두 "0" 으로 처리한다.
+            console.log("!!!! 사용금액 마이너스 구간 !!!" );
+            this.resultvalue1 = 0;
+            this.resultvalue2 = 0;
+            this.resultvalue3 = 0;
+            this.resultvalue7 = "감소";
+            this.resultvalue4 = 0;
+            this.resultvalue5 = 0;
+            this.resultvalue6 = 0;
         }
-
-      // eslint-disable-next-line no-empty
       } else {
-        console.log("!!!! 감소 구간 진입1 !!!" );
-        this.resultvalue7 = "감소 ";
-
-        // 월간 에상 사용량 : 목표시간 사용 시 {{ resultvalue2 }}kWh ({{resultvalue3}}%) {{ resultvalue7 }}
-        // 월간 예상 전력량 요금: 목표시간 사용 시 {{ resultvalue5 }}원  ({{ resultvalue6 }}%) {{ resultvalue7 }}
-
-        // resultvalue2 : 절력량 차분,
-        // resultvalue3: (월간 예상 전령량 요금- 태양광발전량 전령량 요금) / (월간사용량(목표) 요금 - 태양광발전량 전령량 요금) *100
-        // resultvalue7 : 문자 "감소"
-        // resultvalue5 : 월간 예상 전령량 요금(태양광 차감 포함) - 목표 월간사용량(태양광 차감 포함) 요금,
-        // resultvalue6 : 월간 예상 전령량 요금(태양광 차감 포함) / 목표 월간사용량(태양광 차감 포함) 요금 *100
-
-        this.resultvalue2 = (parseFloat((result2).toString().replace(/,/g, "")) || 0).toLocaleString();
-        result3 = Math.round((( (elecmonthuse - elecsunuse) / (targetmonthuse - electargetsunuse)) * 100), 2);
-        if(result2 < 0){
-          this.resultvalue2 = (parseFloat((result2 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
-        }
-
-        if(result3 < 0){
-          result3 = Math.round((( (elecmonthuse - elecsunuse) / (targetmonthuse - electargetsunuse)) * -100), 2);
-        }
-
-        this.resultvalue3 = "("+(parseFloat((result3).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
-        this.resultvalue5 = (parseFloat((result5).toString().replace(/,/g, "")) || 0).toLocaleString();
-        this.resultvalue6 = "("+(parseFloat(Math.round((((result4) / this.calEnergyPay(targetmonthuse - electargetsunuse, "1")) * 100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
-
-        if(result5 < 0){
-          this.resultvalue5 = (parseFloat((result5 * -1).toString().replace(/,/g, "")) || 0).toLocaleString();
-          this.resultvalue6 = "("+(parseFloat(Math.round(((result4 / this.calEnergyPay(targetmonthuse - electargetsunuse, "1")) * -100), 1).toString().replace(/,/g, "")) || 0).toLocaleString() + ")%";
-        }
-
-        // 목표 전력의 요금이 0원인 경우.
-        if(targetmonthuse - electargetsunuse <= 0){
-          console.log("!!!! 목표 전력의 요금이 0원 !!!");
-          this.resultvalue2 = this.resultvalue1;
-          this.resultvalue3 = "";
-          this.resultvalue7 = "감소";
-          this.resultvalue5 = this.resultvalue4;
-          this.resultvalue6 = "";
-        }
-
-        console.log(" kWh % 증감치 = " + this.resultvalue3);
-        console.log(" 요금 % 증감치 = " + this.resultvalue6);
-
+        //alert("필수 입력 항목을 모두 입력해주세요.")
       }
-
-      if(result4 < 0 ) {
-        // 사용금액이 마이너스이면, 모두 "0" 으로 처리한다.
-          console.log("!!!! 사용금액 마이너스 구간 !!!" );
-          this.resultvalue1 = 0;
-          this.resultvalue2 = 0;
-          this.resultvalue3 = 0;
-          this.resultvalue7 = "감소";
-          this.resultvalue4 = 0;
-          this.resultvalue5 = 0;
-          this.resultvalue6 = 0;
-        }
-
     },
   },
 };
