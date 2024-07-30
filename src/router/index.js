@@ -187,6 +187,12 @@ export const router = new VueRouter({
           component: () => import("../views/admin/ConstructionCase.vue"),
         },
         {
+          //사업현황관리
+          path: "/adminbusinessstatus",
+          name: "BusinessStatus",
+          component: () => import("../views/admin/BusinessStatus.vue"),
+        },
+        {
           //복지소식
           path: "/adminnotice",
           name: "Notice",

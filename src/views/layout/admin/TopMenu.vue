@@ -9,6 +9,9 @@
       <v-btn text class="rounded-0" to="/adminconstructioncase">구축사례</v-btn>
     </div>
     <div class="topmenu-item">
+      <v-btn text class="rounded-0" to="/adminbusinessstatus">사업현황관리</v-btn>
+    </div>
+    <div class="topmenu-item">
       <v-btn text class="rounded-0" to="/adminnotice">복지소식</v-btn>
     </div>
     <div class="topmenu-item">
