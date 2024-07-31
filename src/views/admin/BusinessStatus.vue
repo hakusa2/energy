@@ -182,11 +182,32 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field
-                        v-model="editedItem.builtDate"
-                        label="구축일자"
-                        hide-details="auto"
-                      ></v-text-field>
+                      <v-menu
+                        ref="menu2"
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="auto"
+                      >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="editedItem.builtDate"
+                          label="구축일자"
+                          persistent-hint
+                          v-bind="attrs"
+                          @blur="editedItem.builtDate = formatDate(date)"
+                          v-on="on"
+                          hide-details="auto"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="date"
+                        no-title
+                        @input="updateDate"
+                      ></v-date-picker>
+                    </v-menu>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
@@ -195,20 +216,27 @@
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
+                    <!-- 
                     <v-col cols="12" sm="12" md="6">
                       <v-text-field
                         v-model="editedItem.zipcode"
                         label="우편번호"
                         hide-details="auto"
+                        readonly
+                        @click="openPostcode"
                       ></v-text-field>
                     </v-col>
+                    -->
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.addr1"
                         label="주소"
                         hide-details="auto"
+                        readonly
+                        @click="openPostcode"
                       ></v-text-field>
                     </v-col>
+                    <!-- 
                     <v-col cols="12" sm="12" md="12">
                       <v-text-field
                         v-model="editedItem.addr2"
@@ -216,6 +244,7 @@
                         hide-details="auto"
                       ></v-text-field>
                     </v-col>
+                    -->
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.latitude"
@@ -288,24 +317,14 @@
       tabledata: [],
       editedIndex: -1,
       editedItem: {
-        count: "",
-        applydate: "",
-        category: "",
-        name: "",
-        contact: "",
-        email: "",
-        address: "",
-        status: "",
+        units: "1",
+        latitude: 37.400466,
+        longitude: 127.106813,
       },
       defaultItem: {
-        count: "",
-        applydate: "",
-        category: "",
-        name: "",
-        contact: "",
-        email: "",
-        address: "",
-        status: "",
+        units: "1",
+        latitude: 37.400466,
+        longitude: 127.106813,
       },
       filterText: "필터",
       buildingValue: 0,
@@ -350,6 +369,12 @@
       this.initialize();
     },
   
+    mounted() {
+      const script = document.createElement('script');
+      script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+      script.async = true;
+      document.head.appendChild(script);
+    },
     methods: {
       initialize() {
         try {
@@ -380,7 +405,7 @@
                   break;
               }
   
-              this.tabledata[item].addr = "(" + this.tabledata[item].zipcode + ") " + this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
+              this.tabledata[item].addr = "(" + this.tabledata[item].zipcode + ") " + this.tabledata[item].addr1 ;//+ " " + this.tabledata[item].addr2;
             }
           }).catch(function (error) {
             if(error.response.status == "403"){
@@ -397,7 +422,6 @@
         this.editedIndex = this.tabledata.indexOf(item);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
-        this.sunLightVisible = this.editedItem.sunLight === "유" ? true : false;
       },
   
       deleteItem(item) {
@@ -481,7 +505,15 @@
             break;
         }
   
-  
+        if (!this.isValidNumber(this.editedItem.latitude)){
+          alert("잘못된 파라미터입니다.");
+          return 
+        }
+        if (!this.isValidNumber(this.editedItem.longitude)){
+          alert("잘못된 파라미터입니다.");
+          return 
+        }
+
         const formData = new FormData();
         formData.append("category", this.editedItem.category);
         formData.append("name", this.editedItem.name);
@@ -548,6 +580,60 @@
   
       newform(){
         this.editedItem.categoryName = "일반건물";
+      },
+      updateDate(val) {
+        this.date = val;
+        this.editedItem.builtDate = this.formatDate(val);
+        this.menu2 = false;
+      },
+      formatDate(date) {
+        if (!date) return '';
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = (d.getMonth() + 1).toString().padStart(2, '0');
+        const day = d.getDate().toString().padStart(2, '0');
+        return `${year}.${month}.${day}`;
+      },
+      parseDate(dateString) {
+        try{
+          const [year, month, day] = dateString.split('.');
+          const dateString2 = `${year}-${month}-${day}`;
+          return new Date(dateString2);
+        }
+        catch(e){
+          return new Date();
+        }
+      },
+      isValidNumber(value) {
+        const number = parseFloat(value);
+        return !isNaN(number) && isFinite(number);
+      },
+      /* global daum */
+      openPostcode() {
+        new daum.Postcode({
+          oncomplete: (data) => {
+            this.editedItem.zipcode = data.zonecode;
+            this.editedItem.addr1 = data.address;
+            
+            try {
+              axios.get("/api/etc/getAdressDetail",  {
+                params: {
+                  query:  data.address,
+                }
+              }).then((response) => {
+                if (response.data.code == 0) {
+                  //y(위도),x(경도)
+                  this.editedItem.latitude = response.data.y;
+                  this.editedItem.longitude = response.data.x;
+                } else {
+                  console.log(response.data.message);
+                }
+              });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }).open();
       },
     },
   };
