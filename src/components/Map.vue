@@ -55,7 +55,7 @@ export default {
       if (positions.length > 0) {
         positions.forEach((position) => {
           var iwContent = `
-                            <div style="background-color: rgba(0,0,0,0.45); border-radius:4px; padding: 16px 56px; color:#ffffff; text-align:center; line-heght:1;">
+                            <div style="background-color: rgba(0,0,0,0.45); border-radius:4px; padding: 16px 56px; color:#ffffff; text-align:center; line-heght:1; -webkit-backdrop-filter: blur(30px);backdrop-filter: blur(30px);">
                                 <div style="font-size:18px; font-weight:600;">${position.desc}</div>
                             <div style="font-size:14px; font-weight:400;">(구축일자: 0000.00.00)</div>
                             <div style="font-size:14px; font-weight:400;">경기도 성남시 분당구 12345</div>
