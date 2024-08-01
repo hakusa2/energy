@@ -64,10 +64,6 @@
                 </a>
               </template>
   
-              <template v-slot:[`item.status`]="{ item }">
-                <v-chip label> {{ item.status }}</v-chip>
-              </template>
-  
               <template v-slot:no-data> 등록된 글이 없습니다. </template>
             </v-data-table>
           </template>
@@ -302,7 +298,6 @@
       category: ["일반건물", "점포", "공동주택", "단독주택"],
       toggle_exclusive: undefined,
       search: "",
-      dialog1: false,
       dialog: false,
       dialogDelete: false,
       dialogApproval: false,
@@ -327,11 +322,6 @@
         longitude: 127.106813,
       },
       filterText: "필터",
-      buildingValue: 0,
-      shopValue: 0,
-      apartmentValue: 0,
-      detachedValue: 0,
-      sunLightVisible: false,
       exceldata:[],
     }),
   
@@ -339,7 +329,7 @@
       headers() {
         return [
           { text: "순번", align: "center", value: "id"},
-          { text: "구분", align: "center", value: "categoryName" , filter:this.statusFilter},
+          { text: "구분", align: "center", value: "categoryName" , filter:this.categoryFilter},
           { text: "명칭", align: "center", value: "name", sortable: false },
           { text: "주소", align: "center", value: "addr" },
           { text: "세대수", align: "center", value: "units", sortable: false },
@@ -570,7 +560,7 @@
           this.filterText = action;
       },
   
-      statusFilter(value) {
+      categoryFilter(value) {
         if(this.filterText === "필터" || value === this.filterText){
           return true;
         } else {
