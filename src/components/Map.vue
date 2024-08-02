@@ -9,11 +9,10 @@ export default {
   name: "Map",
   data() {
     return {
-        markers: [],
-        customOverlay:[],
-        imageSrc :'',
-        markerImage:null,
-
+      markers: [],
+      customOverlay: [],
+      imageSrc: "",
+      markerImage: null,
     };
   },
   mounted() {
@@ -31,110 +30,121 @@ export default {
   },
   methods: {
     initMap() {
-        var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';  
-        var imageSize = new kakao.maps.Size(64, 69); 
-        var imageOption = {offset: new kakao.maps.Point(27, 69)}; 
-        
-        this.markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-            
-        const container = document.getElementById("map");
-        const options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 5,
-        };
-        this.map = new kakao.maps.Map(container, options);
-        this.$emit("map-ready");
+      var imageSrc = "@/assets/icon_marker.png";
+      var imageSize = new kakao.maps.Size(32, 31);
+      var imageOption = { offset: new kakao.maps.Point(27, 69) };
+
+      this.markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+
+      const container = document.getElementById("map");
+      const options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 5,
+      };
+      this.map = new kakao.maps.Map(container, options);
+      this.$emit("map-ready");
     },
     changeSize(size) {
-        const container = document.getElementById("map");
-        container.style.width = `${size}px`;
-        container.style.height = `${size}px`;
-        this.map.relayout();
+      const container = document.getElementById("map");
+      container.style.width = `${size}px`;
+      container.style.height = `${size}px`;
+      this.map.relayout();
     },
     displayCustomOverlay(markerPositions) {
-        if (this.customOverlay.length > 0) {
-            this.customOverlay.forEach((marker) => marker.setMap(null));
-        }
+      if (this.customOverlay.length > 0) {
+        this.customOverlay.forEach((marker) => marker.setMap(null));
+      }
 
-        const positions = markerPositions.map((position) => ({
-            desc: position.desc,
-            latLng: new kakao.maps.LatLng(position.latitude, position.longitude),
-        }));
+      const positions = markerPositions.map((position) => ({
+        desc: position.desc,
+        latLng: new kakao.maps.LatLng(position.latitude, position.longitude),
+      }));
 
-        if (positions.length > 0) {
-          positions.forEach((position) => {
-                var iwContent = position.desc;
-                var customOverlay = new kakao.maps.CustomOverlay({
-                    map: this.map,
-                    position: position.latLng,
-                    content: iwContent,
-                    yAnchor: 1 
-                });
-                this.customOverlay.push(customOverlay);
-                
-                //this.map.setLevel(3);
-                this.map.panTo(position.latLng);            
-            });
+      if (positions.length > 0) {
+        positions.forEach((position) => {
+          var iwContent = position.desc;
+          var customOverlay = new kakao.maps.CustomOverlay({
+            map: this.map,
+            position: position.latLng,
+            content: iwContent,
+            yAnchor: 1,
+          });
+          this.customOverlay.push(customOverlay);
 
-        } else {
-            this.customOverlay = [];
-        }
+          //this.map.setLevel(3);
+          this.map.panTo(position.latLng);
+        });
+      } else {
+        this.customOverlay = [];
+      }
     },
     displayMarker(markerPositions) {
-        //기존 마커를 지운다
-        if (this.markers.length > 0) {
-            this.markers.forEach((marker) => {
-              kakao.maps.event.removeListener(marker, 'click', this.displayCustomOverlay);
-              marker.setMap(null);
-            });
-        }
-        if (this.customOverlay.length > 0) {
-            this.customOverlay.forEach((marker) => marker.setMap(null));
-        }
+      //기존 마커를 지운다
+      if (this.markers.length > 0) {
+        this.markers.forEach((marker) => {
+          kakao.maps.event.removeListener(
+            marker,
+            "click",
+            this.displayCustomOverlay
+          );
+          marker.setMap(null);
+        });
+      }
+      if (this.customOverlay.length > 0) {
+        this.customOverlay.forEach((marker) => marker.setMap(null));
+      }
 
-        const positions = markerPositions.map((position) => ({
-            desc: position.desc,
-            latitude:position.latitude,
-            longitude:position.longitude,
-            latLng: new kakao.maps.LatLng(position.latitude, position.longitude),
-        }));
+      const positions = markerPositions.map((position) => ({
+        desc: position.desc,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        latLng: new kakao.maps.LatLng(position.latitude, position.longitude),
+      }));
 
-        if (positions.length > 0) {
-            positions.forEach((position) => {
-                var marker = new kakao.maps.Marker({
-                    position: position.latLng,
-                    image: this.markerImage // 마커이미지 설정 
-                });
-                marker.setMap(this.map);  
-                kakao.maps.event.addListener(marker, 'click', () => {
-                  this.displayCustomOverlay([position]);
-                });
-                this.markers.push(marker);
-            });
+      if (positions.length > 0) {
+        positions.forEach((position) => {
+          var marker = new kakao.maps.Marker({
+            position: position.latLng,
+            image: this.markerImage, // 마커이미지 설정
+          });
+          marker.setMap(this.map);
+          kakao.maps.event.addListener(marker, "click", () => {
+            this.displayCustomOverlay([position]);
+          });
+          this.markers.push(marker);
+        });
 
-            const bounds = positions.reduce(
-            (bounds, pos) => bounds.extend(pos.latLng),
-            new kakao.maps.LatLngBounds()
-            );
+        const bounds = positions.reduce(
+          (bounds, pos) => bounds.extend(pos.latLng),
+          new kakao.maps.LatLngBounds()
+        );
 
-            this.map.setBounds(bounds);
-        } else {
-            this.markers = [];
-        }
-        },
+        this.map.setBounds(bounds);
+      } else {
+        this.markers = [];
+      }
     },
+  },
   beforeDestroy() {
     if (this.marker) {
       this.marker.setMap(null);
     }
-    
+
     if (this.markers.length > 0) {
-          this.markers.forEach((marker) =>{ 
-            kakao.maps.event.removeListener(marker, 'click', this.displayCustomOverlay);
-            marker.setMap(null);
-          });
-      }
-  }
+      this.markers.forEach((marker) => {
+        kakao.maps.event.removeListener(
+          marker,
+          "click",
+          this.displayCustomOverlay
+        );
+        marker.setMap(null);
+      });
+    }
+  },
 };
 </script>
 

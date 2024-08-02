@@ -48,13 +48,13 @@
                         placeholder="검색어를 입력하세요"
                         @keydown.enter="searchData"
                       ></v-text-field>
-                      <v-btn 
-                        depressed 
-                        small 
+                      <v-btn
+                        depressed
+                        small
                         color="#F0F0F0"
                         @click="searchData"
-                      > 
-                        검색 
+                      >
+                        검색
                       </v-btn>
                     </div>
                   </div>
@@ -117,7 +117,9 @@
                       <div class="name">공동주택</div>
                       <div class="count">
                         <span>{{ category3Count }}<small>개</small></span>
-                        <span class="ml-4">{{ category3SubCount }}<small>개</small></span>
+                        <span class="ml-4"
+                          >{{ category3SubCount }}<small>개</small></span
+                        >
                       </div>
                     </v-col>
                     <v-divider vertical></v-divider>
@@ -135,13 +137,13 @@
                 <v-card-title>
                   <h4>{{ tableTitle }}</h4>
                   <v-spacer></v-spacer>
-                  <v-btn 
-                    class="btn-admin-link" 
-                    outlined 
-                    color="#6E42C1" 
+                  <v-btn
+                    class="btn-admin-link"
+                    outlined
+                    color="#6E42C1"
                     small
                     href="https://seongnam-ems.e-smartcity.kr/sign"
-                    target="_blank" 
+                    target="_blank"
                   >
                     관리시스템 바로가기
                     <v-icon right> mdi-custom mdi-open-in-new </v-icon>
@@ -216,12 +218,12 @@
                                   placeholder="건물명 혹은 주소로 검색"
                                   @keydown.enter="searchData"
                                 ></v-text-field>
-                                <v-btn 
-                                  depressed 
-                                  small 
+                                <v-btn
+                                  depressed
+                                  small
                                   color="#F0F0F0"
                                   @click="searchData"
-                                > 
+                                >
                                   검색
                                 </v-btn>
                               </div>
@@ -235,7 +237,7 @@
                     <template v-slot:TableFooterRight>
                       <div class="pagination-group d-flex align-center">
                         <div class="pagination-page d-flex align-center">
-                          <span class="pr-2">{{pageCount}} 페이지 중</span>
+                          <span class="pr-2">{{ pageCount }} 페이지 중</span>
                           <v-select
                             solo
                             dense
@@ -246,7 +248,10 @@
                           ></v-select>
                           <span class="pl-2">번째 페이지</span>
                         </div>
-                        <v-pagination v-model="page" :length="pageCount"></v-pagination>
+                        <v-pagination
+                          v-model="page"
+                          :length="pageCount"
+                        ></v-pagination>
                       </div>
                     </template>
                   </Tables>
@@ -287,7 +292,7 @@ export default {
         href: "welfarestatus",
       },
     ],
-    items: ["전체","일반건물", "점포", "공동주택", "단독주택"],
+    items: ["전체", "일반건물", "점포", "공동주택", "단독주택"],
     filters: [
       { title: "전체" },
       { title: "일반건물" },
@@ -335,30 +340,39 @@ export default {
     },
     category1Count() {
       return this.tabledata.length > 0
-        ? this.tabledata.filter(item => item.category === '1').length.toLocaleString()
+        ? this.tabledata
+            .filter((item) => item.category === "1")
+            .length.toLocaleString()
         : "0";
     },
     category2Count() {
       return this.tabledata.length > 0
-        ? this.tabledata.filter(item => item.category === '2').length.toLocaleString()
+        ? this.tabledata
+            .filter((item) => item.category === "2")
+            .length.toLocaleString()
         : "0";
     },
     category3Count() {
       return this.tabledata.length > 0
-        ? this.tabledata.filter(item => item.category === '3').length.toLocaleString()
+        ? this.tabledata
+            .filter((item) => item.category === "3")
+            .length.toLocaleString()
         : "0";
     },
     category3SubCount() {
       return this.tabledata.length > 0
         ? this.tabledata
-          .filter(item => item.category === '3')
-          .map(item => parseFloat(item.units)) 
-          .reduce((sum, units) => sum + units, 0).toLocaleString()
+            .filter((item) => item.category === "3")
+            .map((item) => parseFloat(item.units))
+            .reduce((sum, units) => sum + units, 0)
+            .toLocaleString()
         : "0";
     },
     category4Count() {
       return this.tabledata.length > 0
-        ? this.tabledata.filter(item => item.category === '4').length.toLocaleString()
+        ? this.tabledata
+            .filter((item) => item.category === "4")
+            .length.toLocaleString()
         : "0";
     },
     pageList() {
@@ -375,12 +389,11 @@ export default {
     },
     filteredData(newVal) {
       try {
-        if (this.mapReady)
-          this.$refs.mapComponent.displayMarker(newVal);
+        if (this.mapReady) this.$refs.mapComponent.displayMarker(newVal);
       } catch (err) {
         console.log(err);
       }
-    }
+    },
   },
   methods: {
     initialize() {
@@ -413,17 +426,17 @@ export default {
                   break;
               }
               this.tabledata[item].desc = `
-                            <div class="customoverlay" style="background-color: rgba(0,0,0,0.45); border-radius:4px; padding: 16px 56px; color:#ffffff; text-align:center; line-heght:1; -webkit-backdrop-filter: blur(30px);backdrop-filter: blur(30px);">
-                                <div style="font-size:18px; font-weight:600;">${this.tabledata[item].name}</div>
-                            <div style="font-size:14px; font-weight:400;">(구축일자: ${this.tabledata[item].builtDate})</div>
-                            <div style="font-size:14px; font-weight:400;">${this.tabledata[item].addr1}</div>
+                            <div class="customoverlay" style="">
+                                <div class="name">${this.tabledata[item].name}</div>
+                            <div class="date">(구축일자: ${this.tabledata[item].builtDate})</div>
+                            <div class="address">${this.tabledata[item].addr1}</div>
                         </div>`;
               this.tabledata[item].addr =
                 "(" +
                 this.tabledata[item].zipcode +
                 ") " +
                 this.tabledata[item].addr1; //+ " " + this.tabledata[item].addr2;
-                this.filteredData =  this.tabledata;
+              this.filteredData = this.tabledata;
               try {
                 if (this.mapReady)
                   this.$refs.mapComponent.displayMarker(this.tabledata);
@@ -460,24 +473,24 @@ export default {
     },
 
     searchData() {
-      this.searchVal=this.preSearchVal;
+      this.searchVal = this.preSearchVal;
     },
 
     filterData() {
-      var filteredTabledata=this.tabledata;
+      var filteredTabledata = this.tabledata;
       //필터 처리
-      if(this.filterText!="전체"){
-        filteredTabledata=this.tabledata.filter(item =>
-          item.categoryName === this.filterText
+      if (this.filterText != "전체") {
+        filteredTabledata = this.tabledata.filter(
+          (item) => item.categoryName === this.filterText
         );
       }
       //검색어 처리
       if (this.searchVal) {
-        filteredTabledata= filteredTabledata.filter((item) =>
+        filteredTabledata = filteredTabledata.filter((item) =>
           this.searchInProperties(item, this.searchVal)
         );
       }
-      this.filteredData=filteredTabledata;
+      this.filteredData = filteredTabledata;
     },
     searchInProperties(item, searchTerm) {
       // 검색할 프로퍼티 목록
@@ -492,8 +505,7 @@ export default {
     },
     onRowClick(item) {
       try {
-        if (this.mapReady)
-          this.$refs.mapComponent.displayCustomOverlay([item]);
+        if (this.mapReady) this.$refs.mapComponent.displayCustomOverlay([item]);
       } catch (err) {
         console.log(err);
       }
@@ -502,4 +514,43 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.customoverlay {
+  background-color: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
+  padding: 16px 56px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1;
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+}
+.customoverlay:after {
+  content: "";
+  position: absolute;
+  margin-left: -10px;
+  left: 50%;
+  bottom: -10px;
+  border-top: 10px solid rgba(0, 0, 0, 0.45);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 0px solid transparent;
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+}
+.customoverlay .name {
+  font-size: 18px;
+  font-weight: 600;
+}
+.customoverlay .date,
+.customoverlay .address {
+  font-size: 14px;
+  font-weight: 400;
+}
+.customoverlay .date {
+  margin-top: 6px;
+}
+.customoverlay .address {
+  margin-top: 10px;
+}
+</style>
