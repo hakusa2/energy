@@ -457,7 +457,13 @@ export default {
       formData.append("id", this.deletekey);
 
       try {
-        axios.post("/api/businessStatus/remove", formData).then((response) => {
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+        axios.post("/api/businessStatus/remove", formData, axiosConfig).then((response) => {
           if (response.data.code == 0) {
             this.closeDelete();
             this.snack = true;
@@ -522,6 +528,14 @@ export default {
         alert("잘못된 파라미터입니다.");
         return;
       }
+      if (!this.isValidNumber(this.editedItem.units)) {
+        alert("잘못된 파라미터입니다.");
+        return;
+      }
+      if (!this.editedItem.name || !this.editedItem.addr1  || !this.editedItem.builtDate ) {
+        alert("잘못된 파라미터입니다.");
+        return;
+      }
 
       const formData = new FormData();
       formData.append("category", this.editedItem.category);
@@ -537,8 +551,14 @@ export default {
 
       if (this.editedIndex > -1) {
         try {
+          let token = this.$cookies.get("token");
+          let axiosConfig = {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          };
           axios
-            .post("/api/businessStatus/modify", formData)
+            .post("/api/businessStatus/modify", formData,axiosConfig)
             .then((response) => {
               if (response.data.code == 0) {
                 this.close();
@@ -557,7 +577,14 @@ export default {
       } else {
         //new
         try {
-          axios.post("/api/businessStatus/write", formData).then((response) => {
+          
+        let token = this.$cookies.get("token");
+        let axiosConfig = {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        };
+          axios.post("/api/businessStatus/write", formData,axiosConfig).then((response) => {
             if (response.data.code == 0) {
               this.close();
               this.snack = true;

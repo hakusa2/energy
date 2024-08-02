@@ -29,25 +29,33 @@
                   <div class="d-flex algin-center">
                     <div class="select-group mr-4" style="max-width: 160px">
                       <v-select
-                        v-model="select2"
+                        v-model="filterText"
                         :items="items"
                         label="구분"
                         solo
                         dense
                         hide-details
+                        @change="filterData"
                       ></v-select>
                     </div>
                     <div class="btn-group d-flex align-center col pa-0">
                       <v-text-field
-                        v-model="search"
-                        @input="handleSearch"
+                        v-model="preSearchVal"
                         hide-details
                         solo
                         dense
                         class="mt-0"
                         placeholder="검색어를 입력하세요"
+                        @keydown.enter="searchData"
                       ></v-text-field>
-                      <v-btn depressed small color="#F0F0F0"> 검색 </v-btn>
+                      <v-btn 
+                        depressed 
+                        small 
+                        color="#F0F0F0"
+                        @click="searchData"
+                      > 
+                        검색 
+                      </v-btn>
                     </div>
                   </div>
                   <!-- <v-menu offset-y>
@@ -71,8 +79,8 @@
                     </v-list>
                   </v-menu> -->
                   <!-- <v-text-field
-                    v-model="search"
-                    @input="handleSearch"
+                    v-model="preSearchVal"
+                    @input="filterData"
                     prepend-inner-icon="mdi-magnify"
                     label="검색"
                     hide-details
@@ -94,29 +102,29 @@
                     <v-col cols="6" sm="6" md="3" class="total-item">
                       <div class="name">건물</div>
                       <div class="count">
-                        <span>3<small>개</small></span>
+                        <span>{{ category1Count }}<small>개</small></span>
                       </div>
                     </v-col>
                     <v-divider vertical></v-divider>
                     <v-col cols="6" sm="6" md="3" class="total-item">
-                      <div class="name">건물</div>
+                      <div class="name">점포</div>
                       <div class="count">
-                        <span>3<small>개</small></span>
+                        <span>{{ category2Count }}<small>개</small></span>
                       </div>
                     </v-col>
                     <v-divider vertical class="d-sm-none d-md-flex"></v-divider>
                     <v-col cols="6" sm="6" md="3" class="total-item">
-                      <div class="name">건물</div>
+                      <div class="name">공동주택</div>
                       <div class="count">
-                        <span>10<small>개</small></span>
-                        <span class="ml-4">10,000<small>개</small></span>
+                        <span>{{ category3Count }}<small>개</small></span>
+                        <span class="ml-4">{{ category3SubCount }}<small>개</small></span>
                       </div>
                     </v-col>
                     <v-divider vertical></v-divider>
                     <v-col cols="6" sm="6" md="3" class="total-item">
-                      <div class="name">건물</div>
+                      <div class="name">단독주택</div>
                       <div class="count">
-                        <span>30<small>개</small></span>
+                        <span>{{ category4Count }}<small>개</small></span>
                       </div>
                     </v-col>
                   </v-row>
@@ -127,7 +135,14 @@
                 <v-card-title>
                   <h4>{{ tableTitle }}</h4>
                   <v-spacer></v-spacer>
-                  <v-btn class="btn-admin-link" outlined color="#6E42C1" small>
+                  <v-btn 
+                    class="btn-admin-link" 
+                    outlined 
+                    color="#6E42C1" 
+                    small
+                    href="https://seongnam-ems.e-smartcity.kr/sign"
+                    target="_blank" 
+                  >
                     관리시스템 바로가기
                     <v-icon right> mdi-custom mdi-open-in-new </v-icon>
                   </v-btn>
@@ -138,13 +153,14 @@
                     <template v-slot:TableData>
                       <v-data-table
                         :headers="headers"
-                        :items="tabledata"
-                        :search="search"
+                        :items="filteredData"
+                        :search="searchVal"
                         :page.sync="page"
                         :items-per-page="itemsPerPage"
                         hide-default-footer
                         item-key="id"
                         @page-count="pageCount = $event"
+                        @click:row="onRowClick"
                         height="542px"
                         mobile-breakpoint="0"
                       >
@@ -154,12 +170,13 @@
                               <div class="select-group d-flex flex-column">
                                 <div class="select-label">구분</div>
                                 <v-select
-                                  v-model="select2"
+                                  v-model="filterText"
                                   :items="items"
                                   label="구분"
                                   solo
                                   dense
                                   hide-details
+                                  @change="filterData"
                                 ></v-select>
                               </div>
                               <!-- <v-menu offset-y>
@@ -191,14 +208,20 @@
                             <v-col cols="12" sm="12" md="6">
                               <div class="btn-group d-flex align-center">
                                 <v-text-field
-                                  v-model="search"
+                                  v-model="preSearchVal"
                                   hide-details
                                   solo
                                   dense
                                   class="mt-0"
                                   placeholder="건물명 혹은 주소로 검색"
+                                  @keydown.enter="searchData"
                                 ></v-text-field>
-                                <v-btn depressed small color="#F0F0F0">
+                                <v-btn 
+                                  depressed 
+                                  small 
+                                  color="#F0F0F0"
+                                  @click="searchData"
+                                > 
                                   검색
                                 </v-btn>
                               </div>
@@ -212,18 +235,18 @@
                     <template v-slot:TableFooterRight>
                       <div class="pagination-group d-flex align-center">
                         <div class="pagination-page d-flex align-center">
-                          <span class="pr-2">nnn 페이지 중</span>
+                          <span class="pr-2">{{pageCount}} 페이지 중</span>
                           <v-select
                             solo
                             dense
                             hide-details="auto"
                             style="max-width: 100px"
-                            v-model="itemsPerPage"
-                            :items="perPageValues"
+                            v-model="page"
+                            :items="pageList"
                           ></v-select>
                           <span class="pl-2">번째 페이지</span>
                         </div>
-                        <v-pagination v-model="page"></v-pagination>
+                        <v-pagination v-model="page" :length="pageCount"></v-pagination>
                       </div>
                     </template>
                   </Tables>
@@ -264,8 +287,7 @@ export default {
         href: "welfarestatus",
       },
     ],
-    select2: "전체",
-    items: ["전체"],
+    items: ["전체","일반건물", "점포", "공동주택", "단독주택"],
     filters: [
       { title: "전체" },
       { title: "일반건물" },
@@ -275,14 +297,15 @@ export default {
     ],
     category: ["일반건물", "점포", "공동주택", "단독주택"],
     toggle_exclusive: undefined,
-    search: "",
+    searchVal: "",
+    preSearchVal: "",
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
     perPageValues: [5, 10, 15, 20],
     tabledata: [],
     filteredData: [],
-    filterText: "필터",
+    filterText: "전체",
     mapReady: false,
   }),
   computed: {
@@ -307,14 +330,58 @@ export default {
     },
     tableTitle() {
       return this.tabledata.length > 0
-        ? `구축목록(총 ${this.tabledata.length}개)`
+        ? `구축목록(총 ${this.filteredData.length}개)`
         : "";
+    },
+    category1Count() {
+      return this.tabledata.length > 0
+        ? this.tabledata.filter(item => item.category === '1').length.toLocaleString()
+        : "0";
+    },
+    category2Count() {
+      return this.tabledata.length > 0
+        ? this.tabledata.filter(item => item.category === '2').length.toLocaleString()
+        : "0";
+    },
+    category3Count() {
+      return this.tabledata.length > 0
+        ? this.tabledata.filter(item => item.category === '3').length.toLocaleString()
+        : "0";
+    },
+    category3SubCount() {
+      return this.tabledata.length > 0
+        ? this.tabledata
+          .filter(item => item.category === '3')
+          .map(item => parseFloat(item.units)) 
+          .reduce((sum, units) => sum + units, 0).toLocaleString()
+        : "0";
+    },
+    category4Count() {
+      return this.tabledata.length > 0
+        ? this.tabledata.filter(item => item.category === '4').length.toLocaleString()
+        : "0";
+    },
+    pageList() {
+      return Array.from({ length: this.pageCount }, (_, index) => index + 1);
     },
   },
   created() {
     (this.mapReady = false), this.initialize();
   },
   mounted() {},
+  watch: {
+    searchVal(newSearch) {
+      this.filterData(newSearch);
+    },
+    filteredData(newVal) {
+      try {
+        if (this.mapReady)
+          this.$refs.mapComponent.displayMarker(newVal);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  },
   methods: {
     initialize() {
       try {
@@ -330,7 +397,6 @@ export default {
           .get("/api/businessStatus/getList", axiosConfig)
           .then((response) => {
             this.tabledata = response.data;
-            console.log(response.data);
             for (const item in this.tabledata) {
               switch (this.tabledata[item].category) {
                 case "1":
@@ -346,13 +412,18 @@ export default {
                   this.tabledata[item].categoryName = "단독주택";
                   break;
               }
-              this.tabledata[item].desc = this.tabledata[item].name;
+              this.tabledata[item].desc = `
+                            <div class="customoverlay" style="background-color: rgba(0,0,0,0.45); border-radius:4px; padding: 16px 56px; color:#ffffff; text-align:center; line-heght:1; -webkit-backdrop-filter: blur(30px);backdrop-filter: blur(30px);">
+                                <div style="font-size:18px; font-weight:600;">${this.tabledata[item].name}</div>
+                            <div style="font-size:14px; font-weight:400;">(구축일자: ${this.tabledata[item].builtDate})</div>
+                            <div style="font-size:14px; font-weight:400;">${this.tabledata[item].addr1}</div>
+                        </div>`;
               this.tabledata[item].addr =
                 "(" +
                 this.tabledata[item].zipcode +
                 ") " +
                 this.tabledata[item].addr1; //+ " " + this.tabledata[item].addr2;
-
+                this.filteredData =  this.tabledata;
               try {
                 if (this.mapReady)
                   this.$refs.mapComponent.displayMarker(this.tabledata);
@@ -372,12 +443,12 @@ export default {
       }
     },
     menuActionClick(action) {
-      if (action === "전체") this.filterText = "필터";
+      if (action === "전체") this.filterText = "전체";
       else this.filterText = action;
     },
 
     categoryFilter(value) {
-      if (this.filterText === "필터" || value === this.filterText) {
+      if (this.filterText === "전체" || value === this.filterText) {
         return true;
       } else {
         return false;
@@ -387,28 +458,30 @@ export default {
       this.$refs.mapComponent.displayMarker(this.tabledata);
       this.mapReady = true;
     },
-    handleSearch() {
-      // 검색어를 기반으로 데이터를 필터링
-      this.filteredData = this.filterData(this.search);
-      console.log(this.filteredData);
-      try {
-        if (this.mapReady)
-          this.$refs.mapComponent.displayMarker(this.filteredData);
-      } catch (err) {
-        console.log(err);
-      }
+
+    searchData() {
+      this.searchVal=this.preSearchVal;
     },
-    filterData(searchTerm) {
-      if (!searchTerm) {
-        return this.tabledata; // 검색어가 없으면 원본 데이터를 반환
+
+    filterData() {
+      var filteredTabledata=this.tabledata;
+      //필터 처리
+      if(this.filterText!="전체"){
+        filteredTabledata=this.tabledata.filter(item =>
+          item.categoryName === this.filterText
+        );
       }
-      return this.tabledata.filter((item) =>
-        this.searchInProperties(item, searchTerm)
-      );
+      //검색어 처리
+      if (this.searchVal) {
+        filteredTabledata= filteredTabledata.filter((item) =>
+          this.searchInProperties(item, this.searchVal)
+        );
+      }
+      this.filteredData=filteredTabledata;
     },
     searchInProperties(item, searchTerm) {
       // 검색할 프로퍼티 목록
-      const properties = ["name", "addr1", "categoryName"];
+      const properties = ["name", "addr1"];
 
       // 속성 값 중 하나라도 검색어를 포함하면 true
       return properties.some(
@@ -416,6 +489,14 @@ export default {
           item[prop] &&
           item[prop].toLowerCase().includes(searchTerm.toLowerCase())
       );
+    },
+    onRowClick(item) {
+      try {
+        if (this.mapReady)
+          this.$refs.mapComponent.displayCustomOverlay([item]);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
