@@ -82,7 +82,9 @@
 export default {
   name: "MobileMenu",
   components: {},
-  data: () => ({}),
+  data: () => ({
+    selectedItem : [],
+  }),
   methods: {
     closeMenu() {
       this.$emit("closeMobile");
