@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     initMap() {
-      var imageSrc = "@/assets/icon_marker.png";
+      var imageSrc = require("@/assets/icon_marker.png");
       var imageSize = new kakao.maps.Size(32, 31);
       var imageOption = { offset: new kakao.maps.Point(27, 69) };
 
