@@ -516,6 +516,9 @@ export default {
 
 <style lang="scss">
 .customoverlay {
+  position: relative;
+  left: 2px;
+  bottom: 40px;
   background-color: rgba(0, 0, 0, 0.45);
   border-radius: 4px;
   padding: 16px 56px;
