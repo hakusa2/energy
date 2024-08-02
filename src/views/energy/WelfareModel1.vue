@@ -256,6 +256,12 @@
                       <v-chip small outlined v-if="item.tagYn3 === 'Y'">
                         EV
                       </v-chip>
+                      <v-chip small outlined v-if="item.tagYn4 === 'Y'">
+                        DR
+                      </v-chip>
+                      <v-chip small outlined v-if="item.tagYn5 === 'Y'">
+                        에너지서비스
+                      </v-chip>
                     </div>
                     <div class="item-title">
                       {{ item.groupName }} <v-icon>mdi-chevron-right</v-icon>

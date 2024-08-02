@@ -218,6 +218,18 @@
                         hide-details
                         class="ml-2"
                       ></v-checkbox>
+                      <v-checkbox
+                        v-model="editedItem.tag4"
+                        label="DR"
+                        hide-details
+                        class="ml-2"
+                      ></v-checkbox>
+                      <v-checkbox
+                        v-model="editedItem.tag5"
+                        label="에너지서비스"
+                        hide-details
+                        class="ml-2"
+                      ></v-checkbox>
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
@@ -385,12 +397,18 @@ export default {
               tagName.push("ESS")
             if(this.tabledata[item].tagYn3 === "Y")
               tagName.push("EV")
+            if(this.tabledata[item].tagYn4 === "Y")
+              tagName.push("DR")
+            if(this.tabledata[item].tagYn5 === "Y")
+              tagName.push("에너지서비스")
 
             this.tabledata[item].tagName = tagName;
 
             if(this.tabledata[item].tagYn1 === "Y") this.tabledata[item].tag1 = true; else this.tabledata[item].tag1 = false;
             if(this.tabledata[item].tagYn2 === "Y") this.tabledata[item].tag2 = true; else this.tabledata[item].tag2 = false;
             if(this.tabledata[item].tagYn3 === "Y") this.tabledata[item].tag3 = true; else this.tabledata[item].tag3 = false;
+            if(this.tabledata[item].tagYn4 === "Y") this.tabledata[item].tag4 = true; else this.tabledata[item].tag4 = false;
+            if(this.tabledata[item].tagYn5 === "Y") this.tabledata[item].tag5 = true; else this.tabledata[item].tag5 = false;
           }
         }).catch(function (error) {
           if(error.response.status == "403"){
@@ -494,6 +512,8 @@ export default {
       this.editedItem.tagYn1 = this.editedItem.tag1 ? "Y" : "N";
       this.editedItem.tagYn2 = this.editedItem.tag2 ? "Y" : "N";
       this.editedItem.tagYn3 = this.editedItem.tag3 ? "Y" : "N";
+      this.editedItem.tagYn4 = this.editedItem.tag4 ? "Y" : "N";
+      this.editedItem.tagYn5 = this.editedItem.tag5 ? "Y" : "N";
 
       const formData = new FormData();
       formData.append("bType", this.editedItem.btype);
@@ -506,8 +526,8 @@ export default {
       formData.append("tagYn1", this.editedItem.tagYn1);
       formData.append("tagYn2", this.editedItem.tagYn2);
       formData.append("tagYn3", this.editedItem.tagYn3);
-      formData.append("tagYn4", "N");
-      formData.append("tagYn5", "N");
+      formData.append("tagYn4", this.editedItem.tagYn4);
+      formData.append("tagYn5", this.editedItem.tagYn5);
       formData.append("tagYn6", "N");
       formData.append("tagYn7", "N");
       formData.append("tagYn8", "N");
