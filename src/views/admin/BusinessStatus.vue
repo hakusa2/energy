@@ -319,12 +319,14 @@ export default {
     tabledata: [],
     editedIndex: -1,
     editedItem: {
-      units: "1",
+      categoryName:"일반건물",
+      units: "",
       latitude: 37.400466,
       longitude: 127.106813,
     },
     defaultItem: {
-      units: "1",
+      categoryName:"일반건물",
+      units: "",
       latitude: 37.400466,
       longitude: 127.106813,
     },
@@ -356,6 +358,14 @@ export default {
   },
 
   watch: {
+    'editedItem.categoryName':function(newValue) {
+      if(newValue==='공동주택'){
+        this.editedItem.units='10';
+      }
+      else{
+        this.editedItem.units='';
+      }
+    },
     dialog(val) {
       val || this.close();
     },
@@ -528,9 +538,11 @@ export default {
         alert("잘못된 파라미터입니다.");
         return;
       }
-      if (!this.isValidNumber(this.editedItem.units)) {
-        alert("잘못된 파라미터입니다.");
-        return;
+      if(this.editedItem.category===3){
+        if (!this.isValidNumber(this.editedItem.units)) {
+          alert("잘못된 파라미터입니다.");
+          return;
+        }
       }
       if (!this.editedItem.name || !this.editedItem.addr1  || !this.editedItem.builtDate ) {
         alert("잘못된 파라미터입니다.");

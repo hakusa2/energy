@@ -83,6 +83,8 @@ export default {
       }
     },
     displayMarker(markerPositions) {
+      var maxMarkerCnt=150;
+
       //기존 마커를 지운다
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => {
@@ -97,8 +99,8 @@ export default {
       if (this.customOverlay.length > 0) {
         this.customOverlay.forEach((marker) => marker.setMap(null));
       }
-
-      const positions = markerPositions.map((position) => ({
+      var mapMarkerPositions = markerPositions.slice(0, maxMarkerCnt);
+      const positions = mapMarkerPositions.map((position) => ({
         desc: position.desc,
         latitude: position.latitude,
         longitude: position.longitude,
@@ -124,6 +126,10 @@ export default {
         );
 
         this.map.setBounds(bounds);
+
+        if (markerPositions.length != 0){
+          this.displayCustomOverlay([markerPositions[0]]);
+        } 
       } else {
         this.markers = [];
       }

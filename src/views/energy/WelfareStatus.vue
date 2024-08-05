@@ -316,7 +316,7 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "번호", align: "center", value: "id", sortable: false },
+        { text: "번호", align: "center", value: "id", },
         {
           text: "구분",
           align: "center",
@@ -329,7 +329,6 @@ export default {
           text: "구축일자",
           align: "center",
           value: "builtDate",
-          sortable: false,
         },
       ];
     },
