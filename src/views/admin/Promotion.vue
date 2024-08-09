@@ -191,7 +191,11 @@
                         v-model="editedItem.imageFile"
                         label="이미지"
                         hide-details="auto"
+                        @change="validateFile"
                       ></v-file-input>
+                      <v-alert v-if="fileSizeError" type="error" dense>
+                        파일 크기가 너무 큽니다.
+                      </v-alert>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -257,6 +261,7 @@ export default {
       title: "",
     },
     filterText: "필터",
+    fileSizeError: false,
   }),
 
   computed: {
@@ -326,6 +331,7 @@ export default {
       this.editedIndex = this.tabledata.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.fileSizeError= false;
     },
 
     deleteItem(item) {
@@ -396,11 +402,11 @@ export default {
       // this.snackText = "Data saved";
 
       const formData = new FormData();
-      formData.append("type", this.editedItem.type);
-      formData.append("title", this.editedItem.title);
-      formData.append("image", this.editedItem.imageFile);
-      formData.append("link", this.editedItem.linkUrl);
-      formData.append("sign", this.editedItem.signYn);
+      formData.append("type", this.editedItem.type? this.editedItem.type : "");
+      formData.append("title", this.editedItem.title? this.editedItem.title : "");
+      formData.append("image", this.editedItem.imageFile? this.editedItem.imageFile : "");
+      formData.append("link", this.editedItem.linkUrl? this.editedItem.linkUrl : "");
+      formData.append("sign", this.editedItem.signYn? this.editedItem.signYn : "");
       formData.append("id", this.editedItem.id);
 
       if (this.editedIndex > -1) {
@@ -458,11 +464,23 @@ export default {
     newform(){
       this.editedItem.type = "프로모션";
       this.editedItem.signYn = "O";
+      this.fileSizeError= false;
     },
 
     urlTest(){
       if(this.editedItem.linkUrl != null && this.editedItem.linkUrl.length > 0){
         window.open(this.editedItem.linkUrl, "_blank");
+      }
+    },
+    
+    validateFile(file) {
+      const maxFileSize = 2 * 1024 * 1024; // 2MB로 제한 설정
+
+      if (file && file.size > maxFileSize) {
+        this.fileSizeError = true;
+        this.editedItem.imageFile = null; // 파일 선택 해제
+      } else {
+        this.fileSizeError = false;
       }
     },
   },

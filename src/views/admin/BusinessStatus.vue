@@ -214,6 +214,7 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
+                        v-if="editedItem.categoryName === '공동주택'"
                         v-model="editedItem.units"
                         label="세대수*"
                         hide-details="auto"
@@ -326,6 +327,9 @@ export default {
     },
     defaultItem: {
       categoryName:"일반건물",
+      name:"",
+      addr1:"",
+      addr2:"",
       units: "",
       latitude: 37.400466,
       longitude: 127.106813,
@@ -358,14 +362,6 @@ export default {
   },
 
   watch: {
-    'editedItem.categoryName':function(newValue) {
-      if(newValue==='공동주택'){
-        this.editedItem.units='10';
-      }
-      else{
-        this.editedItem.units='';
-      }
-    },
     dialog(val) {
       val || this.close();
     },
@@ -529,6 +525,19 @@ export default {
           this.editedItem.category = "4";
           break;
       }
+
+      //공동주택 세대 처리
+      if(this.editedItem.categoryName!="공동주택"){
+        this.editedItem.units=''
+      }
+      else if(this.editedItem.units==='' ||this.editedItem===null){
+        this.editedItem.units='0';
+      }
+      else if (!this.isValidNumber(this.editedItem.units)) {
+        alert("잘못된 파라미터입니다.");
+        return;
+      }
+
 
       if (!this.isValidNumber(this.editedItem.latitude)) {
         alert("잘못된 파라미터입니다.");

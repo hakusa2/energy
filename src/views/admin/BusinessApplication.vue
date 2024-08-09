@@ -467,7 +467,9 @@ export default {
                 break;
             }
 
-            this.tabledata[item].addr = "(" + this.tabledata[item].zipcode + ") " + this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
+            //this.tabledata[item].addr = "(" + this.tabledata[item].zipcode + ") " + this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
+            this.tabledata[item].addr = this.tabledata[item].addr1 + " " + this.tabledata[item].addr2;
+            
             this.tabledata[item].sunLight = this.tabledata[item].sunLightYn === "Y" ? "유" : "무";
           }
         }).catch(function (error) {
@@ -596,14 +598,14 @@ export default {
       const formData = new FormData();
       formData.append("bType", this.editedItem.btype);
       formData.append("status", this.editedItem.status);
-      formData.append("name", this.editedItem.name);
+      formData.append("name", this.editedItem.name? this.editedItem.name : "");
       formData.append("birth", "");
-      formData.append("mobile", this.editedItem.mobile);
-      formData.append("phone", this.editedItem.phone);
-      formData.append("zipcode", this.editedItem.zipcode);
-      formData.append("email", this.editedItem.email);
-      formData.append("addr1", this.editedItem.addr1);
-      formData.append("addr2", this.editedItem.addr2);
+      formData.append("mobile", this.editedItem.mobile? this.editedItem.mobile : "");
+      formData.append("phone", this.editedItem.phone? this.editedItem.phone : "");
+      formData.append("zipcode", this.editedItem.zipcode? this.editedItem.zipcode : "");
+      formData.append("email", this.editedItem.email? this.editedItem.email : "");
+      formData.append("addr1", this.editedItem.addr1? this.editedItem.addr1 : "");
+      formData.append("addr2", this.editedItem.addr2? this.editedItem.addr2 : "");
       formData.append("sunLightYn", this.editedItem.sunLightYn);
       formData.append("modelName", this.editedItem.modelName);
       formData.append("remoteYn", "N");

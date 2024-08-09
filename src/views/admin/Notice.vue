@@ -192,7 +192,11 @@
                         :value="editedItem.imageFile"
                         label="대표이미지"
                         hide-details="auto"
+                        @change="validateFile"
                       ></v-file-input>
+                      <v-alert v-if="fileSizeError" type="error" dense>
+                        파일 크기가 너무 큽니다.
+                      </v-alert>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -256,6 +260,7 @@ export default {
       title: "",
     },
     filterText: "필터",
+    fileSizeError: false,
   }),
 
   computed: {
@@ -314,6 +319,7 @@ export default {
       this.editedIndex = this.tabledata.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      this.fileSizeError= false;
     },
 
     deleteItem(item) {
@@ -381,10 +387,10 @@ export default {
       // }
 
       const formData = new FormData();
-      formData.append("title", this.editedItem.title);
-      formData.append("type", this.editedItem.category);
-      formData.append("description", this.editedItem.description);
-      formData.append("image", this.editedItem.imageFile);
+      formData.append("title", this.editedItem.title? this.editedItem.title : "");
+      formData.append("type", this.editedItem.category? this.editedItem.category : "");
+      formData.append("description", this.editedItem.description? this.editedItem.description : "");
+      formData.append("image", this.editedItem.imageFile? this.editedItem.imageFile : "");
       formData.append("id", this.editedItem.id);
 
       if (this.editedIndex > -1) {
@@ -399,6 +405,10 @@ export default {
               this.initialize();
             } else {
               console.log(response.data.message);
+            }
+          }).catch(function (error) {
+            if (error.response.status == "413") {
+              alert("파일 용량이 너무 큽니다.");
             }
           });
         } catch (err) {
@@ -416,6 +426,10 @@ export default {
               this.initialize();
             } else {
               console.log(response.data.message);
+            }
+          }).catch(function (error) {
+            if (error.response.status == "413") {
+              alert("파일 용량이 너무 큽니다.");
             }
           });
         } catch (err) {
@@ -470,8 +484,18 @@ export default {
     newform(){
       this.editedItem.category = "[공지사항]";
       //this.editedItem.createdAt = this.parseDate((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10));
+      this.fileSizeError= false;
     },
+    validateFile(file) {
+      const maxFileSize = 2 * 1024 * 1024; // 2MB로 제한 설정
 
+      if (file && file.size > maxFileSize) {
+        this.fileSizeError = true;
+        this.editedItem.imageFile = null; // 파일 선택 해제
+      } else {
+        this.fileSizeError = false;
+      }
+    },
   },
 };
 </script>

@@ -252,7 +252,11 @@
                         v-model="editedItem.image"
                         label="대표이미지"
                         hide-details="auto"
+                        @change="validateFile"
                       ></v-file-input>
+                      <v-alert v-if="fileSizeError" type="error" dense>
+                        파일 크기가 너무 큽니다.
+                      </v-alert>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -324,6 +328,7 @@ export default {
       tag: "",
     },
     filterText: "필터",
+    fileSizeError: false,
   }),
 
   computed: {
@@ -424,6 +429,7 @@ export default {
     editItem(item) {
       this.editedIndex = this.tabledata.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      this.fileSizeError= false;
       this.dialog = true;
     },
 
@@ -516,12 +522,12 @@ export default {
       this.editedItem.tagYn5 = this.editedItem.tag5 ? "Y" : "N";
 
       const formData = new FormData();
-      formData.append("bType", this.editedItem.btype);
-      formData.append("groupName", this.editedItem.groupName);
-      formData.append("addr1", this.editedItem.addr1);
-      formData.append("addr2", this.editedItem.addr2);
-      formData.append("businessSummary", this.editedItem.businessSummary);
-      formData.append("packageCompose", this.editedItem.packageCompose);
+      formData.append("bType", this.editedItem.btype? this.editedItem.btype : "");
+      formData.append("groupName", this.editedItem.groupName? this.editedItem.groupName : "");
+      formData.append("addr1", this.editedItem.addr1? this.editedItem.addr1 : "");
+      formData.append("addr2", this.editedItem.addr2? this.editedItem.addr2 : "");
+      formData.append("businessSummary", this.editedItem.businessSummary? this.editedItem.businessSummary : "");
+      formData.append("packageCompose", this.editedItem.packageCompose? this.editedItem.packageCompose : "");
       formData.append("markYn", this.editedItem.markYn);
       formData.append("tagYn1", this.editedItem.tagYn1);
       formData.append("tagYn2", this.editedItem.tagYn2);
@@ -532,7 +538,7 @@ export default {
       formData.append("tagYn7", "N");
       formData.append("tagYn8", "N");
       formData.append("tagYn9", "N");
-      formData.append("image", this.editedItem.image);
+      formData.append("image", this.editedItem.image? this.editedItem.image : "");
       formData.append("id", this.editedItem.id);
 
       if (this.editedIndex > -1) {
@@ -590,8 +596,19 @@ export default {
     newform(){
       this.editedItem.btypeName = "건물형 인프라구축 사업";
       this.editedItem.mark = "노출";
+      this.fileSizeError= false;
     },
 
+    validateFile(file) {
+      const maxFileSize = 2 * 1024 * 1024; // 2MB로 제한 설정
+
+      if (file && file.size > maxFileSize) {
+        this.fileSizeError = true;
+        this.editedItem.imageFile = null; // 파일 선택 해제
+      } else {
+        this.fileSizeError = false;
+      }
+    },
   },
 };
 </script>

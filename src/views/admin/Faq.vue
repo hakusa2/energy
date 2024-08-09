@@ -480,9 +480,9 @@ export default {
 
     save() {
       const formData = new FormData();
-      formData.append("qTitle", this.editedItem.qtitle);
-      formData.append("aTitle", this.editedItem.atitle);
-      formData.append("description", this.editedItem.description);
+      formData.append("qTitle", this.editedItem.qtitle? this.editedItem.qtitle : "");
+      formData.append("aTitle", this.editedItem.atitle? this.editedItem.atitle : "");
+      formData.append("description", this.editedItem.description? this.editedItem.description : "");
       formData.append("id", this.editedItem.id);
 
       if (this.editedIndex > -1) {

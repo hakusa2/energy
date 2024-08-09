@@ -35,6 +35,8 @@
                       <v-text-field
                         v-model="password"
                         :rules="passwordRules"
+                        type="password"
+                        @keyup.enter="login"
                         dense
                         outlined
                         placeholder="비밀번호를 입력해주세요"

@@ -25,7 +25,8 @@
                 <v-card-title>
                   <h4>성남시 에너지복지 현황</h4>
                 </v-card-title>
-                <v-card-text class="pt-2">
+                
+                <v-card-text class="pt-2"  style="display: none;">
                   <div class="d-flex algin-center">
                     <div class="select-group mr-4" style="max-width: 160px">
                       <v-select
@@ -118,7 +119,7 @@
                       <div class="count">
                         <span>{{ category3Count }}<small>개</small></span>
                         <span class="ml-4"
-                          >{{ category3SubCount }}<small>개</small></span
+                          >{{ category3SubCount }}<small>세대</small></span
                         >
                       </div>
                     </v-col>
@@ -126,7 +127,7 @@
                     <v-col cols="6" sm="6" md="3" class="total-item">
                       <div class="name">단독주택</div>
                       <div class="count">
-                        <span>{{ category4Count }}<small>개</small></span>
+                        <span>{{ category4Count }}<small>세대</small></span>
                       </div>
                     </v-col>
                   </v-row>
@@ -316,13 +317,14 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "번호", align: "center", value: "id", width: "80" },
+        { text: "번호", align: "center", value: "id", width: "80" , sortable: false },
         {
           text: "구분",
           align: "center",
           value: "categoryName",
           filter: this.categoryFilter,
           width: "100",
+          sortable: false 
         },
         { text: "명칭", align: "center", value: "name", sortable: false },
         { text: "주소", align: "center", value: "addr", sortable: false },
@@ -330,6 +332,7 @@ export default {
           text: "구축일자",
           align: "center",
           value: "builtDate",
+          sortable: false ,
         },
       ];
     },
@@ -432,9 +435,9 @@ export default {
                             <div class="address">${this.tabledata[item].addr1}</div>
                         </div>`;
               this.tabledata[item].addr =
-                "(" +
-                this.tabledata[item].zipcode +
-                ") " +
+                // "(" +
+                // this.tabledata[item].zipcode +
+                // ") " +
                 this.tabledata[item].addr1; //+ " " + this.tabledata[item].addr2;
               this.filteredData = this.tabledata;
               try {
