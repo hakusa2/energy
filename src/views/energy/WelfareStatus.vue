@@ -316,12 +316,13 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "번호", align: "center", value: "id", },
+        { text: "번호", align: "center", value: "id", width: "80" },
         {
           text: "구분",
           align: "center",
           value: "categoryName",
           filter: this.categoryFilter,
+          width: "100",
         },
         { text: "명칭", align: "center", value: "name", sortable: false },
         { text: "주소", align: "center", value: "addr", sortable: false },
